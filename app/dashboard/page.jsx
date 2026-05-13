@@ -85,7 +85,7 @@ export default function Dashboard() {
               Zrób zdjęcie pomieszczenia, podaj lokalizację. Wynik w 30 sekund.
             </p>
           </div>
-          <button className="bg-[#C85A2A] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#B04E24] transition flex items-center gap-3 whitespace-nowrap">
+          <button onClick={() => router.push('/wycena')} className="bg-[#C85A2A] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#B04E24] transition flex items-center gap-3 whitespace-nowrap">
             <span className="text-2xl">📸</span>
             Wyceń teraz
           </button>

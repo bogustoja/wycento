@@ -1,3 +1,4 @@
+'use client'
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917] font-sans">
@@ -7,7 +8,7 @@ export default function Home() {
         <div className="font-serif text-xl font-bold">
           Wyceń<span className="text-[#C85A2A]">To</span>
         </div>
-        <button className="bg-[#C85A2A] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#B04E24] transition">
+        <button className="bg-[#C85A2A] text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-[#B04E24] transition" onClick={() => window.location.href = '/login'}>
           Wypróbuj za darmo
         </button>
       </nav>
@@ -54,8 +55,8 @@ export default function Home() {
               Kliknij lub przeciągnij plik
             </p>
           </div>
-          <button className="w-full bg-[#C85A2A] text-white py-3 rounded-lg font-semibold hover:bg-[#B04E24] transition">
-            Wyceń mój remont →
+          <button className="w-full bg-[#C85A2A] text-white py-3 rounded-lg font-semibold hover:bg-[#B04E24] transition" onClick={() => window.location.href = '/login'}>
+            Wyceń mój remont → onClick={() => window.location.href = '/login'}
           </button>
         </div>
 
