@@ -36,7 +36,7 @@ export default function Dashboard() {
 
       const [profileRes, quotesRes] = await Promise.all([
         supabase.from('profiles').select('credits, plan').eq('user_id', user.id).single(),
-        supabase.from('quotes').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10),
+        fetch('/api/quotes').then(r => r.json()).catch(() => []),
       ])
 
       if (profileRes.data) {
@@ -44,9 +44,9 @@ export default function Dashboard() {
         setPlan(profileRes.data.plan)
       }
 
-      if (quotesRes.data) {
-        setQuotes(quotesRes.data)
-        setTotalQuotes(quotesRes.data.length)
+      if (Array.isArray(quotesRes)) {
+        setQuotes(quotesRes)
+        setTotalQuotes(quotesRes.length)
       }
 
       setLoading(false)

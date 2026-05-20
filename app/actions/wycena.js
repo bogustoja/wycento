@@ -2,8 +2,24 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '../lib/supabase-server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+function getAdmin() {
+  return createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+}
+
+async function ensureQuotesBucket(admin) {
+  const { data: buckets } = await admin.storage.listBuckets()
+  const exists = buckets?.some(b => b.name === 'quotes')
+  if (!exists) {
+    await admin.storage.createBucket('quotes', { public: false, fileSizeLimit: 204800 })
+  }
+}
 
 export async function wyceńRemont(formData) {
   const supabase = await createClient()
@@ -17,7 +33,6 @@ export async function wyceńRemont(formData) {
     .eq('user_id', user.id)
     .single()
 
-  // Jeśli tabela profiles nie istnieje jeszcze, pozwól kontynuować bez kredytów
   const canProceed = profileError || !profile
     ? true
     : (profile.plan === 'pro' || profile.credits > 0)
@@ -81,11 +96,27 @@ Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
     const text = response.content[0].text
     const wynik = JSON.parse(text)
 
-    // Zapisz wycenę (ignoruj błąd jeśli tabela jeszcze nie istnieje)
-    await supabase.from('quotes').insert({ user_id: user.id, pomieszczenie, miasto, wynik })
-      .then(() => {}).catch(() => {})
+    // Save to Supabase Storage (no SQL table needed)
+    try {
+      const admin = getAdmin()
+      await ensureQuotesBucket(admin)
+      const quoteId = Date.now()
+      const quoteData = {
+        id: String(quoteId),
+        user_id: user.id,
+        pomieszczenie,
+        miasto,
+        wynik,
+        created_at: new Date().toISOString(),
+      }
+      await admin.storage
+        .from('quotes')
+        .upload(`${user.id}/${quoteId}.json`, JSON.stringify(quoteData), {
+          contentType: 'application/json',
+        })
+    } catch {}
 
-    // Odejmij kredyt (ignoruj błąd jeśli profil nie istnieje)
+    // Deduct credit
     if (profile && profile.plan !== 'pro' && profile.credits > 0) {
       await supabase.from('profiles').update({ credits: profile.credits - 1 }).eq('user_id', user.id)
         .then(() => {}).catch(() => {})
