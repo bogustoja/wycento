@@ -3,8 +3,6 @@ import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
 function createAdminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -13,6 +11,7 @@ function createAdminClient() {
 }
 
 export async function POST(request) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder')
   const body = await request.text()
   const headersList = await headers()
   const signature = headersList.get('stripe-signature')
