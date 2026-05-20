@@ -4,19 +4,54 @@ import { useEffect, useState } from 'react'
 import { createClient } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 
+const EMOJI = {
+  'Łazienka': '🚿',
+  'Kuchnia': '🍳',
+  'Pokój': '🛋️',
+  'Przedpokój': '🚪',
+  'Sypialnia': '🛏️',
+  'Taras': '🌿',
+  'Całe mieszkanie': '🏠',
+}
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState(null)
-  const [credits, setCredits] = useState(3)
+  const [credits, setCredits] = useState(null)
+  const [plan, setPlan] = useState('free')
+  const [quotes, setQuotes] = useState([])
+  const [totalQuotes, setTotalQuotes] = useState(0)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    async function getUser() {
+    async function getData() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) router.push('/login')
-      else setUser(user)
+      if (!user) { router.push('/login'); return }
+      setUser(user)
+
+      const [profileRes, quotesRes] = await Promise.all([
+        supabase.from('profiles').select('credits, plan').eq('user_id', user.id).single(),
+        supabase.from('quotes').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10),
+      ])
+
+      if (profileRes.data) {
+        setCredits(profileRes.data.credits)
+        setPlan(profileRes.data.plan)
+      }
+
+      if (quotesRes.data) {
+        setQuotes(quotesRes.data)
+        setTotalQuotes(quotesRes.data.length)
+      }
+
+      setLoading(false)
     }
-    getUser()
+    getData()
   }, [])
 
   async function handleLogout() {
@@ -24,127 +59,191 @@ export default function Dashboard() {
     router.push('/login')
   }
 
-  const recentQuotes = [
-    { id: 1, name: 'Remont kuchni', location: 'Warszawa, Ursus', price: '12 000 – 18 000 zł', date: '10 maj 2026', emoji: '🍳' },
-    { id: 2, name: 'Łazienka 6m²', location: 'Kraków, Krowodrza', price: '6 500 – 9 000 zł', date: '8 maj 2026', emoji: '🚿' },
-    { id: 3, name: 'Malowanie salonu', location: 'Warszawa, Mokotów', price: '1 800 – 2 400 zł', date: '5 maj 2026', emoji: '🎨' },
-  ]
+  const initials = user?.email?.slice(0, 2).toUpperCase() ?? '?'
 
   return (
-    <main className="min-h-screen" style={{backgroundColor: '#FAF8F5', backgroundImage: 'radial-gradient(#E7E0D8 1px, transparent 1px)', backgroundSize: '24px 24px'}}>
+    <main className="min-h-screen bg-[#FAF8F5]">
+
       {/* NAV */}
-      <nav className="bg-white border-b border-[#E7E0D8] px-8 h-16 flex items-center justify-between">
-        <div>
-          <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-          <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <span className="text-sm text-[#78716C]">{user?.email}</span>
-          <button onClick={handleLogout} className="text-sm text-[#78716C] hover:text-[#1C1917] transition">
-            Wyloguj
-          </button>
+      <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-0.5">
+            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
+            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
+          </a>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-[#A8A29E] hidden sm:block">{user?.email}</span>
+            <div className="w-8 h-8 bg-[#C85A2A] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              {initials}
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E7E0D8] px-3 py-1.5 rounded-lg hover:bg-[#F2EDE6]"
+            >
+              Wyloguj
+            </button>
+          </div>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-8 py-10">
+      <div className="max-w-5xl mx-auto px-6 py-10">
 
-        {/* POWITANIE */}
         <div className="mb-8">
-          <h1 className="font-serif text-3xl font-bold text-[#1C1917] mb-1">Dzień dobry!</h1>
-          <p className="text-[#78716C]">Co dziś wyceniamy?</p>
+          <h1 className="font-serif text-3xl font-bold text-[#1C1917]">Dzień dobry!</h1>
+          <p className="text-[#78716C] mt-1">Co dziś wyceniamy?</p>
         </div>
 
-        {/* STATYSTYKI */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-white border border-[#E7E0D8] rounded-xl p-5">
-            <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-2">Wyceny w tym miesiącu</div>
-            <div className="font-serif text-4xl font-bold text-[#1C1917]">0<span className="text-xl text-[#78716C]">/3</span></div>
-            <div className="bg-[#F2EDE6] rounded-full h-1.5 mt-3">
-              <div className="bg-[#C85A2A] rounded-full h-1.5" style={{ width: '0%' }} />
+        {/* KARTY STATYSTYK */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-8">
+
+          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">
+                {plan === 'pro' ? 'Plan Pro' : 'Pozostałe wyceny'}
+              </span>
+              <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">📊</div>
+            </div>
+            {credits === null ? (
+              <div className="h-10 bg-[#F2EDE6] rounded-lg animate-pulse" />
+            ) : plan === 'pro' ? (
+              <div className="font-serif text-4xl font-bold text-[#1C1917]">∞</div>
+            ) : (
+              <>
+                <div className="font-serif text-4xl font-bold text-[#1C1917]">
+                  {credits}
+                  <span className="text-xl text-[#A8A29E] font-sans font-normal">/3</span>
+                </div>
+                <div className="mt-3 h-1.5 bg-[#F2EDE6] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#C85A2A] rounded-full transition-all duration-700"
+                    style={{ width: `${((3 - credits) / 3) * 100}%` }}
+                  />
+                </div>
+                <div className="text-xs text-[#A8A29E] mt-2">{3 - credits} z 3 wykorzystanych</div>
+              </>
+            )}
+          </div>
+
+          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Twój plan</span>
+              <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">⭐</div>
+            </div>
+            <div className="font-serif text-2xl font-bold text-[#1C1917] capitalize mb-2">{plan}</div>
+            {plan === 'free' ? (
+              <button
+                onClick={() => router.push('/pro')}
+                className="text-xs text-[#C85A2A] font-semibold hover:underline text-left"
+              >
+                Przejdź na Pro — 39 zł/mies →
+              </button>
+            ) : (
+              <span className="text-xs text-green-600 font-semibold">Aktywny ✓</span>
+            )}
+          </div>
+
+          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Wszystkich wycen</span>
+              <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">📋</div>
+            </div>
+            <div className="font-serif text-4xl font-bold text-[#1C1917]">{totalQuotes}</div>
+            <div className="text-xs text-[#A8A29E] mt-2">od początku</div>
+          </div>
+        </div>
+
+        {/* CTA — NOWA WYCENA */}
+        {credits === 0 && plan === 'free' ? (
+          <div className="relative bg-[#1C1917] rounded-2xl p-8 mb-8 overflow-hidden">
+            <div className="absolute right-0 top-0 bottom-0 w-64 opacity-5" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <div className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-2">Limit wycen</div>
+                <h2 className="font-serif text-2xl font-bold text-white mb-2">Wykorzystałeś 3/3 wyceny</h2>
+                <p className="text-[#78716C] text-sm max-w-xs">Przejdź na Pro — nielimitowane wyceny i pobieranie PDF za 39 zł/mies.</p>
+              </div>
+              <button
+                onClick={() => router.push('/pro')}
+                className="flex-shrink-0 bg-[#C85A2A] text-white px-7 py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/20 whitespace-nowrap"
+              >
+                Przejdź na Pro →
+              </button>
             </div>
           </div>
-          <div className="bg-white border border-[#E7E0D8] rounded-xl p-5">
-            <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-2">Twój plan</div>
-            <div className="font-serif text-2xl font-bold text-[#1C1917] mt-2">Free</div>
-            <button className="text-xs text-[#C85A2A] font-semibold mt-2 hover:underline">
-              Przejdź na Pro →
-            </button>
+        ) : (
+          <div className="relative bg-[#1C1917] rounded-2xl p-8 mb-8 overflow-hidden">
+            <div className="absolute right-0 top-0 bottom-0 w-64 opacity-5" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <div className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-2">Nowa wycena</div>
+                <h2 className="font-serif text-2xl font-bold text-white mb-2">Wyceń swój remont</h2>
+                <p className="text-[#78716C] text-sm max-w-xs">Zrób zdjęcie pomieszczenia, podaj miasto. Wynik w 30 sekund.</p>
+              </div>
+              <button
+                onClick={() => router.push('/wycena')}
+                className="flex-shrink-0 bg-[#C85A2A] text-white px-7 py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/20 flex items-center gap-2 whitespace-nowrap"
+              >
+                <span>📸</span> Wyceń teraz
+              </button>
+            </div>
           </div>
-          <div className="bg-white border border-[#E7E0D8] rounded-xl p-5">
-            <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-2">Wszystkich wycen</div>
-            <div className="font-serif text-4xl font-bold text-[#1C1917]">0</div>
-            <div className="text-xs text-[#78716C] mt-2">od początku</div>
-          </div>
-        </div>
-
-        {/* NOWA WYCENA */}
-        <div className="bg-[#1C1917] rounded-xl p-8 mb-8 flex items-center justify-between">
-          <div>
-            <h2 className="font-serif text-2xl font-bold text-white mb-2">Nowa wycena</h2>
-            <p className="text-[#A8A29E] text-sm max-w-sm">
-              Zrób zdjęcie pomieszczenia, podaj lokalizację. Wynik w 30 sekund.
-            </p>
-          </div>
-          <button onClick={() => router.push('/wycena')} className="bg-[#C85A2A] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#B04E24] transition flex items-center gap-3 whitespace-nowrap">
-            <span className="text-2xl">📸</span>
-            Wyceń teraz
-          </button>
-        </div>
+        )}
 
         {/* HISTORIA */}
-        <div className="bg-white border border-[#E7E0D8] rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-[#E7E0D8] flex items-center justify-between">
-            <h2 className="font-serif text-lg font-bold text-[#1C1917]">Ostatnie wyceny</h2>
-            <span className="text-xs text-[#78716C]">Przykładowe dane</span>
+        <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-[#E7E0D8]">
+            <h2 className="font-serif text-lg font-bold text-[#1C1917]">Historia wycen</h2>
           </div>
-          <div className="divide-y divide-[#E7E0D8]">
-            {recentQuotes.map((q) => (
-              <div key={q.id} className="px-6 py-4 flex items-center justify-between hover:bg-[#FAF8F5] transition">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-[#F2EDE6] rounded-lg flex items-center justify-center text-xl">
-                    {q.emoji}
-                  </div>
-                  <div>
-                    <div className="font-medium text-[#1C1917] text-sm">{q.name}</div>
-                    <div className="text-xs text-[#78716C]">{q.location} · {q.date}</div>
+
+          {loading ? (
+            <div className="divide-y divide-[#E7E0D8]">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="px-6 py-4 flex items-center gap-4">
+                  <div className="w-10 h-10 bg-[#F2EDE6] rounded-xl animate-pulse" />
+                  <div className="flex-1">
+                    <div className="h-4 bg-[#F2EDE6] rounded animate-pulse w-40 mb-2" />
+                    <div className="h-3 bg-[#F2EDE6] rounded animate-pulse w-24" />
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-serif font-bold text-[#1C1917] text-sm">{q.price}</div>
-                  <div className="text-xs text-[#C85A2A] font-medium mt-0.5">Zobacz PDF</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-{/* KONTAKT */}
-        <div className="mt-8 bg-white border border-[#E7E0D8] rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-[#E7E0D8]">
-            <h2 className="font-serif text-lg font-bold text-[#1C1917]">Potrzebujesz pomocy?</h2>
-<p className="text-sm text-[#78716C] mt-1">Skontaktuj się z nami — odpowiadamy w godzinach pracy</p>          </div>
-          <div className="px-6 py-5 grid grid-cols-3 gap-4">
-            <a href="mailto:kontakt@wycento.pl" className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#FAF8F5] transition">
-              <div className="w-9 h-9 bg-[#F5EBE4] rounded-lg flex items-center justify-center text-lg">✉️</div>
-              <div>
-                <div className="text-xs font-semibold text-[#1C1917]">Email</div>
-                <div className="text-xs text-[#78716C]">kontakt@wycento.pl</div>
-              </div>
-            </a>
-            <a href="https://wycento.pl" className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#FAF8F5] transition">
-              <div className="w-9 h-9 bg-[#F5EBE4] rounded-lg flex items-center justify-center text-lg">🌐</div>
-              <div>
-                <div className="text-xs font-semibold text-[#1C1917]">Strona</div>
-                <div className="text-xs text-[#78716C]">wycento.pl</div>
-              </div>
-            </a>
-            <div className="flex items-center gap-3 p-3 rounded-lg">
-              <div className="w-9 h-9 bg-[#F5EBE4] rounded-lg flex items-center justify-center text-lg">⏰</div>
-              <div>
-                <div className="text-xs font-semibold text-[#1C1917]">Godziny</div>
-                <div className="text-xs text-[#78716C]">Pon–Pt, 9:00–17:00</div>
-              </div>
+              ))}
             </div>
-          </div>
+          ) : quotes.length === 0 ? (
+            <div className="py-16 text-center">
+              <div className="text-5xl mb-4">🏗️</div>
+              <div className="font-semibold text-[#1C1917] mb-2">Brak wycen</div>
+              <div className="text-sm text-[#A8A29E] mb-6">Twoje wyceny pojawią się tutaj po pierwszej analizie</div>
+              <button
+                onClick={() => router.push('/wycena')}
+                className="bg-[#C85A2A] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#B04E24] transition"
+              >
+                Zrób pierwszą wycenę →
+              </button>
+            </div>
+          ) : (
+            <div className="divide-y divide-[#E7E0D8]">
+              {quotes.map((q) => (
+                <div key={q.id} className="px-6 py-4 flex items-center justify-between hover:bg-[#FAF8F5] transition">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-[#F2EDE6] rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+                      {EMOJI[q.pomieszczenie] ?? '🏠'}
+                    </div>
+                    <div>
+                      <div className="font-medium text-[#1C1917] text-sm">{q.pomieszczenie}</div>
+                      <div className="text-xs text-[#A8A29E]">{q.miasto} · {formatDate(q.created_at)}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-serif font-bold text-[#1C1917] text-sm">
+                      {q.wynik.total_min?.toLocaleString('pl-PL')} – {q.wynik.total_max?.toLocaleString('pl-PL')} zł
+                    </div>
+                    {plan === 'pro' && (
+                      <div className="text-xs text-[#C85A2A] font-medium mt-0.5 hover:underline cursor-pointer">PDF</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>
