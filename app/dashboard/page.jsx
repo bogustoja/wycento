@@ -59,6 +59,51 @@ export default function Dashboard() {
     router.push('/login')
   }
 
+  function handlePDF(q) {
+    const win = window.open('', '_blank')
+    win.document.write(`
+      <!DOCTYPE html><html lang="pl"><head>
+      <meta charset="UTF-8">
+      <title>Wycena — ${q.pomieszczenie} — ${q.miasto}</title>
+      <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1C1917; font-size: 14px; line-height: 1.5; }
+        .header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 2px solid #C85A2A; padding-bottom: 20px; margin-bottom: 28px; }
+        .logo { font-size: 22px; font-weight: 900; } .logo span { color: #C85A2A; }
+        .meta h1 { font-size: 18px; font-weight: 700; } .meta p { color: #78716C; font-size: 12px; margin-top: 4px; }
+        .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #A8A29E; font-weight: 700; margin: 24px 0 10px; }
+        .summary { background: #FAF8F5; border: 1px solid #E7E0D8; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #44403C; }
+        table { width: 100%; border-collapse: collapse; } tr { border-bottom: 1px solid #E7E0D8; } td { padding: 10px 0; } td:last-child { text-align: right; font-weight: 600; }
+        .total-row td { background: #1C1917; color: white; padding: 12px 10px; font-weight: 700; font-size: 15px; }
+        .total-row td:first-child { border-radius: 6px 0 0 6px; } .total-row td:last-child { border-radius: 0 6px 6px 0; color: #E8A07A; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px; }
+        .item { display: flex; gap: 8px; font-size: 13px; margin: 6px 0; align-items: flex-start; }
+        .warn { color: #D97706; font-size: 15px; flex-shrink: 0; } .ok { color: #16A34A; font-size: 15px; flex-shrink: 0; }
+        .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #E7E0D8; font-size: 11px; color: #A8A29E; text-align: center; }
+        @media print { @page { margin: 20mm; } body { margin: 0; } }
+      </style></head><body>
+      <div class="header">
+        <div class="logo">Wyceń<span>To</span></div>
+        <div class="meta"><h1>${q.pomieszczenie} · ${q.miasto}</h1><p>${new Date(q.created_at).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
+      </div>
+      <div class="label">Analiza zdjęcia</div>
+      <div class="summary">${q.wynik.summary}</div>
+      <div class="label">Kosztorys</div>
+      <table>
+        ${q.wynik.items.map(item => `<tr><td>${item.name}</td><td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${item.jednostka}</td></tr>`).join('')}
+        <tr class="total-row"><td>Łącznie</td><td>${q.wynik.total_min.toLocaleString('pl-PL')} – ${q.wynik.total_max.toLocaleString('pl-PL')} zł</td></tr>
+      </table>
+      <div class="two-col">
+        <div><div class="label">Na co uważać</div>${(q.wynik.uwagi || []).map(u => `<div class="item"><span class="warn">⚠</span><span>${u}</span></div>`).join('')}</div>
+        <div><div class="label">Warto dodać przy okazji</div>${(q.wynik.co_warto_dodac || []).map(c => `<div class="item"><span class="ok">✓</span><span>${c}</span></div>`).join('')}</div>
+      </div>
+      <div class="footer">Wycena wygenerowana przez WyceńTo · wycento.pl · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej</div>
+      <script>window.onload = function() { window.print(); }</script>
+      </body></html>
+    `)
+    win.document.close()
+  }
+
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? '?'
 
   return (
@@ -237,7 +282,7 @@ export default function Dashboard() {
                       {q.wynik.total_min?.toLocaleString('pl-PL')} – {q.wynik.total_max?.toLocaleString('pl-PL')} zł
                     </div>
                     {plan === 'pro' && (
-                      <div className="text-xs text-[#C85A2A] font-medium mt-0.5 hover:underline cursor-pointer">PDF</div>
+                      <button onClick={() => handlePDF(q)} className="text-xs text-[#C85A2A] font-medium mt-0.5 hover:underline">PDF ↓</button>
                     )}
                   </div>
                 </div>
