@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 const FEATURES = [
@@ -11,7 +12,27 @@ const FEATURES = [
 ]
 
 export default function ProPage() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const router = useRouter()
+
+  async function handleCheckout() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/stripe/checkout', { method: 'POST' })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError(data.error || 'Błąd płatności. Spróbuj ponownie.')
+        setLoading(false)
+      }
+    } catch {
+      setError('Błąd połączenia. Spróbuj ponownie.')
+      setLoading(false)
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#FAF8F5]">
@@ -57,15 +78,29 @@ export default function ProPage() {
             <span className="text-[#78716C] pb-1.5 text-base">zł / miesiąc</span>
           </div>
 
-          {/* Stripe checkout — dodaj STRIPE_PUBLISHABLE_KEY do .env.local i podmień link */}
+          {error && (
+            <div className="bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#C85A2A] text-sm rounded-xl px-4 py-3 mb-4">
+              {error}
+            </div>
+          )}
+
           <button
-            onClick={() => alert('Płatności Stripe — skonfiguruj klucze Stripe w .env.local i podmień ten przycisk na Stripe Checkout.')}
-            className="w-full bg-[#C85A2A] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20"
+            onClick={handleCheckout}
+            disabled={loading}
+            className="w-full bg-[#C85A2A] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20 disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            Przejdź na Pro — 39 zł/mies
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Przekierowuję do płatności...
+              </>
+            ) : 'Przejdź na Pro — 39 zł/mies'}
           </button>
           <p className="text-xs text-center text-[#A8A29E] mt-3">
-            Bezpieczna płatność · Anuluj kiedy chcesz
+            Bezpieczna płatność przez Stripe · Anuluj kiedy chcesz
           </p>
         </div>
 
