@@ -11,15 +11,18 @@ export async function wyceńRemont(formData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Musisz być zalogowany' }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('credits, plan')
     .eq('user_id', user.id)
     .single()
 
-  if (!profile) return { error: 'Nie znaleziono profilu użytkownika' }
+  // Jeśli tabela profiles nie istnieje jeszcze, pozwól kontynuować bez kredytów
+  const canProceed = profileError || !profile
+    ? true
+    : (profile.plan === 'pro' || profile.credits > 0)
 
-  if (profile.plan !== 'pro' && profile.credits <= 0) {
+  if (!canProceed) {
     return { error: 'BRAK_KREDYTOW' }
   }
 
@@ -78,18 +81,14 @@ Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
     const text = response.content[0].text
     const wynik = JSON.parse(text)
 
-    await supabase.from('quotes').insert({
-      user_id: user.id,
-      pomieszczenie,
-      miasto,
-      wynik,
-    })
+    // Zapisz wycenę (ignoruj błąd jeśli tabela jeszcze nie istnieje)
+    await supabase.from('quotes').insert({ user_id: user.id, pomieszczenie, miasto, wynik })
+      .then(() => {}).catch(() => {})
 
-    if (profile.plan !== 'pro') {
-      await supabase
-        .from('profiles')
-        .update({ credits: profile.credits - 1 })
-        .eq('user_id', user.id)
+    // Odejmij kredyt (ignoruj błąd jeśli profil nie istnieje)
+    if (profile && profile.plan !== 'pro' && profile.credits > 0) {
+      await supabase.from('profiles').update({ credits: profile.credits - 1 }).eq('user_id', user.id)
+        .then(() => {}).catch(() => {})
     }
 
     return { success: true, wynik }
