@@ -205,7 +205,19 @@ export default function Dashboard() {
                 Przejdź na Pro — 39 zł/mies →
               </button>
             ) : (
-              <span className="text-xs text-green-600 font-semibold">Aktywny ✓</span>
+              <div>
+                <span className="text-xs text-green-600 font-semibold block mb-1">Aktywny ✓</span>
+                <button
+                  onClick={async () => {
+                    const res = await fetch('/api/stripe/portal', { method: 'POST' })
+                    const data = await res.json()
+                    if (data.url) window.location.href = data.url
+                  }}
+                  className="text-xs text-[#A8A29E] hover:text-[#78716C] hover:underline transition-colors"
+                >
+                  Zarządzaj / anuluj →
+                </button>
+              </div>
             )}
           </div>
 

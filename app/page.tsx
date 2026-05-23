@@ -333,6 +333,52 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-24 bg-white border-t border-[#E7E0D8]">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Pytania i odpowiedzi</p>
+            <h2 className="font-serif text-4xl font-bold">Najczęstsze pytania</h2>
+          </div>
+          <div className="divide-y divide-[#E7E0D8]">
+            {[
+              {
+                q: 'Jak dokładna jest wycena?',
+                a: 'Celujemy w dokładność ±15–25%. To znaczy tyle samo co doświadczony wykonawca „z głowy". Wycena jest orientacyjna — podajemy widełki min-max, bo remont zawsze ma zmienne. Nie obiecujemy precyzji której nikt nie ma.',
+              },
+              {
+                q: 'Skąd bierzecie ceny?',
+                a: 'AI jest nauczona na danych rynkowych z całej Polski — stawkach robocizny, cenach materiałów i kosztach regionalnych. Ceny w Warszawie różnią się od Radomia o 20–35% i to uwzględniamy.',
+              },
+              {
+                q: 'Co się dzieje z moim zdjęciem?',
+                a: 'Zdjęcie jest wysyłane do modelu AI (Anthropic Claude) wyłącznie w celu analizy. Nie jest przechowywane po wygenerowaniu wyceny. Wynik wyceny (bez zdjęcia) zostaje zapisany na Twoim koncie.',
+              },
+              {
+                q: 'Czy mogę anulować subskrypcję?',
+                a: 'Tak, w każdej chwili z panelu użytkownika — jedno kliknięcie. Dostęp do Pro trwa do końca opłaconego miesiąca. Żadnych ukrytych opłat ani zobowiązań.',
+              },
+              {
+                q: 'Jakie pomieszczenia można wycenić?',
+                a: 'Łazienkę, kuchnię, pokój, sypialnię, przedpokój, taras i całe mieszkanie. Najlepsza wycena wychodzi przy dobrym oświetleniu i zdjęciu pokazującym cały pokój.',
+              },
+              {
+                q: 'Co jeśli wycena jest daleko od rzeczywistości?',
+                a: 'Napisz do nas na kontakt@wycento.pl z opisem — sprawdzimy i poprawimy model. Twoja opinia dosłownie poprawia produkt dla wszystkich.',
+              },
+            ].map((item, i) => (
+              <details key={i} className="group py-5 cursor-pointer list-none">
+                <summary className="flex items-center justify-between font-semibold text-[#1C1917] text-sm select-none list-none">
+                  {item.q}
+                  <span className="ml-4 flex-shrink-0 w-6 h-6 rounded-full bg-[#F2EDE6] flex items-center justify-center text-[#C85A2A] text-xs font-bold group-open:rotate-45 transition-transform duration-200">+</span>
+                </summary>
+                <p className="mt-3 text-sm text-[#78716C] leading-relaxed">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-[#F2EDE6] border-y border-[#E7E0D8] py-20">
         <div className="max-w-6xl mx-auto px-6 text-center">
@@ -356,8 +402,8 @@ export default function Home() {
             <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
           </div>
           <div className="flex gap-6 text-sm text-[#78716C]">
-            <a href="#" className="hover:text-[#1C1917] transition-colors">Regulamin</a>
-            <a href="#" className="hover:text-[#1C1917] transition-colors">Prywatność</a>
+            <a href="/regulamin" className="hover:text-[#1C1917] transition-colors">Regulamin</a>
+            <a href="/prywatnosc" className="hover:text-[#1C1917] transition-colors">Prywatność</a>
             <a href="mailto:kontakt@wycento.pl" className="hover:text-[#1C1917] transition-colors">Kontakt</a>
           </div>
           <span className="text-sm text-[#A8A29E]">© 2026 WyceńTo</span>
