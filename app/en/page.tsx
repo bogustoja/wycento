@@ -159,9 +159,9 @@ export default function HomeEN() {
             <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
           </div>
           <div className="flex gap-6 text-sm text-[#78716C]">
-            <a href="#" className="hover:text-[#1C1917]">Terms</a>
-            <a href="#" className="hover:text-[#1C1917]">Privacy</a>
-            <a href="mailto:contact@wycento.pl" className="hover:text-[#1C1917]">Contact</a>
+            <a href="/regulamin" className="hover:text-[#1C1917]">Terms</a>
+            <a href="/prywatnosc" className="hover:text-[#1C1917]">Privacy</a>
+            <a href="mailto:kontakt@wycento.pl" className="hover:text-[#1C1917]">Contact</a>
             <a href="/" className="hover:text-[#1C1917]">🇵🇱 Polski</a>
           </div>
           <span className="text-sm text-[#A8A29E]">© 2026 WyceńTo</span>
