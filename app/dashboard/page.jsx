@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '../lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const EMOJI = {
   'Łazienka': '🚿',
@@ -25,8 +25,17 @@ export default function Dashboard() {
   const [quotes, setQuotes] = useState([])
   const [totalQuotes, setTotalQuotes] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [showProBanner, setShowProBanner] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+
+  useEffect(() => {
+    if (searchParams.get('sukces') === 'pro') {
+      setShowProBanner(true)
+      window.history.replaceState({}, '', '/dashboard')
+    }
+  }, [searchParams])
 
   useEffect(() => {
     async function getData() {
@@ -132,6 +141,19 @@ export default function Dashboard() {
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-10">
+
+        {showProBanner && (
+          <div className="bg-green-50 border border-green-200 rounded-2xl px-6 py-4 mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🎉</span>
+              <div>
+                <div className="font-semibold text-green-800 text-sm">Witaj w planie Pro!</div>
+                <div className="text-xs text-green-600 mt-0.5">Masz teraz nielimitowane wyceny i dostęp do PDF.</div>
+              </div>
+            </div>
+            <button onClick={() => setShowProBanner(false)} className="text-green-400 hover:text-green-600 transition text-lg leading-none">×</button>
+          </div>
+        )}
 
         <div className="mb-8">
           <h1 className="font-serif text-3xl font-bold text-[#1C1917]">Dzień dobry!</h1>
