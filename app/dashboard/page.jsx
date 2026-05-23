@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '../lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -18,7 +18,18 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-export default function Dashboard() {
+function ProBannerCheck({ onShow }) {
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    if (searchParams.get('sukces') === 'pro') {
+      onShow()
+      window.history.replaceState({}, '', '/dashboard')
+    }
+  }, [searchParams, onShow])
+  return null
+}
+
+function Dashboard() {
   const [user, setUser] = useState(null)
   const [credits, setCredits] = useState(null)
   const [plan, setPlan] = useState('free')
@@ -27,15 +38,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [showProBanner, setShowProBanner] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
   const supabase = createClient()
-
-  useEffect(() => {
-    if (searchParams.get('sukces') === 'pro') {
-      setShowProBanner(true)
-      window.history.replaceState({}, '', '/dashboard')
-    }
-  }, [searchParams])
 
   useEffect(() => {
     async function getData() {
@@ -117,6 +120,9 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-[#FAF8F5]">
+      <Suspense fallback={null}>
+        <ProBannerCheck onShow={() => setShowProBanner(true)} />
+      </Suspense>
 
       {/* NAV */}
       <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
@@ -326,5 +332,13 @@ export default function Dashboard() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF8F5]" />}>
+      <Dashboard />
+    </Suspense>
   )
 }
