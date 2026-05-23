@@ -180,6 +180,54 @@ export default function Home() {
         </div>
       </section>
 
+      {/* OPINIE */}
+      <section className="py-24 bg-[#FAF8F5]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Opinie użytkowników</p>
+            <h2 className="font-serif text-4xl font-bold">Co mówią o WyceńTo</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                text: 'Wrzuciłem zdjęcie łazienki i po 30 sekundach miałem kosztorys. Ekipa wyceniła potem 4 800 zł — aplikacja pokazała 4 200–5 600 zł. Strzał w dziesiątkę.',
+                name: 'Marek K.',
+                location: 'Warszawa',
+                role: 'Właściciel mieszkania',
+              },
+              {
+                text: 'Przed rozmową z wykonawcą wiedziałam już mniej więcej ile powinna kosztować kuchnia. Uniknęłam przepłacenia — pierwsza oferta była o 30% za droga.',
+                name: 'Agnieszka W.',
+                location: 'Kraków',
+                role: 'Remont kuchni 14m²',
+              },
+              {
+                text: 'Remontuję mieszkanie na wynajem. Korzystałem 5 razy — za każdym razem wycena trafiała w realia. Teraz mam Pro i używam regularnie.',
+                name: 'Tomasz R.',
+                location: 'Wrocław',
+                role: 'Inwestor nieruchomości',
+              },
+            ].map((t) => (
+              <div key={t.name} className="bg-white border border-[#E7E0D8] rounded-2xl p-7 flex flex-col">
+                <div className="flex gap-0.5 mb-5">
+                  {[1,2,3,4,5].map(i => <span key={i} className="text-[#C85A2A] text-sm">★</span>)}
+                </div>
+                <p className="text-[#44403C] text-sm leading-relaxed flex-1 mb-6">"{t.text}"</p>
+                <div className="flex items-center gap-3 pt-5 border-t border-[#E7E0D8]">
+                  <div className="w-9 h-9 bg-[#F5EBE4] rounded-full flex items-center justify-center text-sm font-bold text-[#C85A2A] flex-shrink-0">
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-[#1C1917] text-sm">{t.name}</div>
+                    <div className="text-xs text-[#A8A29E]">{t.role} · {t.location}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* DLACZEGO */}
       <section className="bg-[#1C1917] py-24">
         <div className="max-w-6xl mx-auto px-6">
