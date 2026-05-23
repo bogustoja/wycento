@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
+  const [isForgot, setIsForgot] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('error')
@@ -15,6 +16,18 @@ export default function LoginPage() {
   const supabase = createClient()
 
   async function handleSubmit() {
+    if (isForgot) {
+      if (!email) { setMessage('Podaj adres email'); setMessageType('error'); return }
+      setLoading(true)
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/login`,
+      })
+      if (error) { setMessage(error.message); setMessageType('error') }
+      else { setMessage('Wysłaliśmy link do resetowania hasła. Sprawdź skrzynkę.'); setMessageType('success') }
+      setLoading(false)
+      return
+    }
+
     if (!email || !password) { setMessage('Uzupełnij email i hasło'); setMessageType('error'); return }
     setLoading(true)
     setMessage('')
@@ -88,10 +101,12 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h1 className="font-serif text-3xl font-bold text-[#1C1917] mb-2">
-              {isRegister ? 'Utwórz konto' : 'Witaj z powrotem'}
+              {isForgot ? 'Resetuj hasło' : isRegister ? 'Utwórz konto' : 'Witaj z powrotem'}
             </h1>
             <p className="text-sm text-[#78716C]">
-              {isRegister
+              {isForgot
+                ? 'Wyślemy Ci link do ustawienia nowego hasła'
+                : isRegister
                 ? 'Pierwsze 3 wyceny za darmo, bez karty kredytowej'
                 : 'Zaloguj się żeby zobaczyć swoje wyceny'}
             </p>
@@ -110,17 +125,26 @@ export default function LoginPage() {
                   className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
                 />
               </div>
-              <div>
-                <label className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide mb-2 block">Hasło</label>
-                <input
-                  type="password"
-                  placeholder="Minimum 6 znaków"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
-                />
-              </div>
+              {!isForgot && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide">Hasło</label>
+                    {!isRegister && (
+                      <button type="button" onClick={() => { setIsForgot(true); setMessage('') }} className="text-xs text-[#C85A2A] hover:underline">
+                        Zapomniałem hasła
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="Minimum 6 znaków"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
+                  />
+                </div>
+              )}
             </div>
 
             {message && (
@@ -146,19 +170,27 @@ export default function LoginPage() {
                   </svg>
                   Ładowanie...
                 </>
-              ) : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
+              ) : isForgot ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
             </button>
           </div>
 
-          <p className="text-sm text-center text-[#78716C] mt-5">
-            {isRegister ? 'Masz już konto?' : 'Nie masz konta?'}{' '}
-            <button
-              onClick={() => { setIsRegister(!isRegister); setMessage('') }}
-              className="text-[#C85A2A] font-semibold hover:underline"
-            >
-              {isRegister ? 'Zaloguj się' : 'Zarejestruj się za darmo'}
-            </button>
-          </p>
+          {isForgot ? (
+            <p className="text-sm text-center text-[#78716C] mt-5">
+              <button onClick={() => { setIsForgot(false); setMessage('') }} className="text-[#C85A2A] font-semibold hover:underline">
+                ← Wróć do logowania
+              </button>
+            </p>
+          ) : (
+            <p className="text-sm text-center text-[#78716C] mt-5">
+              {isRegister ? 'Masz już konto?' : 'Nie masz konta?'}{' '}
+              <button
+                onClick={() => { setIsRegister(!isRegister); setMessage('') }}
+                className="text-[#C85A2A] font-semibold hover:underline"
+              >
+                {isRegister ? 'Zaloguj się' : 'Zarejestruj się za darmo'}
+              </button>
+            </p>
+          )}
 
           <p className="text-center mt-5">
             <a href="/" className="text-xs text-[#A8A29E] hover:text-[#78716C] transition-colors">
