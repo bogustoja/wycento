@@ -14,25 +14,62 @@ export default function WycenaPage() {
   const [error, setError] = useState(null)
   const router = useRouter()
 
-  function handleImage(e) {
+  // Zdjęcia z telefonu mają 3–8 MB. Zmniejszamy do max 1600 px i JPEG ~80%,
+  // bo limit Server Action to 1 MB, a Claude przyjmuje max 5 MB na obraz.
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file)
+      const img = new Image()
+      img.onload = () => {
+        const MAX = 1600
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height))
+        const canvas = document.createElement('canvas')
+        canvas.width = Math.round(img.width * scale)
+        canvas.height = Math.round(img.height * scale)
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        URL.revokeObjectURL(url)
+        resolve(canvas.toDataURL('image/jpeg', 0.8))
+      }
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        reject(new Error('decode'))
+      }
+      img.src = url
+    })
+  }
+
+  async function handleImage(e) {
     const file = e.target.files[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = (e) => { setImage(e.target.result); setPreview(e.target.result) }
-    reader.readAsDataURL(file)
+    setError(null)
+    try {
+      const dataUrl = await compressImage(file)
+      setImage(dataUrl)
+      setPreview(dataUrl)
+    } catch {
+      setImage(null)
+      setPreview(null)
+      setError('Nie udało się wczytać zdjęcia. Użyj JPG lub PNG (zdjęcia HEIC z iPhone’a najlepiej wrzucać przez Safari).')
+    }
   }
 
   async function handleSubmit() {
-    if (!miasto || !image) { setError('Dodaj zdjęcie i podaj miasto'); return }
+    if (!miasto.trim() || !image) { setError('Dodaj zdjęcie i podaj miasto'); return }
     setLoading(true); setError(null)
-    const formData = new FormData()
-    formData.append('miasto', miasto)
-    formData.append('pomieszczenie', pomieszczenie)
-    formData.append('image', image)
-    const result = await wyceńRemont(formData)
-    if (result.error) setError(result.error)
-    else setWynik(result.wynik)
-    setLoading(false)
+    try {
+      const formData = new FormData()
+      formData.append('miasto', miasto.trim())
+      formData.append('pomieszczenie', pomieszczenie)
+      formData.append('image', image)
+      const result = await wyceńRemont(formData)
+      if (!result || result.error) setError(result?.error || 'Błąd podczas wyceny. Spróbuj ponownie.')
+      else setWynik(result.wynik)
+    } catch (err) {
+      console.error(err)
+      setError('Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handlePDF() {
