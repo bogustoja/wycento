@@ -6,6 +6,10 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
+const POMIESZCZENIA = ['Łazienka', 'Kuchnia', 'Przedpokój', 'Sypialnia', 'Pokój', 'Salon', 'Całe mieszkanie', 'Taras']
+const MEDIA_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_BASE64_LENGTH = 6_500_000 // ~4.8 MB po zdekodowaniu, limit Claude to 5 MB
+
 function getAdmin() {
   return createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -13,11 +17,84 @@ function getAdmin() {
   )
 }
 
-async function ensureQuotesBucket(admin) {
-  const { data: buckets } = await admin.storage.listBuckets()
-  const exists = buckets?.some(b => b.name === 'quotes')
-  if (!exists) {
-    await admin.storage.createBucket('quotes', { public: false, fileSizeLimit: 204800 })
+const SYSTEM_PROMPT = `Jesteś doświadczonym kierownikiem ekipy wykończeniowej w Polsce. Robiłeś łazienki, kuchnie, pokoje, tarasy i altany. Wyceniasz remont na podstawie zdjęcia tak, jak zrobiłbyś to dla klienta przy pierwszych oględzinach.
+
+ZASADY WYCENY
+- Podajesz widełki min–max w złotych brutto, osobno dla każdej pozycji. Nigdy jedna liczba.
+- Rozdzielasz robociznę od materiałów. Materiały liczysz w średnim standardzie (nie najtańsze z marketu, nie premium).
+- Stawki robocizny zależą od miasta: Warszawa, Kraków, Wrocław, Trójmiasto, Poznań są wyraźnie droższe niż średnie miasta, a te droższe niż małe miejscowości i wsie.
+- Jeśli czegoś nie widać na zdjęciu (powierzchnia, stan instalacji pod płytkami, wilgoć), zakładasz realistyczny wariant i piszesz to wprost w "uwagi".
+
+UKRYTE KOSZTY — ZAWSZE SPRAWDŹ I DOLICZ, JEŚLI DOTYCZĄ
+- Skucie starych płytek / zerwanie podłóg i wywóz gruzu (kontener lub worki big-bag).
+- Gruntowanie, wyrównanie ścian i wylewki samopoziomujące — stare budynki rzadko mają proste ściany.
+- Hydroizolacja w strefach mokrych (łazienka, prysznic, taras).
+- Chemia budowlana: kleje, fugi, silikony, narożniki, listwy, taśmy uszczelniające.
+- Zabezpieczenie mieszkania: folie, taśmy, sprzątanie po robocie.
+- Stare instalacje: w blokach z lat 60–80 i kamienicach wymiana odcinków hydrauliki i elektryki to częsta niespodzianka po skuciu.
+- Transport materiałów i wniesienie (zwłaszcza bez windy).
+
+TYPOWE PUŁAPKI KLIENTA — WSKAŻ W "uwagi" TE, KTÓRE PASUJĄ
+- Zmiana decyzji w trakcie (inne płytki, przesunięcie odpływu) podnosi koszt i wydłuża termin.
+- Płytki wielkoformatowe kosztują więcej w robociźnie niż standardowe.
+- Odpływ liniowy i stelaż podtynkowy to osobne pozycje.
+- Zostaw 10–15% rezerwy na niespodzianki po skuciu.
+
+CO WARTO ZROBIĆ PRZY OKAZJI
+- Tylko rzeczy, których odłożenie oznacza ponowne kucie lub ponowny przyjazd ekipy (instalacje pod płytkami, dodatkowe gniazdka, wentylacja).
+
+FORMAT
+Odpowiadasz WYŁĄCZNIE poprawnym JSON-em, bez markdown i bez tekstu przed ani po.
+Jeśli na zdjęciu nie ma pomieszczenia do remontu, zwróć: {"error": "NIE_POMIESZCZENIE"}.`
+
+function buildUserPrompt(miasto, pomieszczenie) {
+  return `Lokalizacja: ${miasto}
+Typ pomieszczenia: ${pomieszczenie}
+
+Zwróć dokładnie taki JSON:
+{
+  "summary": "2–3 zdania: co widać na zdjęciu, stan pomieszczenia, jaki zakres prac zakładasz",
+  "items": [
+    {"name": "nazwa pozycji (robocizna lub materiał)", "min": 1000, "max": 2000, "jednostka": "zł"}
+  ],
+  "total_min": 5000,
+  "total_max": 8000,
+  "czas_realizacji": "np. 2–3 tygodnie",
+  "uwagi": ["konkretna uwaga o ryzyku lub założeniu"],
+  "co_warto_dodac": ["konkretna rzecz do zrobienia przy okazji"]
+}
+total_min i total_max to sumy pozycji z items.`
+}
+
+function parseJson(text) {
+  const cleaned = text.replace(/```json|```/g, '').trim()
+  const start = cleaned.indexOf('{')
+  const end = cleaned.lastIndexOf('}')
+  if (start === -1 || end === -1) throw new Error('Brak JSON w odpowiedzi AI')
+  return JSON.parse(cleaned.slice(start, end + 1))
+}
+
+function normalizeWynik(raw) {
+  const items = Array.isArray(raw.items)
+    ? raw.items
+        .filter(i => i && i.name && Number.isFinite(Number(i.min)) && Number.isFinite(Number(i.max)))
+        .map(i => {
+          const a = Math.round(Number(i.min))
+          const b = Math.round(Number(i.max))
+          return { name: String(i.name), min: Math.min(a, b), max: Math.max(a, b), jednostka: 'zł' }
+        })
+    : []
+
+  if (items.length === 0) throw new Error('AI nie zwróciło pozycji wyceny')
+
+  return {
+    summary: String(raw.summary || ''),
+    items,
+    total_min: items.reduce((s, i) => s + i.min, 0),
+    total_max: items.reduce((s, i) => s + i.max, 0),
+    czas_realizacji: String(raw.czas_realizacji || 'do ustalenia z wykonawcą'),
+    uwagi: Array.isArray(raw.uwagi) ? raw.uwagi.map(String) : [],
+    co_warto_dodac: Array.isArray(raw.co_warto_dodac) ? raw.co_warto_dodac.map(String) : [],
   }
 }
 
@@ -27,104 +104,83 @@ export async function wyceńRemont(formData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Musisz być zalogowany' }
 
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('credits, plan')
-    .eq('user_id', user.id)
-    .single()
+  // --- Walidacja wejścia ---
+  const miasto = String(formData.get('miasto') || '').trim().slice(0, 80)
+  const pomieszczenieRaw = String(formData.get('pomieszczenie') || '').trim()
+  const pomieszczenie = POMIESZCZENIA.includes(pomieszczenieRaw) ? pomieszczenieRaw : 'Pokój'
+  const imageData = String(formData.get('image') || '')
 
-  const canProceed = profileError || !profile
-    ? true
-    : (profile.plan === 'pro' || profile.credits > 0)
+  if (!miasto) return { error: 'Podaj miasto' }
+  if (!imageData.startsWith('data:image/')) return { error: 'Dodaj zdjęcie pomieszczenia' }
 
-  if (!canProceed) {
-    return { error: 'BRAK_KREDYTOW' }
+  const mediaType = imageData.slice(5, imageData.indexOf(';'))
+  const base64 = imageData.split(',')[1] || ''
+
+  if (!MEDIA_TYPES.includes(mediaType)) {
+    return { error: 'Nieobsługiwany format zdjęcia. Użyj JPG lub PNG.' }
+  }
+  if (!base64 || base64.length > MAX_BASE64_LENGTH) {
+    return { error: 'Zdjęcie jest za duże. Spróbuj inne zdjęcie.' }
   }
 
-  const miasto = formData.get('miasto')
-  const pomieszczenie = formData.get('pomieszczenie')
-  const imageData = formData.get('image')
+  // --- Kredyt: pobierany atomowo w bazie, zwracany jeśli wycena padnie ---
+  const { data: allowed, error: creditError } = await supabase.rpc('use_credit')
+  if (creditError) {
+    console.error('[wycena] use_credit failed:', creditError)
+    return { error: 'Nie udało się sprawdzić konta. Spróbuj za chwilę.' }
+  }
+  if (!allowed) return { error: 'BRAK_KREDYTOW' }
 
-  if (!imageData) return { error: 'Brak zdjęcia' }
-
-  const base64 = imageData.split(',')[1]
-  const mediaType = imageData.split(';')[0].split(':')[1]
-
-  const systemPrompt = `Jesteś ekspertem od wyceny remontów w Polsce z 20-letnim doświadczeniem.
-Pracowałeś przy wykończeniach wnętrz, łazienkach, kuchniach, tarasach i altanach.
-
-Znasz realia rynku budowlanego:
-- Stawki robocizny różnią się regionalnie (Warszawa drożej, mniejsze miasta taniej)
-- Klienci często nie wiedzą co chcą i zmieniają zdanie w trakcie
-- Zawsze warto przy okazji wymieniać instalacje elektryczne i hydrauliczne
-- Ukryte koszty: wywóz gruzu, folia, taśmy, kleje, gruntowanie
-- Czas realizacji ma wpływ na cenę (pilne = droższe)
-
-Odpowiadasz TYLKO w formacie JSON, bez żadnego tekstu przed ani po.`
-
-  const userPrompt = `Przeanalizuj to zdjęcie pomieszczenia.
-Lokalizacja: ${miasto}
-Typ pomieszczenia: ${pomieszczenie}
-
-Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
-{
-  "summary": "krótki opis co widać na zdjęciu i stan pomieszczenia",
-  "items": [
-    {"name": "nazwa pracy", "min": 1000, "max": 2000, "jednostka": "zł"}
-  ],
-  "total_min": 5000,
-  "total_max": 8000,
-  "czas_realizacji": "2-3 tygodnie",
-  "uwagi": ["ważna uwaga 1", "ważna uwaga 2"],
-  "co_warto_dodac": ["co warto zrobić przy okazji"]
-}`
-
+  let wynik
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
-      system: systemPrompt,
+      max_tokens: 2000,
+      system: SYSTEM_PROMPT,
       messages: [{
         role: 'user',
         content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: userPrompt },
+          { type: 'text', text: buildUserPrompt(miasto, pomieszczenie) },
         ],
       }],
     })
 
-    const text = response.content[0].text
-    const wynik = JSON.parse(text)
+    const text = response.content.find(c => c.type === 'text')?.text || ''
+    const raw = parseJson(text)
 
-    // Save to Supabase Storage (no SQL table needed)
-    try {
-      const admin = getAdmin()
-      await ensureQuotesBucket(admin)
-      const quoteId = Date.now()
-      const quoteData = {
-        id: String(quoteId),
-        user_id: user.id,
-        pomieszczenie,
-        miasto,
-        wynik,
-        created_at: new Date().toISOString(),
-      }
-      await admin.storage
-        .from('quotes')
-        .upload(`${user.id}/${quoteId}.json`, JSON.stringify(quoteData), {
-          contentType: 'application/json',
-        })
-    } catch {}
-
-    // Deduct credit
-    if (profile && profile.plan !== 'pro' && profile.credits > 0) {
-      await supabase.from('profiles').update({ credits: profile.credits - 1 }).eq('user_id', user.id)
-        .then(() => {}).catch(() => {})
+    if (raw.error === 'NIE_POMIESZCZENIE') {
+      await refund(user.id)
+      return { error: 'Na zdjęciu nie widać pomieszczenia do remontu. Zrób zdjęcie całego pokoju.' }
     }
 
-    return { success: true, wynik }
-  } catch (error) {
-    console.error('Błąd API:', error)
-    return { error: 'Błąd podczas wyceny. Spróbuj ponownie.' }
+    wynik = normalizeWynik(raw)
+  } catch (err) {
+    console.error('[wycena] AI error:', err)
+    await refund(user.id)
+    return { error: 'Błąd podczas wyceny. Kredyt został zwrócony — spróbuj ponownie.' }
   }
+
+  // --- Zapis do historii (wycena już jest, więc błąd zapisu nie blokuje wyniku) ---
+  const { error: insertError } = await supabase
+    .from('quotes')
+    .insert({
+      user_id: user.id,
+      pomieszczenie,
+      miasto,
+      total_min: wynik.total_min,
+      total_max: wynik.total_max,
+      wynik,
+    })
+
+  if (insertError) {
+    console.error('[wycena] quotes insert failed:', insertError)
+  }
+
+  return { success: true, wynik }
+}
+
+async function refund(userId) {
+  const { error } = await getAdmin().rpc('refund_credit', { p_user: userId })
+  if (error) console.error('[wycena] refund_credit failed for', userId, error)
 }
