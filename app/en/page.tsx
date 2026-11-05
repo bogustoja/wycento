@@ -43,7 +43,7 @@ export default function HomeEN() {
                 <span className="text-[#C85A2A] italic">really cost?</span>
               </h1>
               <p className="text-lg text-[#78716C] leading-relaxed mb-10 max-w-lg">
-                Upload a photo of your room, enter your city. AI estimates the renovation cost with real local prices — before you even call a contractor.
+                Upload a photo of your room, enter your city. We estimate the renovation cost with real local prices — before you even call a contractor.
               </p>
               <div className="flex items-center gap-6">
                 <div><div className="font-serif text-2xl font-bold">30s</div><div className="text-xs text-[#A8A29E]">estimate time</div></div>

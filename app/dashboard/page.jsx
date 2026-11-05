@@ -109,7 +109,8 @@ function Dashboard() {
         <div><div class="label">Na co uważać</div>${(q.wynik.uwagi || []).map(u => `<div class="item"><span class="warn">⚠</span><span>${u}</span></div>`).join('')}</div>
         <div><div class="label">Warto dodać przy okazji</div>${(q.wynik.co_warto_dodac || []).map(c => `<div class="item"><span class="ok">✓</span><span>${c}</span></div>`).join('')}</div>
       </div>
-      <div class="footer">Wycena wygenerowana przez WyceńTo · wycento.pl · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej</div>
+      ${plan !== 'pro' ? `<div style="margin-top:24px;background:#FEF8F4;border:1px solid #F2D9C8;border-radius:8px;padding:12px 16px;text-align:center;font-size:11px;color:#C85A2A;font-weight:600;">Wygenerowano bezpłatnie na wycento.app · Sprawdź ile kosztuje Twój remont</div>` : ''}
+      <div class="footer">Wycena wygenerowana przez WyceńTo · wycento.app · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej</div>
       <script>window.onload = function() { window.print(); }</script>
       </body></html>
     `)

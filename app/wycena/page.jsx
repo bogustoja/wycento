@@ -7,6 +7,7 @@ import { wyceńRemont } from '../actions/wycena'
 export default function WycenaPage() {
   const [miasto, setMiasto] = useState('')
   const [pomieszczenie, setPomieszczenie] = useState('Łazienka')
+  const [opis, setOpis] = useState('')
   const [image, setImage] = useState(null)
   const [preview, setPreview] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -28,6 +29,7 @@ export default function WycenaPage() {
     const formData = new FormData()
     formData.append('miasto', miasto)
     formData.append('pomieszczenie', pomieszczenie)
+    formData.append('opis', opis)
     formData.append('image', image)
     const result = await wyceńRemont(formData)
     if (result.error) setError(result.error)
@@ -115,8 +117,9 @@ export default function WycenaPage() {
           </div>
         </div>
 
+        <div style="margin-top:24px;background:#FEF8F4;border:1px solid #F2D9C8;border-radius:8px;padding:12px 16px;text-align:center;font-size:11px;color:#C85A2A;font-weight:600;">Wygenerowano bezpłatnie na wycento.app · Sprawdź ile kosztuje Twój remont</div>
         <div class="footer">
-          Wycena wygenerowana przez WyceńTo · wycento.pl · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej
+          Wycena wygenerowana przez WyceńTo · wycento.app · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej
         </div>
         <script>window.onload = function() { window.print(); }</script>
       </body>
@@ -307,6 +310,19 @@ export default function WycenaPage() {
               </select>
             </div>
 
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-[#44403C] mb-2">
+                Co chcesz zrobić? <span className="text-[#A8A29E] font-normal">(opcjonalnie)</span>
+              </label>
+              <textarea
+                placeholder="np. położyć płytki na podłodze, wymienić wannę na prysznic, pomalować ściany i wymienić okno..."
+                value={opis}
+                onChange={(e) => setOpis(e.target.value)}
+                rows={3}
+                className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition resize-none"
+              />
+            </div>
+
             <label className="block border-2 border-dashed border-[#E7E0D8] rounded-2xl p-10 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] transition-all mb-6 group">
               {preview ? (
                 <div>
@@ -347,7 +363,7 @@ export default function WycenaPage() {
 
             {loading && (
               <p className="text-xs text-center text-[#A8A29E] mt-3">
-                AI analizuje zdjęcie i sprawdza stawki dla Twojego miasta…
+                Analizujemy zdjęcie i sprawdzamy stawki dla Twojego miasta…
               </p>
             )}
           </div>

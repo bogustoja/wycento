@@ -40,8 +40,8 @@ export default function Home() {
 
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-16">
           <div className="inline-flex items-center gap-2 bg-white border border-[#E7E0D8] rounded-full px-4 py-1.5 mb-10 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-green-400"></span>
-            <span className="text-xs font-semibold text-[#78716C]">🇵🇱 Polskie ceny, polskie realia</span>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span className="text-xs font-semibold text-[#78716C]">📷 Wycena ze zdjęcia · Polskie ceny i realia</span>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -53,7 +53,7 @@ export default function Home() {
                 <span className="text-[#C85A2A] italic">remont?</span>
               </h1>
               <p className="text-lg text-[#78716C] leading-relaxed mb-10 max-w-lg">
-                Wrzuć zdjęcie pomieszczenia, podaj miasto. AI wyceni remont z prawdziwymi cenami dla Twojej okolicy — zanim zdążysz zadzwonić do ekipy.
+                Wrzuć zdjęcie pomieszczenia, podaj miasto. Nasz system wyceni remont z prawdziwymi cenami dla Twojej okolicy — zanim zdążysz zadzwonić do ekipy.
               </p>
               <div className="flex items-center gap-6">
                 <div>
@@ -116,6 +116,11 @@ export default function Home() {
                 <span>✓ Bez karty kredytowej</span>
                 <span>✓ Wynik w 30s</span>
               </div>
+              <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-[#F2EDE6]">
+                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🔒</span> SSL</span>
+                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">💳</span> Stripe</span>
+                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🇪🇺</span> GDPR</span>
+              </div>
             </div>
           </div>
         </div>
@@ -150,6 +155,53 @@ export default function Home() {
               <span className="font-semibold text-white">Łącznie</span>
               <span className="font-serif text-xl font-bold text-[#E8A07A]">3 800 – 5 700 zł</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PORÓWNANIE */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Przewaga WyceńTo</p>
+            <h2 className="font-serif text-4xl font-bold leading-tight">
+              Inne kalkulatory zgadują.<br />
+              <span className="text-[#C85A2A] italic">My patrzymy.</span>
+            </h2>
+            <p className="text-[#78716C] mt-4 max-w-xl mx-auto text-sm leading-relaxed">
+              "Łazienka 6m²" to za mało. Zdjęcie mówi wszystko — stare płytki, pęknięcia ściany, układ rur, stan fugi. System widzi to co widzi doświadczony wykonawca.
+            </p>
+          </div>
+
+          <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden shadow-sm">
+            <div className="grid grid-cols-3 bg-[#FAF8F5] border-b border-[#E7E0D8]">
+              <div className="px-6 py-4 text-sm font-semibold text-[#78716C]">Co bierzemy pod uwagę</div>
+              <div className="px-6 py-4 text-center">
+                <span className="font-serif font-bold text-[#1C1917] text-sm">Wyceń<span className="text-[#C85A2A]">To</span></span>
+              </div>
+              <div className="px-6 py-4 text-center text-xs font-semibold text-[#A8A29E] uppercase tracking-wide">Inne kalkulatory</div>
+            </div>
+            {[
+              { feature: 'Analiza zdjęcia (widzi stan pomieszczenia)', us: true, them: false },
+              { feature: 'Stawki robocizny dla Twojego miasta', us: true, them: '⚠ Ogólne' },
+              { feature: 'Ukryte koszty (gruz, kleje, folia, grunt)', us: true, them: false },
+              { feature: 'Czas realizacji i dostępność ekip', us: true, them: false },
+              { feature: 'Co warto zrobić przy okazji remontu', us: true, them: false },
+              { feature: 'Raport PDF do pobrania', us: true, them: false },
+            ].map((row, i) => (
+              <div key={i} className="grid grid-cols-3 border-b border-[#E7E0D8] last:border-0 hover:bg-[#FAF8F5]/50 transition-colors">
+                <div className="px-6 py-4 text-sm text-[#44403C] flex items-center">{row.feature}</div>
+                <div className="px-6 py-4 flex justify-center items-center">
+                  <span className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">✓</span>
+                </div>
+                <div className="px-6 py-4 flex justify-center items-center">
+                  {row.them === false
+                    ? <span className="w-6 h-6 rounded-full bg-[#FEF0EA] text-[#C85A2A]/60 flex items-center justify-center text-xs font-bold">✕</span>
+                    : <span className="text-xs text-[#A8A29E]">{row.them}</span>
+                  }
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -348,11 +400,11 @@ export default function Home() {
               },
               {
                 q: 'Skąd bierzecie ceny?',
-                a: 'AI jest nauczona na danych rynkowych z całej Polski — stawkach robocizny, cenach materiałów i kosztach regionalnych. Ceny w Warszawie różnią się od Radomia o 20–35% i to uwzględniamy.',
+                a: 'Nasz system jest nauczony na danych rynkowych z całej Polski — stawkach robocizny, cenach materiałów i kosztach regionalnych. Ceny w Warszawie różnią się od Radomia o 20–35% i to uwzględniamy.',
               },
               {
                 q: 'Co się dzieje z moim zdjęciem?',
-                a: 'Zdjęcie jest wysyłane do modelu AI (Anthropic Claude) wyłącznie w celu analizy. Nie jest przechowywane po wygenerowaniu wyceny. Wynik wyceny (bez zdjęcia) zostaje zapisany na Twoim koncie.',
+                a: 'Zdjęcie jest wysyłane do naszego systemu analizy wyłącznie w celu wyceny. Nie jest przechowywane po wygenerowaniu wyceny. Wynik wyceny (bez zdjęcia) zostaje zapisany na Twoim koncie.',
               },
               {
                 q: 'Czy mogę anulować subskrypcję?',
@@ -380,16 +432,32 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-[#F2EDE6] border-y border-[#E7E0D8] py-20">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="font-serif text-4xl font-bold mb-4">Gotowy na pierwszą wycenę?</h2>
-          <p className="text-[#78716C] mb-8">Dołącz za darmo. Pierwsze 3 wyceny gratis, bez karty kredytowej.</p>
+      <section className="bg-[#1C1917] py-24">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-8">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span className="text-xs font-semibold text-[#D4C9BE]">Zacznij za darmo · bez karty kredytowej</span>
+          </div>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
+            Nie płać ekipie<br />
+            <span className="text-[#E8A07A] italic">za dużo.</span>
+          </h2>
+          <p className="text-[#78716C] mb-10 text-base leading-relaxed">
+            Pierwsze 3 wyceny całkowicie za darmo.<br />
+            Wiedz ile powinien kosztować remont zanim zadzwonisz po oferty.
+          </p>
           <button
             onClick={() => window.location.href = '/login'}
-            className="inline-flex items-center gap-2 bg-[#C85A2A] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20"
+            className="inline-flex items-center gap-2 bg-[#C85A2A] text-white px-10 py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/30 mb-5"
           >
-            Wyceń swój remont teraz →
+            Wyceń mój remont teraz →
           </button>
+          <div className="flex justify-center gap-6 text-xs text-[#78716C]">
+            <span>✓ 3 wyceny gratis</span>
+            <span>✓ Bez karty</span>
+            <span>✓ Wynik w 30s</span>
+            <span>✓ Anuluj kiedy chcesz</span>
+          </div>
         </div>
       </section>
 

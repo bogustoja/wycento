@@ -15,12 +15,12 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   title: "WyceńTo — Wycena remontu ze zdjęcia",
-  description: "Wrzuć zdjęcie, podaj miasto. AI wyceni Twój remont w 30 sekund z prawdziwymi cenami dla Twojej okolicy.",
-  metadataBase: new URL("https://wycento.vercel.app"),
+  description: "Wrzuć zdjęcie, podaj miasto. Wyceniamy Twój remont w 30 sekund z prawdziwymi cenami dla Twojej okolicy.",
+  metadataBase: new URL("https://wycento.app"),
   openGraph: {
     title: "WyceńTo — Ile kosztuje Twój remont?",
-    description: "Wrzuć zdjęcie pomieszczenia. AI wyceni remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
-    url: "https://wycento.vercel.app",
+    description: "Wrzuć zdjęcie pomieszczenia. Wyceniamy remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
+    url: "https://wycento.app",
     siteName: "WyceńTo",
     locale: "pl_PL",
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "WyceńTo — Wycena remontu ze zdjęcia",
-    description: "Wrzuć zdjęcie pomieszczenia. AI wyceni remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
+    description: "Wrzuć zdjęcie pomieszczenia. Wyceniamy remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
   },
   keywords: ["wycena remontu", "kosztorys remontu", "ile kosztuje remont", "kalkulator remontu", "wycena łazienki", "wycena kuchni"],
 };

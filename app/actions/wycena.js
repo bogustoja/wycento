@@ -13,11 +13,10 @@ function getAdmin() {
   )
 }
 
-async function ensureQuotesBucket(admin) {
+async function ensureBucket(admin, name, isPublic = false) {
   const { data: buckets } = await admin.storage.listBuckets()
-  const exists = buckets?.some(b => b.name === 'quotes')
-  if (!exists) {
-    await admin.storage.createBucket('quotes', { public: false, fileSizeLimit: 204800 })
+  if (!buckets?.some(b => b.name === name)) {
+    await admin.storage.createBucket(name, { public: isPublic, fileSizeLimit: 10485760 })
   }
 }
 
@@ -43,12 +42,22 @@ export async function wyceńRemont(formData) {
 
   const miasto = formData.get('miasto')
   const pomieszczenie = formData.get('pomieszczenie')
+  const opis = formData.get('opis') || ''
   const imageData = formData.get('image')
 
   if (!imageData) return { error: 'Brak zdjęcia' }
 
   const base64 = imageData.split(',')[1]
   const mediaType = imageData.split(';')[0].split(':')[1]
+  const ext = mediaType.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg'
+
+  // Upload image to Supabase Storage → get public URL for Claude
+  const admin = getAdmin()
+  await ensureBucket(admin, 'images', true)
+  const imagePath = `${user.id}/${Date.now()}.${ext}`
+  const imageBuffer = Buffer.from(base64, 'base64')
+  await admin.storage.from('images').upload(imagePath, imageBuffer, { contentType: mediaType })
+  const { data: { publicUrl } } = admin.storage.from('images').getPublicUrl(imagePath)
 
   const systemPrompt = `Jesteś ekspertem od wyceny remontów w Polsce z 20-letnim doświadczeniem.
 Pracowałeś przy wykończeniach wnętrz, łazienkach, kuchniach, tarasach i altanach.
@@ -64,7 +73,7 @@ Odpowiadasz TYLKO w formacie JSON, bez żadnego tekstu przed ani po.`
 
   const userPrompt = `Przeanalizuj to zdjęcie pomieszczenia.
 Lokalizacja: ${miasto}
-Typ pomieszczenia: ${pomieszczenie}
+Typ pomieszczenia: ${pomieszczenie}${opis ? `\nZakres prac wskazany przez klienta: ${opis}` : ''}
 
 Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
 {
@@ -87,7 +96,7 @@ Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
       messages: [{
         role: 'user',
         content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'image', source: { type: 'url', url: publicUrl } },
           { type: 'text', text: userPrompt },
         ],
       }],
@@ -98,8 +107,7 @@ Zwróć TYLKO ten JSON (bez markdown, bez \`\`\`):
 
     // Save to Supabase Storage (no SQL table needed)
     try {
-      const admin = getAdmin()
-      await ensureQuotesBucket(admin)
+      await ensureBucket(admin, 'quotes')
       const quoteId = Date.now()
       const quoteData = {
         id: String(quoteId),
