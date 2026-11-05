@@ -79,3 +79,8 @@ create policy "quotes_insert_own" on public.quotes
   for insert to authenticated with check (auth.uid() = user_id);
 
 create index if not exists quotes_user_created_idx on public.quotes(user_id, created_at desc);
+
+-- 5. Utwardzenie triggera tworzącego profil (ostrzeżenia Supabase Security Advisor).
+--    Funkcja zwraca trigger, więc i tak nie da się jej wywołać przez /rpc, ale zamykamy temat.
+alter function public.create_profile_for_user() set search_path = public;
+revoke execute on function public.create_profile_for_user() from public, anon, authenticated;
