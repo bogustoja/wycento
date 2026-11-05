@@ -62,8 +62,8 @@ export default function Home() {
                 </div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
                 <div>
-                  <div className="font-serif text-2xl font-bold">±15%</div>
-                  <div className="text-xs text-[#A8A29E]">dokładność</div>
+                  <div className="font-serif text-2xl font-bold">min–max</div>
+                  <div className="text-xs text-[#A8A29E]">widełki cenowe</div>
                 </div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
                 <div>
@@ -118,7 +118,6 @@ export default function Home() {
               </div>
               <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-[#F2EDE6]">
                 <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🔒</span> SSL</span>
-                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">💳</span> Stripe</span>
                 <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🇪🇺</span> GDPR</span>
               </div>
             </div>
@@ -185,7 +184,7 @@ export default function Home() {
               { feature: 'Analiza zdjęcia (widzi stan pomieszczenia)', us: true, them: false },
               { feature: 'Stawki robocizny dla Twojego miasta', us: true, them: '⚠ Ogólne' },
               { feature: 'Ukryte koszty (gruz, kleje, folia, grunt)', us: true, them: false },
-              { feature: 'Czas realizacji i dostępność ekip', us: true, them: false },
+              { feature: 'Szacowany czas realizacji', us: true, them: false },
               { feature: 'Co warto zrobić przy okazji remontu', us: true, them: false },
               { feature: 'Raport PDF do pobrania', us: true, them: false },
             ].map((row, i) => (
@@ -232,51 +231,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* OPINIE */}
+      {/* KTO ZA TYM STOI */}
       <section className="py-24 bg-[#FAF8F5]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Opinie użytkowników</p>
-            <h2 className="font-serif text-4xl font-bold">Co mówią o WyceńTo</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                text: 'Wrzuciłem zdjęcie łazienki i po 30 sekundach miałem kosztorys. Ekipa wyceniła potem 4 800 zł — aplikacja pokazała 4 200–5 600 zł. Strzał w dziesiątkę.',
-                name: 'Marek K.',
-                location: 'Warszawa',
-                role: 'Właściciel mieszkania',
-              },
-              {
-                text: 'Przed rozmową z wykonawcą wiedziałam już mniej więcej ile powinna kosztować kuchnia. Uniknęłam przepłacenia — pierwsza oferta była o 30% za droga.',
-                name: 'Agnieszka W.',
-                location: 'Kraków',
-                role: 'Remont kuchni 14m²',
-              },
-              {
-                text: 'Remontuję mieszkanie na wynajem. Korzystałem 5 razy — za każdym razem wycena trafiała w realia. Teraz mam Pro i używam regularnie.',
-                name: 'Tomasz R.',
-                location: 'Wrocław',
-                role: 'Inwestor nieruchomości',
-              },
-            ].map((t) => (
-              <div key={t.name} className="bg-white border border-[#E7E0D8] rounded-2xl p-7 flex flex-col">
-                <div className="flex gap-0.5 mb-5">
-                  {[1,2,3,4,5].map(i => <span key={i} className="text-[#C85A2A] text-sm">★</span>)}
-                </div>
-                <p className="text-[#44403C] text-sm leading-relaxed flex-1 mb-6">"{t.text}"</p>
-                <div className="flex items-center gap-3 pt-5 border-t border-[#E7E0D8]">
-                  <div className="w-9 h-9 bg-[#F5EBE4] rounded-full flex items-center justify-center text-sm font-bold text-[#C85A2A] flex-shrink-0">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-[#1C1917] text-sm">{t.name}</div>
-                    <div className="text-xs text-[#A8A29E]">{t.role} · {t.location}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Kto za tym stoi</p>
+          <h2 className="font-serif text-4xl font-bold mb-6">Robione przez kogoś, kto kładł płytki</h2>
+          <p className="text-[#78716C] leading-relaxed">
+            WyceńTo tworzy osoba, która pracowała na budowach przy wykończeniach wnętrz, tarasach i altanach w Polsce i w Wielkiej Brytanii.
+            Wiedza o tym, co ekipy faktycznie liczą i co klienci pomijają w budżecie — gruz, gruntowanie, poprawki po starych instalacjach — jest wbudowana w sposób, w jaki system liczy wycenę.
+          </p>
         </div>
       </section>
 
@@ -295,7 +258,7 @@ export default function Home() {
               { icon: '📍', title: 'Ceny lokalne', desc: 'Stawki robocizny w Warszawie są 20–35% wyższe niż w mniejszych miastach. Uwzględniamy to.' },
               { icon: '🔧', title: 'Ukryte koszty na wierzch', desc: 'Wywóz gruzu, folia, taśmy, kleje, gruntowanie — wszystko co pomijają inne kalkulatory.' },
               { icon: '📊', title: 'Widełki, nie jedna liczba', desc: 'Uczciwa wycena to przedział min-max. Nie obiecujemy precyzji której nikt nie ma.' },
-              { icon: '⏰', title: 'Czas realizacji', desc: 'Pilne zlecenia kosztują więcej. Wycena uwzględnia dostępność ekip w Twoim mieście.' },
+              { icon: '⏰', title: 'Czas realizacji', desc: 'Każda wycena podaje orientacyjny czas prac, żebyś wiedział, czego się spodziewać od ekipy.' },
               { icon: '💡', title: 'Co zrobić przy okazji', desc: 'Wiemy kiedy warto coś wymienić teraz zamiast płacić za powrót ekipy za rok.' },
               { icon: '📁', title: 'Historia wycen', desc: 'Wszystkie wyceny zapisane. Możesz wrócić, porównać i podjąć świadomą decyzję.' },
             ].map((item) => (
@@ -329,7 +292,7 @@ export default function Home() {
               <div className="text-sm text-[#A8A29E] mb-7">na zawsze</div>
               <ul className="space-y-3 mb-8">
                 {[
-                  { text: '3 wyceny miesięcznie', ok: true },
+                  { text: '3 darmowe wyceny', ok: true },
                   { text: 'Podgląd na ekranie', ok: true },
                   { text: 'Historia wycen', ok: true },
                   { text: 'Raport PDF', ok: false },
@@ -353,7 +316,6 @@ export default function Home() {
 
             {/* PRO */}
             <div className="bg-[#1C1917] rounded-2xl p-8 relative">
-              <div className="absolute top-5 right-5 bg-[#C85A2A] text-white text-xs font-bold px-3 py-1 rounded-full">Popularne</div>
               <div className="text-xs font-semibold text-[#C0A882] uppercase tracking-widest mb-4">Pro</div>
               <div className="flex items-end gap-1 mb-1">
                 <span className="font-serif text-5xl font-bold text-white">39</span>
@@ -396,15 +358,15 @@ export default function Home() {
             {[
               {
                 q: 'Jak dokładna jest wycena?',
-                a: 'Celujemy w dokładność ±15–25%. To znaczy tyle samo co doświadczony wykonawca „z głowy". Wycena jest orientacyjna — podajemy widełki min-max, bo remont zawsze ma zmienne. Nie obiecujemy precyzji której nikt nie ma.',
+                a: 'To wycena orientacyjna — taka, jaką doświadczony wykonawca da „z głowy” po obejrzeniu zdjęcia. Dlatego podajemy widełki min–max, a nie jedną liczbę. Nie zastępuje kosztorysu po wizycie ekipy na miejscu, ale pozwala sprawdzić, czy oferta, którą dostajesz, jest z tej planety.',
               },
               {
                 q: 'Skąd bierzecie ceny?',
-                a: 'Nasz system jest nauczony na danych rynkowych z całej Polski — stawkach robocizny, cenach materiałów i kosztach regionalnych. Ceny w Warszawie różnią się od Radomia o 20–35% i to uwzględniamy.',
+                a: 'Zdjęcie analizuje model AI (Anthropic Claude) według wytycznych przygotowanych przez osobę z praktyką w wykończeniach: aktualne stawki robocizny, typowe koszty materiałów i różnice między miastami. Wycena uwzględnia też koszty, których na zdjęciu nie widać — wywóz gruzu, chemię budowlaną, przygotowanie podłoża.',
               },
               {
                 q: 'Co się dzieje z moim zdjęciem?',
-                a: 'Zdjęcie jest wysyłane do naszego systemu analizy wyłącznie w celu wyceny. Nie jest przechowywane po wygenerowaniu wyceny. Wynik wyceny (bez zdjęcia) zostaje zapisany na Twoim koncie.',
+                a: 'Zdjęcie zapisujemy na serwerze plików (Supabase, UE) i przekazujemy do analizy AI wyłącznie w celu wyceny. Wynik wyceny zostaje na Twoim koncie. Jeśli chcesz, żebyśmy usunęli Twoje zdjęcia, napisz na kontakt@wycento.pl.',
               },
               {
                 q: 'Czy mogę anulować subskrypcję?',
@@ -416,7 +378,7 @@ export default function Home() {
               },
               {
                 q: 'Co jeśli wycena jest daleko od rzeczywistości?',
-                a: 'Napisz do nas na kontakt@wycento.pl z opisem — sprawdzimy i poprawimy model. Twoja opinia dosłownie poprawia produkt dla wszystkich.',
+                a: 'Napisz do nas na kontakt@wycento.pl i podaj, ile ostatecznie zapłaciłeś. Każde takie porównanie poprawia wytyczne, według których liczymy wyceny.',
               },
             ].map((item, i) => (
               <details key={i} className="group py-5 cursor-pointer list-none">

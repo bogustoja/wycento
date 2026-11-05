@@ -26,7 +26,10 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const protectedPaths = ['/dashboard', '/wycena']
-  const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))
+  // Dokładne dopasowanie albo podścieżka. Samo startsWith('/wycena') łapało też
+  // publiczne landingi /wycena-remontu-* i przekierowywało je (i Google) na /login.
+  const { pathname } = request.nextUrl
+  const isProtected = protectedPaths.some(p => pathname === p || pathname.startsWith(p + '/'))
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone()

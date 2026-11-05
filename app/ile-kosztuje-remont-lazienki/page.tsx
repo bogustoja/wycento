@@ -35,7 +35,7 @@ const FAQ = [
   },
   {
     q: 'Czy wycena ze zdjęcia jest dokładna?',
-    a: 'Wycena na podstawie zdjęcia jest orientacyjna z dokładnością ±15–25% — tyle samo co doświadczony wykonawca "z głowy". Podajemy widełki min-max, bo remont zawsze ma zmienne.',
+    a: 'Wycena ze zdjęcia jest orientacyjna — taka, jaką doświadczony wykonawca poda „z głowy” po obejrzeniu pomieszczenia. Dlatego podajemy widełki min–max, a nie jedną liczbę. Dokładny kosztorys da dopiero ekipa po wizycie na miejscu.',
   },
 ]
 

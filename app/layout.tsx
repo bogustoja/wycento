@@ -13,24 +13,28 @@ const lora = Lora({
   style: ["normal", "italic"],
 });
 
+// Tytuł i opis poniżej to domyślne wartości (strona główna).
+// Podstrony, które mają własne `metadata` (np. /ile-kosztuje-remont-lazienki),
+// nadpisują title i description, a openGraph/twitter biorą je automatycznie,
+// bo NIE ustawiamy tu openGraph.title / twitter.title.
 export const metadata: Metadata = {
-  title: "WyceńTo — Wycena remontu ze zdjęcia",
-  description: "Wrzuć zdjęcie, podaj miasto. Wyceniamy Twój remont w 30 sekund z prawdziwymi cenami dla Twojej okolicy.",
   metadataBase: new URL("https://wycento.app"),
+  title: "Wycena remontu ze zdjęcia w 30 sekund — WyceńTo",
+  description:
+    "Wrzuć zdjęcie pomieszczenia i podaj miasto. Dostaniesz widełki kosztów robocizny, materiałów i ukrytych kosztów (gruz, chemia, przygotowanie podłoża) dla Twojej okolicy.",
+  // './' = każda strona wskazuje SAMĄ SIEBIE jako kanoniczną (Next liczy to względem ścieżki).
+  alternates: {
+    canonical: "./",
+  },
   openGraph: {
-    title: "WyceńTo — Ile kosztuje Twój remont?",
-    description: "Wrzuć zdjęcie pomieszczenia. Wyceniamy remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
-    url: "https://wycento.app",
+    url: "./",
     siteName: "WyceńTo",
     locale: "pl_PL",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WyceńTo — Wycena remontu ze zdjęcia",
-    description: "Wrzuć zdjęcie pomieszczenia. Wyceniamy remont z prawdziwymi cenami dla Twojego miasta w 30 sekund.",
   },
-  keywords: ["wycena remontu", "kosztorys remontu", "ile kosztuje remont", "kalkulator remontu", "wycena łazienki", "wycena kuchni"],
 };
 
 export default function RootLayout({

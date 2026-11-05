@@ -73,8 +73,6 @@ export default function ProPage() {
         </div>
 
         <div className="bg-[#1C1917] rounded-2xl p-8 mb-5 text-left relative overflow-hidden">
-          <div className="absolute top-4 right-4 bg-[#C85A2A] text-white text-xs font-bold px-3 py-1 rounded-full">Popularne</div>
-
           <ul className="space-y-4 mb-8">
             {FEATURES.map(item => (
               <li key={item.text} className={`flex items-center gap-3 text-sm ${item.highlight ? 'text-white font-semibold' : 'text-[#D4C9BE]'}`}>
@@ -118,15 +116,6 @@ export default function ProPage() {
             <span>✓ Anuluj kiedy chcesz</span>
             <span>🛡️ 30-dniowa gwarancja</span>
           </div>
-        </div>
-
-        {/* Social proof mini */}
-        <div className="bg-white border border-[#E7E0D8] rounded-xl px-5 py-4 mb-6 text-left">
-          <div className="flex gap-0.5 mb-2">
-            {[1,2,3,4,5].map(i => <span key={i} className="text-[#C85A2A] text-sm">★</span>)}
-          </div>
-          <p className="text-xs text-[#44403C] leading-relaxed italic">"Remontuję mieszkania na wynajem. Korzystałem 5 razy — za każdym razem wycena trafiała w realia. Pro zwraca się przy pierwszym remoncie."</p>
-          <p className="text-xs text-[#A8A29E] mt-2">— Tomasz R., inwestor · Wrocław</p>
         </div>
 
         <button

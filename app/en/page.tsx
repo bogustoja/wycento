@@ -48,7 +48,7 @@ export default function HomeEN() {
               <div className="flex items-center gap-6">
                 <div><div className="font-serif text-2xl font-bold">30s</div><div className="text-xs text-[#A8A29E]">estimate time</div></div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
-                <div><div className="font-serif text-2xl font-bold">±15%</div><div className="text-xs text-[#A8A29E]">accuracy</div></div>
+                <div><div className="font-serif text-2xl font-bold">min–max</div><div className="text-xs text-[#A8A29E]">price range</div></div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
                 <div><div className="font-serif text-2xl font-bold">Free</div><div className="text-xs text-[#A8A29E]">to start</div></div>
               </div>
@@ -131,8 +131,7 @@ export default function HomeEN() {
               <button onClick={() => window.location.href = '/login'} className="w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold hover:bg-[#FAF8F5] transition">Start for free</button>
             </div>
             <div className="bg-[#1C1917] rounded-2xl p-8 relative">
-              <div className="absolute top-5 right-5 bg-[#C85A2A] text-white text-xs font-bold px-3 py-1 rounded-full">Popular</div>
-              <div className="text-xs font-semibold text-[#C0A882] uppercase tracking-widest mb-4">Pro</div>
+                            <div className="text-xs font-semibold text-[#C0A882] uppercase tracking-widest mb-4">Pro</div>
               <div className="flex items-end gap-1 mb-7"><span className="font-serif text-5xl font-bold text-white">£9</span><span className="text-[#A8A29E] pb-1">/month</span></div>
               <ul className="space-y-3 mb-8">
                 {['Unlimited estimates', 'On-screen view', 'Estimate history', 'PDF report download', 'Priority support'].map(i => (
