@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Zdjęcie po kompresji (1600 px, JPEG 80%) w base64 to ~0,5–0,9 MB, domyślny limit to 1 MB.
+      bodySizeLimit: "4mb",
+    },
+  },
   async redirects() {
     return [
       {

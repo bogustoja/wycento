@@ -366,7 +366,7 @@ export default function Home() {
               },
               {
                 q: 'Co się dzieje z moim zdjęciem?',
-                a: 'Zdjęcie zapisujemy na serwerze plików (Supabase, UE) i przekazujemy do analizy AI wyłącznie w celu wyceny. Wynik wyceny zostaje na Twoim koncie. Jeśli chcesz, żebyśmy usunęli Twoje zdjęcia, napisz na kontakt@wycento.pl.',
+                a: 'Zdjęcie trafia wyłącznie do analizy przez model AI (Anthropic) w celu wyceny — nie zapisujemy go na naszych serwerach. Na Twoim koncie zostaje tylko wynik wyceny (bez zdjęcia).',
               },
               {
                 q: 'Czy mogę anulować subskrypcję?',

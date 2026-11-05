@@ -26,7 +26,7 @@ export default function Prywatnosc() {
             <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">2. Jakie dane zbieramy</h2>
             <ul className="list-disc list-inside space-y-2 ml-3">
               <li><strong>Adres e-mail</strong> — przy rejestracji konta</li>
-              <li><strong>Zdjęcia pomieszczeń</strong> — przesyłane do analizy i zapisywane na serwerze plików Supabase (UE); na Twoją prośbę usuwamy je</li>
+              <li><strong>Zdjęcia pomieszczeń</strong> — przesyłane do analizy przez Anthropic (Claude); nie zapisujemy ich na naszych serwerach</li>
               <li><strong>Wyniki wycen</strong> — przechowywane na Twoim koncie w formie zaszyfrowanej</li>
               <li><strong>Dane płatności</strong> — obsługiwane wyłącznie przez Stripe; nie mamy dostępu do numerów kart</li>
               <li><strong>Dane techniczne</strong> — adres IP, przeglądarka (logi systemowe)</li>
