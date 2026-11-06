@@ -7,18 +7,18 @@ export const metadata: Metadata = {
 }
 
 const DZIELNICE = [
-  { name: 'Stare Miasto, Kazimierz, Podgórze', mnoznik: '+25–35%' },
+  { name: 'Stare Miasto, Kazimierz, Podgórze', mnoznik: '+20–30%' },
   { name: 'Krowodrza, Bronowice, Zwierzyniec', mnoznik: '+15–25%' },
   { name: 'Prądnik Czerwony, Czyżyny', mnoznik: '+10–18%' },
   { name: 'Nowa Huta, Swoszowice', mnoznik: '+5–12%' },
 ]
 
 const ITEMS = [
-  { name: 'Glazurnik (m²)', min: 70, max: 140, jednostka: 'zł/m²' },
-  { name: 'Malarz (m² ściany)', min: 12, max: 28, jednostka: 'zł/m²' },
-  { name: 'Hydraulik (rbh)', min: 100, max: 170, jednostka: 'zł/h' },
-  { name: 'Elektryk (rbh)', min: 90, max: 160, jednostka: 'zł/h' },
-  { name: 'Posadzkarz — panele (m²)', min: 22, max: 45, jednostka: 'zł/m²' },
+  { name: 'Glazurnik — płytki standardowe (m²)', min: 105, max: 170, jednostka: 'zł/m²' },
+  { name: 'Malarz — 2 warstwy (m² ściany)', min: 22, max: 35, jednostka: 'zł/m²' },
+  { name: 'Hydraulik (punkt wodny lub kanalizacyjny)', min: 350, max: 850, jednostka: 'zł/pkt' },
+  { name: 'Elektryk (nowy punkt)', min: 190, max: 300, jednostka: 'zł/pkt' },
+  { name: 'Posadzkarz — panele (m²)', min: 45, max: 70, jednostka: 'zł/m²' },
   { name: 'Wywóz gruzu (m³)', min: 180, max: 380, jednostka: 'zł/m³' },
 ]
 
@@ -64,7 +64,7 @@ export default function WycenaKrakow() {
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Stawki robocizny w Krakowie 2026</h2>
-          <p className="text-[#78716C] text-sm mb-6">Widełki dla sprawdzonych ekip z Krakowa. Ceny niższe niż podane często oznaczają brak doświadczenia lub pracę bez faktury.</p>
+          <p className="text-[#78716C] text-sm mb-6">Widełki dla sprawdzonych ekip z Krakowa, stan na listopad 2026. Ceny niższe niż podane często oznaczają brak doświadczenia lub pracę bez faktury.</p>
           <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden">
             <div className="divide-y divide-[#E7E0D8]">
               {ITEMS.map((item) => (
@@ -102,9 +102,9 @@ export default function WycenaKrakow() {
           <h2 className="font-serif text-2xl font-bold mb-6">Przykładowe koszty remontów w Krakowie</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { room: 'Łazienka 5m²', range: '11 000 – 22 000 zł', note: 'Krowodrza/Kazimierz' },
-              { room: 'Kuchnia 12m²', range: '18 000 – 40 000 zł', note: 'ze sprzętem i meblami' },
-              { room: 'Pokój 16m²', range: '5 500 – 13 000 zł', note: 'malowanie + podłoga + gładzie' },
+              { room: 'Łazienka 5m²', range: '18 000 – 30 000 zł', note: 'z materiałami, średni standard' },
+              { room: 'Kuchnia 12m²', range: '26 000 – 50 000 zł', note: 'ze sprzętem i meblami' },
+              { room: 'Pokój 16m²', range: '7 000 – 16 000 zł', note: 'malowanie + podłoga + gładzie' },
             ].map((item) => (
               <div key={item.room} className="bg-white border border-[#E7E0D8] rounded-xl p-5">
                 <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wide mb-2">{item.room}</div>

@@ -7,18 +7,18 @@ export const metadata: Metadata = {
 }
 
 const DZIELNICE = [
-  { name: 'Śródmieście, Mokotów, Żoliborz', mnoznik: '+35–45%' },
-  { name: 'Ursynów, Wilanów, Wola', mnoznik: '+25–35%' },
+  { name: 'Śródmieście, Mokotów, Żoliborz', mnoznik: '+25–35%' },
+  { name: 'Ursynów, Wilanów, Wola', mnoznik: '+20–30%' },
   { name: 'Praga Południe, Białołęka', mnoznik: '+15–25%' },
   { name: 'Targówek, Rembertów, Wawer', mnoznik: '+10–20%' },
 ]
 
 const ITEMS = [
-  { name: 'Glazurnik (m²)', min: 80, max: 160, jednostka: 'zł/m²' },
-  { name: 'Malarz (m² ściany)', min: 15, max: 35, jednostka: 'zł/m²' },
-  { name: 'Hydraulik (rbh)', min: 120, max: 200, jednostka: 'zł/h' },
-  { name: 'Elektryk (rbh)', min: 100, max: 180, jednostka: 'zł/h' },
-  { name: 'Posadzkarz — panele (m²)', min: 25, max: 55, jednostka: 'zł/m²' },
+  { name: 'Glazurnik — płytki standardowe (m²)', min: 120, max: 280, jednostka: 'zł/m²' },
+  { name: 'Malarz — 2 warstwy (m² ściany)', min: 30, max: 50, jednostka: 'zł/m²' },
+  { name: 'Hydraulik (punkt wodny lub kanalizacyjny)', min: 400, max: 1000, jednostka: 'zł/pkt' },
+  { name: 'Elektryk (nowy punkt)', min: 180, max: 350, jednostka: 'zł/pkt' },
+  { name: 'Posadzkarz — panele (m²)', min: 50, max: 90, jednostka: 'zł/m²' },
   { name: 'Wywóz gruzu (m³)', min: 200, max: 450, jednostka: 'zł/m³' },
 ]
 
@@ -47,7 +47,7 @@ export default function WycenaWarszawa() {
             <span className="text-[#C85A2A]">ile to naprawdę kosztuje?</span>
           </h1>
           <p className="text-lg text-[#78716C] leading-relaxed max-w-2xl">
-            Warszawa jest najdroższym miastem remontowym w Polsce. Stawki robocizny są tu 25–45% wyższe niż średnia krajowa — i różnią się znacząco między dzielnicami. Zebraliśmy realne dane, żebyś wiedział czego się spodziewać.
+            Warszawa jest najdroższym miastem remontowym w Polsce. Stawki robocizny są tu zwykle 15–35% wyższe niż średnia krajowa — i różnią się znacząco między dzielnicami. Zebraliśmy realne dane, żebyś wiedział czego się spodziewać.
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export default function WycenaWarszawa() {
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Stawki robocizny w Warszawie 2026</h2>
-          <p className="text-[#78716C] text-sm mb-6">Aktualne widełki dla doświadczonych ekip. Tańsze oferty zazwyczaj oznaczają brak doświadczenia lub szarą strefę bez gwarancji.</p>
+          <p className="text-[#78716C] text-sm mb-6">Widełki dla doświadczonych ekip, stan na listopad 2026. Tańsze oferty zazwyczaj oznaczają brak doświadczenia lub szarą strefę bez gwarancji.</p>
           <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden">
             <div className="divide-y divide-[#E7E0D8]">
               {ITEMS.map((item) => (
@@ -102,9 +102,9 @@ export default function WycenaWarszawa() {
           <h2 className="font-serif text-2xl font-bold mb-6">Przykładowe koszty remontów w Warszawie</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { room: 'Łazienka 5m²', range: '14 000 – 28 000 zł', note: 'Mokotów/Śródmieście' },
-              { room: 'Kuchnia 12m²', range: '22 000 – 50 000 zł', note: 'ze sprzętem i meblami' },
-              { room: 'Pokój 16m²', range: '7 000 – 16 000 zł', note: 'malowanie + podłoga + gładzie' },
+              { room: 'Łazienka 5m²', range: '22 000 – 36 000 zł', note: 'z materiałami, średni standard' },
+              { room: 'Kuchnia 12m²', range: '30 000 – 60 000 zł', note: 'ze sprzętem i meblami' },
+              { room: 'Pokój 16m²', range: '8 000 – 18 000 zł', note: 'malowanie + podłoga + gładzie' },
             ].map((item) => (
               <div key={item.room} className="bg-white border border-[#E7E0D8] rounded-xl p-5">
                 <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wide mb-2">{item.room}</div>

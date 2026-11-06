@@ -411,16 +411,17 @@ export default function WycenaPage() {
               <div className="px-6 py-4 border-b border-[#E7E0D8] bg-[#FAF8F5] flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-0.5">Przykładowy wynik</div>
-                  <div className="font-serif text-base font-bold text-[#1C1917]">Łazienka 6m² · Warszawa</div>
+                  <div className="font-serif text-base font-bold text-[#1C1917]">Łazienka 6m² · Kraków</div>
                 </div>
                 <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full font-medium">Demo</span>
               </div>
               <div className="divide-y divide-[#E7E0D8]">
                 {[
-                  { name: 'Glazura i terakota (robocizna)', min: 1800, max: 2600 },
-                  { name: 'Hydraulik — armatura', min: 900, max: 1400 },
-                  { name: 'Materiały (kleje, fugi, uszczelki)', min: 800, max: 1200 },
-                  { name: 'Wywóz gruzu i sprzątanie', min: 300, max: 500 },
+                  { name: 'Skucie płytek i wywóz gruzu', min: 2000, max: 3200 },
+                  { name: 'Hydroizolacja i przygotowanie podłoża', min: 1200, max: 2000 },
+                  { name: 'Glazura i terakota — robocizna (ok. 25 m²)', min: 3800, max: 6000 },
+                  { name: 'Hydraulika i biały montaż', min: 3000, max: 5000 },
+                  { name: 'Materiały: płytki, chemia, armatura (średni standard)', min: 8000, max: 14000 },
                 ].map((item, i) => (
                   <div key={i} className="px-6 py-3 flex justify-between items-center">
                     <span className="text-sm text-[#44403C]">{item.name}</span>
@@ -430,7 +431,7 @@ export default function WycenaPage() {
               </div>
               <div className="px-6 py-4 bg-[#1C1917] flex justify-between items-center">
                 <span className="font-semibold text-white">Łącznie</span>
-                <span className="font-serif text-xl font-bold text-[#E8A07A]">3 800 – 5 700 zł</span>
+                <span className="font-serif text-xl font-bold text-[#E8A07A]">18 000 – 30 200 zł</span>
               </div>
             </div>
 

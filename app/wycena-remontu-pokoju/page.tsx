@@ -7,26 +7,26 @@ export const metadata: Metadata = {
 }
 
 const ITEMS = [
-  { name: 'Malowanie ścian i sufitu (robocizna + farby)', min: 800, max: 2500 },
-  { name: 'Panele podłogowe lub parkiet (montaż)', min: 1200, max: 4000 },
-  { name: 'Gładzie gipsowe i szpachlowanie', min: 600, max: 2000 },
+  { name: 'Malowanie ścian i sufitu (robocizna + farby)', min: 1500, max: 3500 },
+  { name: 'Panele podłogowe lub parkiet (materiał + montaż)', min: 1500, max: 4000 },
+  { name: 'Gładzie gipsowe i szpachlowanie', min: 2500, max: 4000 },
   { name: 'Elektryka (punkty świetlne, gniazdka)', min: 400, max: 1200 },
   { name: 'Listwy przypodłogowe i wykończenia', min: 200, max: 600 },
-  { name: 'Materiały (farby, kleje, podkład)', min: 400, max: 1000 },
+  { name: 'Materiały (grunt, kleje, podkład, taśmy)', min: 400, max: 1000 },
 ]
 
 const FAQ = [
   {
     q: 'Ile kosztuje malowanie pokoju?',
-    a: 'Malowanie pokoju 15–20m² to koszt 600–1 800 zł za robociznę plus farby (300–800 zł). Cena zależy od stanu ścian — jeśli wymagają szpachlowania lub gładzi, doliczyć trzeba 500–1 500 zł.',
+    a: 'Pokój 15–20 m² to ok. 50–60 m² ścian i sufitu do malowania. Robocizna to 20–50 zł/m² (Warszawa na górnej granicy), czyli ok. 1 200–2 800 zł, plus farby 300–800 zł. Jeśli ściany wymagają gładzi, dolicz 2 500–4 000 zł.',
   },
   {
     q: 'Ile kosztuje wymiana podłogi w pokoju?',
-    a: 'Panele podłogowe to 40–120 zł/m² za materiał i 20–40 zł/m² za montaż. Dla pokoju 15m² to 900–2 400 zł za materiał i 300–600 zł za ułożenie. Parkiet drewniany jest 2–3 razy droższy.',
+    a: 'Panele podłogowe to 40–120 zł/m² za materiał i 45–85 zł/m² za montaż. Dla pokoju 15 m² to ok. 600–1 800 zł za materiał i 700–1 300 zł za ułożenie. Parkiet drewniany jest 2–3 razy droższy.',
   },
   {
     q: 'Czy warto robić gładzie na całe mieszkanie?',
-    a: 'Gładzie podnoszą wartość nieruchomości i wygląd wnętrza. Koszt dla całego pokoju to 20–45 zł/m² powierzchni ścian. Dla pokoju 15m² ze standardową wysokością to 1 500–3 500 zł.',
+    a: 'Gładź to zwykle 40–60 zł/m² ścian i sufitu za robociznę. Dla pokoju 15 m² ze standardową wysokością (ok. 50 m² powierzchni) to 2 000–3 000 zł plus materiał.',
   },
   {
     q: 'Ile trwa remont pokoju?',
@@ -90,7 +90,7 @@ export default function RemontPokoju() {
             </div>
             <div className="px-6 py-5 bg-[#1C1917] flex justify-between items-center">
               <span className="font-semibold text-white">Łącznie (orientacyjnie)</span>
-              <span className="font-serif text-xl font-bold text-[#E8A07A]">4 000 – 12 000 zł</span>
+              <span className="font-serif text-xl font-bold text-[#E8A07A]">6 500 – 14 300 zł</span>
             </div>
           </div>
         </section>

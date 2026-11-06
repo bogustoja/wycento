@@ -139,10 +139,11 @@ export default function Home() {
             </div>
             <div className="divide-y divide-[#E7E0D8]">
               {[
-                { name: 'Glazura i terakota (robocizna)', min: 1800, max: 2600 },
-                { name: 'Hydraulika — armatura', min: 900, max: 1400 },
-                { name: 'Materiały (kleje, fugi, uszczelki)', min: 800, max: 1200 },
-                { name: 'Wywóz gruzu i sprzątanie', min: 300, max: 500 },
+                { name: 'Skucie płytek i wywóz gruzu', min: 2000, max: 3200 },
+                { name: 'Hydroizolacja i przygotowanie podłoża', min: 1200, max: 2000 },
+                { name: 'Glazura i terakota — robocizna (ok. 25 m²)', min: 3800, max: 6000 },
+                { name: 'Hydraulika i biały montaż', min: 3000, max: 5000 },
+                { name: 'Materiały: płytki, chemia, armatura (średni standard)', min: 8000, max: 14000 },
               ].map((item, i) => (
                 <div key={i} className="px-6 py-3.5 flex justify-between items-center">
                   <span className="text-sm text-[#44403C]">{item.name}</span>
@@ -152,7 +153,7 @@ export default function Home() {
             </div>
             <div className="px-6 py-4 bg-[#1C1917] flex justify-between items-center">
               <span className="font-semibold text-white">Łącznie</span>
-              <span className="font-serif text-xl font-bold text-[#E8A07A]">3 800 – 5 700 zł</span>
+              <span className="font-serif text-xl font-bold text-[#E8A07A]">18 000 – 30 200 zł</span>
             </div>
           </div>
         </div>

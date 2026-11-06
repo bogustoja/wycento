@@ -7,19 +7,19 @@ export const metadata: Metadata = {
 }
 
 const ITEMS = [
-  { name: 'Meble kuchenne na wymiar (zabudowa)', min: 4000, max: 15000 },
+  { name: 'Meble kuchenne (gotowe moduły lub zabudowa na wymiar)', min: 5000, max: 20000 },
   { name: 'Blat roboczy (laminat/granit/kompozyt)', min: 800, max: 4000 },
-  { name: 'Glazura i terakota — robocizna', min: 1500, max: 3500 },
-  { name: 'Hydraulika (podłączenia AGD, zlewozmywak)', min: 800, max: 2000 },
-  { name: 'Elektryka (oświetlenie, gniazdka, okap)', min: 700, max: 1800 },
+  { name: 'Glazura i terakota — robocizna', min: 2000, max: 4000 },
+  { name: 'Hydraulika (podłączenia AGD, zlewozmywak)', min: 1200, max: 3000 },
+  { name: 'Elektryka (oświetlenie, gniazdka, okap)', min: 1000, max: 2200 },
   { name: 'Malowanie ścian i sufitu', min: 600, max: 1500 },
-  { name: 'Materiały (kleje, fugi, uszczelki, farby)', min: 600, max: 1500 },
+  { name: 'Materiały (płytki, kleje, fugi, farby)', min: 1500, max: 3000 },
 ]
 
 const FAQ = [
   {
     q: 'Ile kosztuje remont kuchni 10m²?',
-    a: 'Remont kuchni 10m² bez mebli to 8 000–18 000 zł. Z zabudową meblową na wymiar całkowity koszt wynosi zazwyczaj 15 000–35 000 zł w zależności od standardu.',
+    a: 'Remont kuchni 10 m² bez mebli i AGD to zwykle 8 000–18 000 zł. Z meblami na wymiar i sprzętem AGD w średnim standardzie całość to najczęściej 25 000–55 000 zł.',
   },
   {
     q: 'Czy warto remontować kuchnię przed sprzedażą mieszkania?',
@@ -95,10 +95,10 @@ export default function RemontKuchni() {
             </div>
             <div className="px-6 py-5 bg-[#1C1917] flex justify-between items-center">
               <span className="font-semibold text-white">Łącznie (orientacyjnie)</span>
-              <span className="font-serif text-xl font-bold text-[#E8A07A]">10 000 – 40 000 zł</span>
+              <span className="font-serif text-xl font-bold text-[#E8A07A]">12 100 – 37 700 zł</span>
             </div>
           </div>
-          <p className="text-xs text-[#A8A29E] mt-3">* Bez sprzętu AGD. Ceny w Warszawie są wyższe o 20–35%.</p>
+          <p className="text-xs text-[#A8A29E] mt-3">* Bez sprzętu AGD. W dużych miastach ceny są wyższe o 15–25%. Stan na listopad 2026.</p>
         </section>
 
         <section className="mb-12">
@@ -106,7 +106,7 @@ export default function RemontKuchni() {
           <div className="grid md:grid-cols-2 gap-4">
             {[
               { icon: '🪵', title: 'Standard mebli', desc: 'Największa różnica cenowa. Fronty akrylowe, szuflady z cichym domykaniem, blat granitowy — każdy wybór podwaja lub trzykrotnie zwiększa koszt segmentu.' },
-              { icon: '📍', title: 'Miasto', desc: 'W Warszawie ta sama ekipa glazurnicza weźmie 30–40% więcej niż w Łodzi czy Rzeszowie. Wyceniamy zawsze z uwzględnieniem Twojej lokalizacji.' },
+              { icon: '📍', title: 'Miasto', desc: 'W Warszawie ta sama ekipa glazurnicza zwykle weźmie 15–30% więcej niż w Łodzi czy Rzeszowie. Wyceniamy zawsze z uwzględnieniem Twojej lokalizacji.' },
               { icon: '🔌', title: 'Elektryka i okap', desc: 'Okap wyciągowy z odświeżaniem to dodatkowy przewód elektryczny i kanał wentylacyjny — rzadko uwzględniany w pierwszej wycenie, kosztuje 500–1 500 zł.' },
               { icon: '🚰', title: 'Przeniesienie instalacji', desc: 'Zmiana położenia zlewozmywaka lub zmywarka w innym miejscu niż pion — to prace hydrauliczne za 1 500–4 000 zł extra.' },
             ].map((item) => (

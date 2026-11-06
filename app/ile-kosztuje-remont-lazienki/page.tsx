@@ -7,23 +7,23 @@ export const metadata: Metadata = {
 }
 
 const ITEMS = [
-  { name: 'Skucie starych płytek i wywóz gruzu', min: 800, max: 1500 },
-  { name: 'Glazura i terakota — robocizna', min: 2000, max: 4500 },
-  { name: 'Hydraulika (armatura, odpływy)', min: 1200, max: 2800 },
-  { name: 'Elektryka (oświetlenie, gniazdka)', min: 600, max: 1400 },
-  { name: 'Sufity i tynkowanie', min: 500, max: 1200 },
-  { name: 'Materiały (kleje, fugi, silikon, folia)', min: 800, max: 1800 },
-  { name: 'Drzwi łazienkowe', min: 400, max: 1200 },
+  { name: 'Skucie starych płytek i wywóz gruzu', min: 1800, max: 3500 },
+  { name: 'Hydroizolacja, gruntowanie i wyrównanie podłoża', min: 1200, max: 2500 },
+  { name: 'Glazura i terakota — robocizna', min: 3500, max: 7500 },
+  { name: 'Hydraulika (punkty wodne, odpływy, stelaż WC)', min: 2500, max: 5500 },
+  { name: 'Biały montaż (WC, umywalka, prysznic lub wanna)', min: 1200, max: 3000 },
+  { name: 'Elektryka (oświetlenie, gniazdka, wentylator)', min: 600, max: 1500 },
+  { name: 'Materiały: płytki, chemia, armatura (średni standard)', min: 7000, max: 14000 },
 ]
 
 const FAQ = [
   {
     q: 'Ile kosztuje remont łazienki 4m²?',
-    a: 'Remont małej łazienki 4m² to koszt 8 000–16 000 zł w zależności od standardu materiałów i lokalizacji. W Warszawie ceny są wyższe o 20–35% niż w mniejszych miastach.',
+    a: 'Pełny remont łazienki 4 m² w średnim standardzie to zwykle 16 000–25 000 zł razem z materiałami. W dużych miastach (Warszawa, Kraków, Wrocław) ceny są o 15–25% wyższe niż w mniejszych miejscowościach.',
   },
   {
     q: 'Ile kosztuje remont łazienki 6m²?',
-    a: 'Remont łazienki 6m² kosztuje orientacyjnie 12 000–22 000 zł. Kluczowy wpływ na cenę ma zakres prac hydraulicznych oraz wybór armatury i płytek.',
+    a: 'Remont łazienki 6 m² kosztuje orientacyjnie 20 000–36 000 zł z materiałami. Największy wpływ mają zakres prac hydraulicznych, format płytek i klasa armatury. W starym bloku lub kamienicy z wymianą pionów łatwo przekroczyć 36 000 zł.',
   },
   {
     q: 'Co jest najdroższe w remoncie łazienki?',
@@ -103,11 +103,11 @@ export default function RemontLazienki() {
             </div>
             <div className="px-6 py-5 bg-[#1C1917] flex justify-between items-center">
               <span className="font-semibold text-white">Łącznie (orientacyjnie)</span>
-              <span className="font-serif text-xl font-bold text-[#E8A07A]">8 000 – 22 000 zł</span>
+              <span className="font-serif text-xl font-bold text-[#E8A07A]">17 800 – 37 500 zł</span>
             </div>
           </div>
 
-          <p className="text-xs text-[#A8A29E] mt-3">* Podane widełki dotyczą standardowego zakresu prac. Ceny w Warszawie, Wrocławiu i Krakowie są zazwyczaj 20–35% wyższe.</p>
+          <p className="text-xs text-[#A8A29E] mt-3">* Podane widełki dotyczą standardowego zakresu prac. Ceny w Warszawie, Wrocławiu i Krakowie są zazwyczaj 15–25% wyższe niż w mniejszych miastach. Stan na listopad 2026.</p>
         </section>
 
         {/* CO WPŁYWA NA CENĘ */}
@@ -115,12 +115,12 @@ export default function RemontLazienki() {
           <h2 className="font-serif text-2xl font-bold mb-6">Co najbardziej wpływa na cenę remontu łazienki?</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { icon: '📍', title: 'Lokalizacja', desc: 'Stawki robocizny w Warszawie są 20–35% wyższe niż w miastach poniżej 100 tys. mieszkańców. Kraków i Wrocław to +15–20%.' },
+              { icon: '📍', title: 'Lokalizacja', desc: 'Stawki robocizny w dużych miastach są o 15–25% wyższe niż w mniejszych miejscowościach. Warszawa jest zwykle na górnej granicy.' },
               { icon: '🚿', title: 'Zakres prac hydraulicznych', desc: 'Przeniesienie rur, zmiana układu armatury czy wymiana pionów to najdroższa część remontu. Sama wymiana baterii to 200–500 zł.' },
               { icon: '🪨', title: 'Format i gatunek płytek', desc: 'Duże formaty (60×60 i większe) wymagają więcej pracy i generują więcej odpadu. Drogie płytki włoskie czy hiszpańskie znacznie podnoszą koszty materiałów.' },
               { icon: '🏗️', title: 'Stan istniejący', desc: 'Jeśli pod starymi płytkami kryją się wilgoć, grzyb lub nierówne ściany — koszty przygotowania podłoża mogą zaskoczyć. Dobre zdjęcie pomaga to wycenić z wyprzedzeniem.' },
-              { icon: '⏰', title: 'Termin wykonania', desc: 'Pilne zlecenia kosztują 20–30% więcej. Ekipy z dłuższym terminem oczekiwania zazwyczaj pracują lepiej i taniej.' },
-              { icon: '🔧', title: 'Ukryte koszty', desc: 'Wywóz gruzu, folia uszczelniająca (hydroizolacja), taśmy uszczelniające, kleje, fugi, silikon — często pomijane w pierwszych wycenach, a mogą wynieść 1 000–2 500 zł.' },
+              { icon: '⏰', title: 'Termin wykonania', desc: 'Pilne zlecenia zwykle kosztują więcej. Ekipy z dłuższym terminem oczekiwania zazwyczaj pracują lepiej i taniej.' },
+              { icon: '🔧', title: 'Ukryte koszty', desc: 'Wywóz gruzu, folia uszczelniająca (hydroizolacja), taśmy uszczelniające, kleje, fugi, silikon — często pomijane w pierwszych wycenach, a razem z transportem i wniesieniem materiałów mogą wynieść 2 000–4 000 zł.' },
             ].map((item) => (
               <div key={item.title} className="bg-white border border-[#E7E0D8] rounded-xl p-5">
                 <div className="text-2xl mb-2">{item.icon}</div>

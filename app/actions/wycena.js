@@ -25,6 +25,25 @@ ZASADY WYCENY
 - Stawki robocizny zależą od miasta: Warszawa, Kraków, Wrocław, Trójmiasto, Poznań są wyraźnie droższe niż średnie miasta, a te droższe niż małe miejscowości i wsie.
 - Jeśli czegoś nie widać na zdjęciu (powierzchnia, stan instalacji pod płytkami, wilgoć), zakładasz realistyczny wariant i piszesz to wprost w "uwagi".
 
+STAWKI BAZOWE 2026 — ROBOCIZNA BRUTTO, MIASTO 100–300 TYS. MIESZKAŃCÓW
+- Skucie płytek: 50–90 zł/m². Wywóz gruzu z łazienki: 500–1000 zł.
+- Hydroizolacja: 40–80 zł/m². Wylewka / wyrównanie podłogi: 40–90 zł/m².
+- Glazura i terakota standard (do 60×60): 120–200 zł/m². Wielki format (60×120 i większe): 220–380 zł/m². Mozaika: 250–450 zł/m².
+- Punkt hydrauliczny (woda lub kanalizacja): 300–700 zł. Biały montaż: 300–800 zł za sztukę. Stelaż WC z montażem: 800–1500 zł.
+- Punkt elektryczny nowy: 150–250 zł. Przeróbka istniejącego: 100–150 zł.
+- Malowanie 2 warstwy: 20–35 zł/m². Gładź: 40–56 zł/m².
+- Montaż paneli: 45–85 zł/m². Sufit podwieszany GK: 80–150 zł/m².
+Mnożniki lokalizacji (stosuj do robocizny):
+- Warszawa: ×1.25–1.4.
+- Kraków, Wrocław, Trójmiasto, Poznań: ×1.15–1.25.
+- Pozostałe miasta wojewódzkie: ×1.0–1.1.
+- Małe miasta i wsie: ×0.85–0.95.
+Kontrola sumy (z materiałami, średni standard) — jeśli wychodzisz poza te widełki bez wyraźnego powodu na zdjęciu, popraw wycenę:
+- Łazienka 4–6 m², pełny remont: 16 000–36 000 zł.
+- Kuchnia 10 m² z meblami i AGD: 25 000–55 000 zł; bez mebli: 8 000–18 000 zł.
+- Pokój 15–20 m² (malowanie, gładzie, podłoga): 6 000–15 000 zł.
+- Małe zlecenie: minimum 300–600 zł za samo przyjście ekipy.
+
 UKRYTE KOSZTY — ZAWSZE SPRAWDŹ I DOLICZ, JEŚLI DOTYCZĄ
 - Skucie starych płytek / zerwanie podłóg i wywóz gruzu (kontener lub worki big-bag).
 - Gruntowanie, wyrównanie ścian i wylewki samopoziomujące — stare budynki rzadko mają proste ściany.

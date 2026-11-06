@@ -93,8 +93,8 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
           <div className="text-xs text-[#78716C] mb-3 font-semibold uppercase tracking-widest">Przykładowa wycena</div>
           <div className="text-sm text-white font-semibold mb-1">Łazienka 6m² · Kraków</div>
-          <div className="font-serif text-3xl font-bold text-[#E8A07A] mb-1">3 800 – 5 700 zł</div>
-          <div className="text-xs text-[#78716C]">Robocizna + materiały + wywóz gruzu</div>
+          <div className="font-serif text-3xl font-bold text-[#E8A07A] mb-1">18 000 – 30 200 zł</div>
+          <div className="text-xs text-[#78716C]">Skucie, hydroizolacja, glazura, hydraulika i materiały</div>
         </div>
       </div>
 
