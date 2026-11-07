@@ -63,34 +63,45 @@ CO WARTO ZROBIĆ PRZY OKAZJI
 - Tylko rzeczy, których odłożenie oznacza ponowne kucie lub ponowny przyjazd ekipy (instalacje pod płytkami, dodatkowe gniazdka, wentylacja).
 
 FORMAT
-Odpowiadasz WYŁĄCZNIE poprawnym JSON-em, bez markdown i bez tekstu przed ani po.
-Jeśli na zdjęciu nie ma pomieszczenia do remontu, zwróć: {"error": "NIE_POMIESZCZENIE"}.`
+Wynik zapisujesz WYŁĄCZNIE narzędziem zapisz_wycene.
+- Wyceniasz tylko prace, które faktycznie zostały do zrobienia. Jeśli coś jest już zrobione (np. płytki skute, stelaż zamontowany), nie doliczasz tego ponownie.
+- 5–10 pozycji w items, nazwy krótkie (do 60 znaków).
+- uwagi i co_warto_dodac: maksymalnie po 4 krótkie punkty.
+- Jeśli na zdjęciu nie ma pomieszczenia do remontu, ustaw nie_pomieszczenie = true i zostaw items puste.`
+
+const WYCENA_TOOL = {
+  name: 'zapisz_wycene',
+  description: 'Zapisuje wycenę remontu.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      nie_pomieszczenie: { type: 'boolean', description: 'true, jeśli na zdjęciu nie ma pomieszczenia do remontu' },
+      summary: { type: 'string', description: '2–3 zdania: co widać na zdjęciu, stan pomieszczenia, jaki zakres prac zakładasz' },
+      items: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            min: { type: 'number', description: 'zł brutto' },
+            max: { type: 'number', description: 'zł brutto' },
+          },
+          required: ['name', 'min', 'max'],
+        },
+      },
+      czas_realizacji: { type: 'string', description: 'np. 2–3 tygodnie' },
+      uwagi: { type: 'array', items: { type: 'string' } },
+      co_warto_dodac: { type: 'array', items: { type: 'string' } },
+    },
+    required: ['nie_pomieszczenie', 'summary', 'items', 'czas_realizacji', 'uwagi', 'co_warto_dodac'],
+  },
+}
 
 function buildUserPrompt(miasto, pomieszczenie, opis) {
   return `Lokalizacja: ${miasto}
 Typ pomieszczenia: ${pomieszczenie}${opis ? `\nZakres prac wskazany przez klienta: ${opis}` : ''}
 
-Zwróć dokładnie taki JSON:
-{
-  "summary": "2–3 zdania: co widać na zdjęciu, stan pomieszczenia, jaki zakres prac zakładasz",
-  "items": [
-    {"name": "nazwa pozycji (robocizna lub materiał)", "min": 1000, "max": 2000, "jednostka": "zł"}
-  ],
-  "total_min": 5000,
-  "total_max": 8000,
-  "czas_realizacji": "np. 2–3 tygodnie",
-  "uwagi": ["konkretna uwaga o ryzyku lub założeniu"],
-  "co_warto_dodac": ["konkretna rzecz do zrobienia przy okazji"]
-}
-total_min i total_max to sumy pozycji z items.`
-}
-
-function parseJson(text) {
-  const cleaned = text.replace(/```json|```/g, '').trim()
-  const start = cleaned.indexOf('{')
-  const end = cleaned.lastIndexOf('}')
-  if (start === -1 || end === -1) throw new Error('Brak JSON w odpowiedzi AI')
-  return JSON.parse(cleaned.slice(start, end + 1))
+Wyceń remont i zapisz wynik narzędziem zapisz_wycene.`
 }
 
 function normalizeWynik(raw) {
@@ -155,8 +166,10 @@ export async function wyceńRemont(formData) {
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 2000,
+      max_tokens: 4000,
       system: SYSTEM_PROMPT,
+      tools: [WYCENA_TOOL],
+      tool_choice: { type: 'tool', name: 'zapisz_wycene' },
       messages: [{
         role: 'user',
         content: [
@@ -166,10 +179,11 @@ export async function wyceńRemont(formData) {
       }],
     })
 
-    const text = response.content.find(c => c.type === 'text')?.text || ''
-    const raw = parseJson(text)
+    const raw = response.content.find(c => c.type === 'tool_use')?.input
+    if (!raw) throw new Error(`Brak wyniku narzędzia (stop_reason: ${response.stop_reason})`)
+    if (response.stop_reason === 'max_tokens') throw new Error('Odpowiedź AI ucięta (max_tokens)')
 
-    if (raw.error === 'NIE_POMIESZCZENIE') {
+    if (raw.nie_pomieszczenie === true) {
       await refund(user.id)
       return { error: 'Na zdjęciu nie widać pomieszczenia do remontu. Zrób zdjęcie całego pokoju.' }
     }
