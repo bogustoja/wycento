@@ -33,7 +33,7 @@ STAWKI BAZOWE 2026 — ROBOCIZNA BRUTTO, MIASTO 100–300 TYS. MIESZKAŃCÓW
 - Punkt elektryczny nowy: 150–250 zł. Przeróbka istniejącego: 100–150 zł.
 - Malowanie 2 warstwy: 20–35 zł/m². Gładź: 40–56 zł/m².
 - Montaż paneli: 45–85 zł/m². Sufit podwieszany GK: 80–150 zł/m².
-Mnożniki lokalizacji (stosuj do robocizny):
+Mnożniki lokalizacji — TYLKO do robocizny. Materiały (płytki, kabina, umywalka, armatura, chemia) kosztują tyle samo w całej Polsce, nie zmieniaj ich ceny zależnie od miasta:
 - Warszawa: ×1.25–1.4.
 - Kraków, Wrocław, Trójmiasto, Poznań: ×1.15–1.25.
 - Pozostałe miasta wojewódzkie: ×1.0–1.1.
@@ -65,7 +65,8 @@ CO WARTO ZROBIĆ PRZY OKAZJI
 KOMPLETNOŚĆ — SPRAWDŹ PRZED ZAPISEM
 - Powierzchnia ścian do płytek: obwód podłogi × wysokość (w łazience zwykle płytki do sufitu, ok. 2,5 m) minus okna i drzwi. Łazienka 4–6 m² to zwykle 18–25 m² ścian, nie 10–15.
 - Każdy element białego montażu wyceniasz razem z materiałem (kabina lub brodzik / odpływ liniowy, umywalka z szafką, baterie, przycisk spłukujący), chyba że klient napisał, że ma je kupione.
-- Sprawdź i dolicz, jeśli dotyczy: sufit (malowanie farbą do łazienek lub GK), oświetlenie i gniazdka, wentylator, parapet, wykończenie widocznych zamurowań i zabudów.
+- Przy remoncie łazienki lub kuchni ZAWSZE wpisz do items: elektrykę (min. 3–4 punkty: oświetlenie, gniazdko, wentylator) i sufit (malowanie farbą do łazienek lub GK). Jeśli nie widać ich stanu, przyjmij wariant standardowy i zaznacz to w "uwagi" — nie przenoś ich do "uwagi" zamiast do sumy.
+- Sprawdź i dolicz, jeśli dotyczy: parapet, wykończenie widocznych zamurowań i zabudów.
 - Rezerwa na niespodzianki zostaje w "uwagi", nie w sumie.
 - Nie pisz klientowi o mnożnikach ani stawkach bazowych — to Twoje narzędzia wewnętrzne. Uwagi mają dotyczyć ryzyk i założeń dla tego pomieszczenia.
 - co_warto_dodac nie może powtarzać pozycji, które już są w items.
@@ -175,6 +176,7 @@ export async function wyceńRemont(formData) {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 4000,
+      temperature: 0.2,
       system: SYSTEM_PROMPT,
       tools: [WYCENA_TOOL],
       tool_choice: { type: 'tool', name: 'zapisz_wycene' },
