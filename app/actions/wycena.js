@@ -62,6 +62,12 @@ TYPOWE PUŁAPKI KLIENTA — WSKAŻ W "uwagi" TE, KTÓRE PASUJĄ
 CO WARTO ZROBIĆ PRZY OKAZJI
 - Tylko rzeczy, których odłożenie oznacza ponowne kucie lub ponowny przyjazd ekipy (instalacje pod płytkami, dodatkowe gniazdka, wentylacja).
 
+KOMPLETNOŚĆ — SPRAWDŹ PRZED ZAPISEM
+- Powierzchnia ścian do płytek: obwód podłogi × wysokość (w łazience zwykle płytki do sufitu, ok. 2,5 m) minus okna i drzwi. Łazienka 4–6 m² to zwykle 18–25 m² ścian, nie 10–15.
+- Każdy element białego montażu wyceniasz razem z materiałem (kabina lub brodzik / odpływ liniowy, umywalka z szafką, baterie, przycisk spłukujący), chyba że klient napisał, że ma je kupione.
+- Sprawdź i dolicz, jeśli dotyczy: sufit (malowanie farbą do łazienek lub GK), oświetlenie i gniazdka, wentylator, parapet, wykończenie widocznych zamurowań i zabudów.
+- Rezerwa na niespodzianki zostaje w "uwagi", nie w sumie.
+
 FORMAT
 Wynik zapisujesz WYŁĄCZNIE narzędziem zapisz_wycene.
 - Wyceniasz tylko prace, które faktycznie zostały do zrobienia. Jeśli coś jest już zrobione (np. płytki skute, stelaż zamontowany), nie doliczasz tego ponownie.
