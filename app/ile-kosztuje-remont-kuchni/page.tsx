@@ -1,3 +1,5 @@
+import LogoIcon from '../components/LogoIcon'
+
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -45,6 +47,7 @@ export default function RemontKuchni() {
       <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-0.5">
+            <LogoIcon size={28} className="mr-2" />
             <span className="font-serif text-xl font-bold">Wyceń</span>
             <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
           </a>
@@ -153,6 +156,7 @@ export default function RemontKuchni() {
       <footer className="bg-white border-t border-[#E7E0D8] mt-12">
         <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-1">
+            <LogoIcon size={24} className="mr-2" />
             <span className="font-serif text-lg font-bold">Wyceń</span>
             <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
             <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>

@@ -1,5 +1,7 @@
 'use client'
 
+import LogoIcon from '../components/LogoIcon'
+
 import { useState } from 'react'
 import { createClient } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -64,6 +66,7 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-[45%] bg-[#1C1917] flex-col justify-between p-12">
         <div>
           <a href="/" className="flex items-center gap-0.5 mb-16">
+            <LogoIcon size={32} className="mr-2" />
             <span className="font-serif text-2xl font-bold text-white">Wyceń</span>
             <span className="font-serif text-2xl font-bold text-[#C85A2A]">To</span>
           </a>
@@ -104,6 +107,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
 
           {/* Mobile logo */}
           <a href="/" className="flex items-center gap-0.5 mb-8 lg:hidden">
+            <LogoIcon size={28} className="mr-2" />
             <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
             <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
           </a>

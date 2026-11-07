@@ -1,5 +1,7 @@
 'use client'
 
+import LogoIcon from '../components/LogoIcon'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { wyceńRemont } from '../actions/wycena'
@@ -246,6 +248,7 @@ export default function WycenaPage() {
         <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/" className="flex items-center gap-0.5">
+              <LogoIcon size={28} className="mr-2" />
               <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
               <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
             </a>
@@ -341,6 +344,7 @@ export default function WycenaPage() {
       <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-0.5">
+            <LogoIcon size={28} className="mr-2" />
             <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
             <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
           </a>

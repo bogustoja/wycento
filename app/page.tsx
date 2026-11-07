@@ -1,5 +1,7 @@
 'use client'
 
+import LogoIcon from './components/LogoIcon'
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
@@ -8,6 +10,7 @@ export default function Home() {
       <nav className="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E7E0D8]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-0.5">
+            <LogoIcon size={28} className="mr-2" />
             <span className="font-serif text-xl font-bold">Wyceń</span>
             <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
           </a>
@@ -428,6 +431,7 @@ export default function Home() {
       <footer className="bg-white border-t border-[#E7E0D8]">
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-1">
+            <LogoIcon size={24} className="mr-2" />
             <span className="font-serif text-lg font-bold">Wyceń</span>
             <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
             <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
