@@ -382,6 +382,7 @@ export default function WycenaPage() {
                 <option>Łazienka</option>
                 <option>Kuchnia</option>
                 <option>Pokój</option>
+                <option>Salon</option>
                 <option>Przedpokój</option>
                 <option>Sypialnia</option>
                 <option>Taras</option>

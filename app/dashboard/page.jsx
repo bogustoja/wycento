@@ -206,6 +206,9 @@ function Dashboard() {
               <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Twój plan</span>
               <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">⭐</div>
             </div>
+            {loading ? (
+              <div className="h-10 bg-[#F2EDE6] rounded-lg animate-pulse" />
+            ) : <>
             <div className="font-serif text-2xl font-bold text-[#1C1917] capitalize mb-2">{plan}</div>
             {plan === 'free' ? (
               <button
@@ -229,6 +232,7 @@ function Dashboard() {
                 </button>
               </div>
             )}
+            </>}
           </div>
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
@@ -236,7 +240,7 @@ function Dashboard() {
               <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Wszystkich wycen</span>
               <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">📋</div>
             </div>
-            <div className="font-serif text-4xl font-bold text-[#1C1917]">{totalQuotes}</div>
+            {loading ? <div className="h-10 bg-[#F2EDE6] rounded-lg animate-pulse" /> : <div className="font-serif text-4xl font-bold text-[#1C1917]">{totalQuotes}</div>}
             <div className="text-xs text-[#A8A29E] mt-2">od początku</div>
           </div>
         </div>

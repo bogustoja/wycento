@@ -66,6 +66,7 @@ KOMPLETNOŚĆ — SPRAWDŹ PRZED ZAPISEM
 - Powierzchnia ścian do płytek: obwód podłogi × wysokość (w łazience zwykle płytki do sufitu, ok. 2,5 m) minus okna i drzwi. Łazienka 4–6 m² to zwykle 18–25 m² ścian, nie 10–15.
 - Każdy element białego montażu wyceniasz razem z materiałem (kabina lub brodzik / odpływ liniowy, umywalka z szafką, baterie, przycisk spłukujący), chyba że klient napisał, że ma je kupione.
 - Przy remoncie łazienki lub kuchni ZAWSZE wpisz do items: elektrykę (min. 3–4 punkty: oświetlenie, gniazdko, wentylator) i sufit (malowanie farbą do łazienek lub GK). Jeśli nie widać ich stanu, przyjmij wariant standardowy i zaznacz to w "uwagi" — nie przenoś ich do "uwagi" zamiast do sumy.
+- Przy kuchni z nowymi meblami ZAWSZE osobno: montaż mebli (robocizna) oraz podłączenie zlewu i AGD (hydraulik).
 - Sprawdź i dolicz, jeśli dotyczy: parapet, wykończenie widocznych zamurowań i zabudów.
 - Rezerwa na niespodzianki zostaje w "uwagi", nie w sumie.
 - Nie pisz klientowi o mnożnikach ani stawkach bazowych — to Twoje narzędzia wewnętrzne. Uwagi mają dotyczyć ryzyk i założeń dla tego pomieszczenia.
@@ -132,7 +133,10 @@ function normalizeWynik(raw) {
     total_min: items.reduce((s, i) => s + i.min, 0),
     total_max: items.reduce((s, i) => s + i.max, 0),
     czas_realizacji: String(raw.czas_realizacji || 'do ustalenia z wykonawcą'),
-    uwagi: Array.isArray(raw.uwagi) ? raw.uwagi.map(String) : [],
+    // Model czasem i tak pisze o mnożnikach — to wewnętrzna kuchnia, klient tego nie widzi.
+    uwagi: Array.isArray(raw.uwagi)
+      ? raw.uwagi.map(String).filter(u => !/mno[żz]nik|stawk\w* bazow|stawki robocizny (podniesion|obni[żz]on)/i.test(u))
+      : [],
     co_warto_dodac: Array.isArray(raw.co_warto_dodac) ? raw.co_warto_dodac.map(String) : [],
   }
 }
