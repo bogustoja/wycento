@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { wyceńRemont } from '../actions/wycena'
 
-// Wycena trwa zwykle 25–45 s (Claude analizuje zdjęcie i składa kosztorys).
+// Wycena trwa zwykle 23–30 s (pomiar 7.11.2026) (Claude analizuje zdjęcie i składa kosztorys).
 // Pasek rośnie asymptotycznie do 95% i dobija do 100% dopiero po odpowiedzi.
 function PasekPostepu({ miasto }) {
   const [sek, setSek] = useState(0)
@@ -16,14 +16,14 @@ function PasekPostepu({ miasto }) {
     return () => clearInterval(t)
   }, [])
 
-  const procent = Math.min(95, 95 * (1 - Math.exp(-sek / 15)))
+  const procent = Math.min(95, 95 * (1 - Math.exp(-sek / 11)))
   const etap =
     sek < 3 ? 'Wysyłam zdjęcie…' :
     sek < 12 ? 'Analizuję zdjęcie pomieszczenia…' :
-    sek < 25 ? `Liczę robociznę i materiały${miasto ? ` dla: ${miasto}` : ''}…` :
+    sek < 20 ? `Liczę robociznę i materiały${miasto ? ` dla: ${miasto}` : ''}…` :
     sek < 60 ? 'Sprawdzam ukryte koszty i składam kosztorys…' :
     'Trwa dłużej niż zwykle — jeszcze chwila…'
-  const zostalo = Math.max(0, Math.round(35 - sek))
+  const zostalo = Math.max(0, Math.round(30 - sek))
 
   return (
     <div className="mt-4" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(procent)}>
@@ -38,7 +38,7 @@ function PasekPostepu({ miasto }) {
         />
       </div>
       <p className="text-xs text-center text-[#A8A29E] mt-2 tabular-nums">
-        {zostalo > 0 ? `Zwykle 30–45 sekund · zostało ok. ${zostalo} s` : 'Zwykle 30–45 sekund · kończę…'}
+        {zostalo > 0 ? `Zwykle 20–40 sekund · zostało ok. ${zostalo} s` : 'Zwykle 20–40 sekund · kończę…'}
       </p>
     </div>
   )
