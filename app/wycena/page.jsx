@@ -284,7 +284,7 @@ export default function WycenaPage() {
               {wynik.items.map((item, i) => (
                 <div key={i} className="px-6 py-4 flex justify-between items-center">
                   <span className="text-sm text-[#44403C]">{item.name}</span>
-                  <span className="font-semibold text-[#1C1917] text-sm tabular-nums">
+                  <span className="font-semibold text-[#1C1917] text-sm tabular-nums whitespace-nowrap ml-4">
                     {item.min.toLocaleString('pl-PL')} – {item.max.toLocaleString('pl-PL')} {item.jednostka}
                   </span>
                 </div>
@@ -292,7 +292,7 @@ export default function WycenaPage() {
             </div>
             <div className="px-6 py-5 bg-[#1C1917] flex justify-between items-center">
               <span className="font-semibold text-white">Łącznie</span>
-              <span className="font-serif text-2xl font-bold text-[#E8A07A]">
+              <span className="font-serif text-xl sm:text-2xl font-bold text-[#E8A07A] whitespace-nowrap ml-4">
                 {wynik.total_min.toLocaleString('pl-PL')} – {wynik.total_max.toLocaleString('pl-PL')} zł
               </span>
             </div>
