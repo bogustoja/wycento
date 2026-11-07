@@ -94,10 +94,10 @@ function Dashboard() {
         .item { display: flex; gap: 8px; font-size: 13px; margin: 6px 0; align-items: flex-start; }
         .warn { color: #D97706; font-size: 15px; flex-shrink: 0; } .ok { color: #16A34A; font-size: 15px; flex-shrink: 0; }
         .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #E7E0D8; font-size: 11px; color: #A8A29E; text-align: center; }
-        @media print { @page { margin: 20mm; } body { margin: 0; } }
+        @page { size: A4 portrait; margin: 15mm; } html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } tr, .item { break-inside: avoid; } @media print { body { margin: 0; } }
       </style></head><body>
       <div class="header">
-        <div class="logo">Wyceń<span>To</span></div>
+        <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
         <div class="meta"><h1>${q.pomieszczenie} · ${q.miasto}</h1><p>${new Date(q.created_at).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
       </div>
       <div class="label">Analiza zdjęcia</div>

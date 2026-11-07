@@ -147,12 +147,12 @@ export default function WycenaPage() {
           .time-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #A8A29E; font-weight: 700; }
           .time-box .value { font-size: 17px; font-weight: 700; color: #1C1917; }
           .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #E7E0D8; font-size: 11px; color: #A8A29E; text-align: center; }
-          @media print { @page { margin: 20mm; } body { margin: 0; } }
+          @page { size: A4 portrait; margin: 15mm; } html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } tr, .item { break-inside: avoid; } @media print { body { margin: 0; } }
         </style>
       </head>
       <body>
         <div class="header">
-          <div class="logo">Wyceń<span>To</span></div>
+          <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
           <div class="meta">
             <h1>${pomieszczenie} · ${miasto}</h1>
             <p>${new Date().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
