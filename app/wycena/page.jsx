@@ -1,8 +1,46 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { wyceńRemont } from '../actions/wycena'
+
+// Wycena trwa zwykle 25–45 s (Claude analizuje zdjęcie i składa kosztorys).
+// Pasek rośnie asymptotycznie do 95% i dobija do 100% dopiero po odpowiedzi.
+function PasekPostepu({ miasto }) {
+  const [sek, setSek] = useState(0)
+  useEffect(() => {
+    const start = Date.now()
+    const t = setInterval(() => setSek((Date.now() - start) / 1000), 250)
+    return () => clearInterval(t)
+  }, [])
+
+  const procent = Math.min(95, 95 * (1 - Math.exp(-sek / 15)))
+  const etap =
+    sek < 3 ? 'Wysyłam zdjęcie…' :
+    sek < 12 ? 'Analizuję zdjęcie pomieszczenia…' :
+    sek < 25 ? `Liczę robociznę i materiały${miasto ? ` dla: ${miasto}` : ''}…` :
+    sek < 60 ? 'Sprawdzam ukryte koszty i składam kosztorys…' :
+    'Trwa dłużej niż zwykle — jeszcze chwila…'
+  const zostalo = Math.max(0, Math.round(35 - sek))
+
+  return (
+    <div className="mt-4" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(procent)}>
+      <div className="flex justify-between text-xs text-[#78716C] mb-2">
+        <span>{etap}</span>
+        <span className="tabular-nums">{Math.round(procent)}%</span>
+      </div>
+      <div className="h-2 bg-[#F2EDE6] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-[#C85A2A] rounded-full transition-[width] duration-300 ease-out"
+          style={{ width: `${procent}%` }}
+        />
+      </div>
+      <p className="text-xs text-center text-[#A8A29E] mt-2 tabular-nums">
+        {zostalo > 0 ? `Zwykle 30–45 sekund · zostało ok. ${zostalo} s` : 'Zwykle 30–45 sekund · kończę…'}
+      </p>
+    </div>
+  )
+}
 
 export default function WycenaPage() {
   const [miasto, setMiasto] = useState('')
@@ -398,11 +436,7 @@ export default function WycenaPage() {
               ) : 'Wyceń mój remont →'}
             </button>
 
-            {loading && (
-              <p className="text-xs text-center text-[#A8A29E] mt-3">
-                Analizujemy zdjęcie i sprawdzamy stawki dla Twojego miasta…
-              </p>
-            )}
+            {loading && <PasekPostepu miasto={miasto.trim()} />}
           </div>
 
           {/* SIDEBAR */}
