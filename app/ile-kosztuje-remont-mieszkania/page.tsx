@@ -10,7 +10,7 @@ export default function RemontMieszkania() {
   return (
     <SeoLanding
       path="/ile-kosztuje-remont-mieszkania"
-      badge="🏠 Ceny 2026"
+      badge="Ceny 2026"
       h1="Ile kosztuje remont mieszkania?"
       h1Accent="Ceny za m² na 2026 rok"
       intro="Koszt remontu mieszkania zależy przede wszystkim od zakresu: czy tylko odświeżasz ściany i podłogi, czy ruszasz instalacje, łazienkę i kuchnię. Poniżej realne widełki dla każdego wariantu i przykład dla mieszkania 50 m²."

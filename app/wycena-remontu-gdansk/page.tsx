@@ -10,7 +10,7 @@ export default function WycenaGdansk() {
   return (
     <SeoLanding
       path="/wycena-remontu-gdansk"
-      badge="📍 Gdańsk · Trójmiasto · Ceny 2026"
+      badge="Gdańsk · Trójmiasto · Ceny 2026"
       h1="Wycena remontu w Gdańsku —"
       h1Accent="ceny w Trójmieście 2026"
       intro="Trójmiasto to jeden z droższych rynków remontowych w Polsce — stawki są zbliżone do Wrocławia i Krakowa. Zebraliśmy aktualne widełki robocizny i przykładowe koszty, żebyś mógł porównać je z ofertami, które dostajesz."

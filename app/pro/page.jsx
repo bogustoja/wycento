@@ -1,6 +1,7 @@
 'use client'
 
-import LogoIcon from '../components/LogoIcon'
+import Brand from '../components/Brand'
+import Spotlight from '../components/Spotlight'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -37,64 +38,61 @@ export default function ProPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5]">
-      <nav className="bg-white border-b border-[#E7E0D8]">
+    <main className="relative min-h-screen bg-bg overflow-hidden">
+      <div className="dot-grid absolute inset-0" aria-hidden="true" />
+      <Spotlight x={50} y={20} />
+      <nav className="relative bg-bg/80 backdrop-blur-md border-b border-line">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-0.5">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
+          <Brand />
           <button
             onClick={() => router.push('/dashboard')}
-            className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E7E0D8] px-3 py-1.5 rounded-lg hover:bg-[#F2EDE6]"
+            className="text-sm text-muted hover:text-ink transition-colors border border-line-strong px-3.5 py-1.5 rounded-full hover:bg-surface-2"
           >
             ← Panel
           </button>
         </div>
       </nav>
 
-      <div className="max-w-lg mx-auto px-6 py-16 text-center">
-        <div className="inline-flex items-center gap-2 bg-[#F5EBE4] text-[#C85A2A] text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">
-          ⭐ Plan Pro
+      <div className="relative max-w-lg mx-auto px-6 py-16 text-center">
+        <div className="inline-flex items-center gap-2 border border-accent-2/40 bg-accent-2/10 text-accent-2 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+          Plan Pro
         </div>
 
-        <h1 className="font-serif text-4xl font-bold text-[#1C1917] mb-3 leading-tight">
+        <h1 className="text-5xl font-extrabold text-ink mb-4 leading-[0.95]">
           Nielimitowane wyceny<br />za 39 zł miesięcznie
         </h1>
-        <p className="text-[#78716C] mb-8 text-sm">
+        <p className="text-muted mb-8 text-sm">
           Anuluj kiedy chcesz. Żadnych długoterminowych zobowiązań.
         </p>
 
         {/* Guarantee badge */}
-        <div className="flex items-center justify-center gap-3 bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-8">
-          <span className="text-2xl">🛡️</span>
-          <div className="text-left">
-            <div className="text-sm font-semibold text-green-800">30-dniowa gwarancja zwrotu</div>
-            <div className="text-xs text-green-600">Jeśli wyceny są niedokładne — zwrócimy pieniądze bez pytań</div>
+        <div className="flex items-center justify-center gap-3 bg-green-500/10 border border-green-400/30 rounded-xl px-4 py-3 mb-8">
+                    <div className="text-left">
+            <div className="text-sm font-semibold text-green-400">30-dniowa gwarancja zwrotu</div>
+            <div className="text-xs text-green-400">Jeśli wyceny są niedokładne — zwrócimy pieniądze bez pytań</div>
           </div>
         </div>
 
-        <div className="bg-[#1C1917] rounded-2xl p-8 mb-5 text-left relative overflow-hidden">
+        <div className="glow-ring rounded-3xl mb-5"><div className="bg-surface rounded-[23px] p-8 text-left relative overflow-hidden">
           <ul className="space-y-4 mb-8">
             {FEATURES.map(item => (
-              <li key={item.text} className={`flex items-center gap-3 text-sm ${item.highlight ? 'text-white font-semibold' : 'text-[#D4C9BE]'}`}>
-                <span className="w-5 h-5 rounded-full bg-[#C85A2A]/20 border border-[#C85A2A]/40 text-[#E8A07A] flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
+              <li key={item.text} className={`flex items-center gap-3 text-sm ${item.highlight ? 'text-ink font-semibold' : 'text-ink-2'}`}>
+                <span className="w-5 h-5 rounded-full bg-accent-2/15 border border-accent-2/40 text-accent-2 flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
                 {item.text}
               </li>
             ))}
           </ul>
 
           <div className="border-t border-white/10 pt-6 flex items-end gap-2 mb-6">
-            <span className="font-serif text-5xl font-bold text-white">39</span>
+            <span className="text-6xl font-extrabold tracking-tight text-ink">39</span>
             <div className="pb-1.5">
-              <div className="text-[#A8A29E] text-base">zł / miesiąc</div>
-              <div className="text-xs text-[#A8A29E]">ok. 1,30 zł za wycenę przy 30 wycenach</div>
+              <div className="text-muted text-base">zł / miesiąc</div>
+              <div className="text-xs text-muted">ok. 1,30 zł za wycenę przy 30 wycenach</div>
             </div>
           </div>
 
           {error && (
-            <div className="bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#C85A2A] text-sm rounded-xl px-4 py-3 mb-4">
+            <div className="bg-surface-2 border border-accent-2/40 text-accent-2 text-sm rounded-xl px-4 py-3 mb-4">
               {error}
             </div>
           )}
@@ -102,7 +100,7 @@ export default function ProPage() {
           <button
             onClick={handleCheckout}
             disabled={loading}
-            className="w-full bg-[#C85A2A] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full bg-accent text-white py-4 rounded-xl font-semibold text-base hover:bg-accent-hover btn-glow disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -114,16 +112,16 @@ export default function ProPage() {
               </>
             ) : 'Przejdź na Pro — 39 zł/mies →'}
           </button>
-          <div className="flex justify-center gap-4 mt-3 text-xs text-[#A8A29E]">
-            <span>🔒 Stripe SSL</span>
+          <div className="flex justify-center gap-4 mt-3 text-xs text-muted">
+            <span>Płatność przez Stripe</span>
             <span>✓ Anuluj kiedy chcesz</span>
-            <span>🛡️ 30-dniowa gwarancja</span>
+            <span>✓ 30-dniowa gwarancja</span>
           </div>
-        </div>
+        </div></div>
 
         <button
           onClick={() => router.push('/dashboard')}
-          className="text-sm text-[#78716C] hover:text-[#78716C] transition-colors"
+          className="text-sm text-muted hover:text-ink transition-colors"
         >
           Zostań przy planie darmowym
         </button>

@@ -1,31 +1,223 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Czcionka Onest (licencja SIL OFL 1.1), pliki lokalne w /public/fonts.
+   Dwa pliki: podstawowy alfabet + polskie znaki (ą, ę, ł, ż…). Przeglądarka pobiera tylko to, czego potrzebuje. */
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/onest-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/onest-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-lora);
+/*
+  WyceńTo — ciemny styl (kierunek E: ciemny premium + skan).
+  Wszystkie kolory strony biorą się STĄD. Zmieniasz kolor w jednym miejscu, zmienia się wszędzie.
+  Klasy w kodzie: bg-bg, bg-surface, bg-surface-2, text-ink, text-ink-2, text-muted,
+  border-line, border-line-strong, bg-accent, hover:bg-accent-hover, text-accent-2.
+  Kontrast tekstu sprawdzony (WCAG AA ≥ 4,5:1): muted na najjaśniejszej karcie = 6,2:1,
+  biały na przycisku accent = 5,0:1.
+*/
+@theme {
+  --color-bg: #12100e;
+  --color-surface: #1b1815;
+  --color-surface-2: #242019;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-line-strong: rgb(255 255 255 / 0.2);
+  --color-ink: #f4eee6;
+  --color-ink-2: #d7ccbf;
+  --color-muted: #a99e91;
+  --color-accent: #b8501f;
+  --color-accent-hover: #c85a2a;
+  --color-accent-2: #f08a55;
+  --color-brand: #c85a2a;
+
+  --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+  /* Dawne nagłówki „font-serif” też idą w Onest — jeden krój, jak na makiecie E. */
+  --font-serif: "Onest", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Strona ma tylko jasny motyw. Wcześniej tryb ciemny systemu zmieniał tło body na czarne
-   pod jasnymi sekcjami, a body miało font Arial zamiast wczytanego Geist. */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--color-accent-2);
+  color: var(--color-bg);
 }
 
 /* Widoczny fokus dla nawigacji klawiaturą (dostępność). */
 :where(a, button, input, select, textarea, summary, label):focus-visible {
-  outline: 2px solid #C85A2A;
+  outline: 2px solid var(--color-accent-2);
   outline-offset: 2px;
+}
+
+/* Pola formularzy na ciemnym tle: systemowe autouzupełnianie nie może zrobić żółtych pól. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface-2) inset;
+  caret-color: var(--color-ink);
+}
+
+/* ===== Tło: kropki ===== */
+.dot-grid {
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* ===== Świecąca, obracająca się ramka =====
+   Kolorowy „snop” to pseudo-element obracany przez transform, więc liczy go karta graficzna
+   (bez przemalowywania karty w każdej klatce). Treść ramki leży nad nim. */
+.glow-ring {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1.5px;
+  background: var(--color-line);
+}
+.glow-ring::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: max(160%, 900px);
+  aspect-ratio: 1;
+  background: conic-gradient(transparent 0deg, var(--color-accent-2) 60deg, transparent 140deg, transparent 360deg);
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: ring-spin 6s linear infinite;
+  pointer-events: none;
+}
+.glow-ring > * {
+  position: relative;
+  z-index: 1;
+}
+@keyframes ring-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ===== Skan =====
+   Jeden element o wysokości zdjęcia: na dole ma linię, nad nią poświatę.
+   Startuje nad zdjęciem i zjeżdża w dół przez transform (płynnie, bez przeliczania układu strony). */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(100% - 120px),
+    rgb(240 138 85 / 0.16) calc(100% - 3px),
+    var(--color-accent-2) calc(100% - 2px)
+  );
+  filter: drop-shadow(0 0 10px rgb(240 138 85 / 0.55));
+  animation: scan-move 4.5s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  pointer-events: none;
+  will-change: transform;
+}
+/* Dawna osobna poświata jest teraz częścią .scan-line. Klasa zostaje pusta dla zgodności. */
+.scan-glow { display: none; }
+@keyframes scan-move {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+/* Elementy, które pojawiają się kolejno w pętli (ramki na zdjęciu, wiersze kosztorysu).
+   Stan spoczynkowy jest widoczny, więc bez animacji wszystko i tak jest czytelne. */
+.cycle-in {
+  animation: cycle-in 9s ease-out infinite both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes cycle-in {
+  0%, 8% { opacity: 0.45; transform: scale(1.06); }
+  16%, 88% { opacity: 1; transform: none; }
+  100% { opacity: 0.45; }
+}
+.cycle-row {
+  animation: cycle-row 9s ease-out infinite both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes cycle-row {
+  0%, 10% { opacity: 0.7; transform: translateX(-8px); }
+  18%, 90% { opacity: 1; transform: none; }
+  100% { opacity: 0.7; }
+}
+
+/* Jednorazowe wejście przy załadowaniu (nagłówek, karty). */
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes rise {
+  from { opacity: 0.35; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes float-y {
+  50% { transform: translateY(-10px); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  50% { opacity: 0.3; }
+}
+
+/* Przycisk główny: poświata przy najechaniu. */
+.btn-glow {
+  transition: box-shadow 0.3s, transform 0.3s, background-color 0.2s;
+}
+.btn-glow:hover {
+  box-shadow: 0 0 0 6px rgb(200 90 42 / 0.2), 0 18px 40px rgb(200 90 42 / 0.35);
+  transform: translateY(-2px);
+}
+
+/* Karta, która lekko unosi się przy najechaniu. */
+.lift {
+  transition: transform 0.3s, border-color 0.3s, background-color 0.3s;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-line-strong);
+}
+
+/* Ludzie z wyłączonym ruchem w systemie dostają stronę bez animacji. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .scan-line, .scan-glow { display: none; }
+  /* Elementy z pętli i wejścia pokazujemy od razu w pełni, bez zatrzymania na przygaszonej klatce. */
+  .cycle-in, .cycle-row, .rise, .float-y, .pulse-dot { animation: none !important; }
 }

@@ -1,6 +1,7 @@
 'use client'
 
-import LogoIcon from '../components/LogoIcon'
+import Brand from '../components/Brand'
+import Spotlight from '../components/Spotlight'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '../lib/supabase'
@@ -108,18 +109,16 @@ export default function LoginPage() {
     <div className="min-h-screen flex">
 
       {/* LEWA KOLUMNA — brand */}
-      <div className="hidden lg:flex lg:w-[45%] bg-[#1C1917] flex-col justify-between p-12">
-        <div>
-          <a href="/" className="flex items-center gap-0.5 mb-16">
-            <LogoIcon size={32} className="mr-2" />
-            <span className="font-serif text-2xl font-bold text-white">Wyceń</span>
-            <span className="font-serif text-2xl font-bold text-[#C85A2A]">To</span>
-          </a>
-          <h2 className="font-serif text-4xl font-bold text-white leading-tight mb-4">
+      <div className="relative hidden lg:flex lg:w-[45%] bg-surface border-r border-line flex-col justify-between p-12 overflow-hidden">
+        <div className="dot-grid absolute inset-0" aria-hidden="true" />
+        <Spotlight x={30} y={25} />
+        <div className="relative">
+          <div className="mb-16"><Brand size={32} /></div>
+          <h2 className="text-5xl font-extrabold text-ink leading-[0.95] mb-5">
             Wycena remontu<br />
-            <span className="text-[#E8A07A] italic">ze zdjęcia</span>
+            <span className="text-accent-2">ze zdjęcia.</span>
           </h2>
-          <p className="text-[#A8A29E] leading-relaxed mb-10">
+          <p className="text-ink-2 leading-relaxed mb-10 max-w-md">
 Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na robociznę, materiały i koszty dodatkowe.
           </p>
           <ul className="space-y-4">
@@ -129,8 +128,8 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
               'Uwzględniamy ukryte koszty',
               'Widełki, nie jedna liczba',
             ].map((item) => (
-              <li key={item} className="flex items-center gap-3 text-sm text-[#A8A29E]">
-                <span className="w-5 h-5 rounded-full bg-[#C85A2A]/20 border border-[#C85A2A]/40 flex items-center justify-center text-xs text-[#E8A07A] font-bold flex-shrink-0">✓</span>
+              <li key={item} className="flex items-center gap-3 text-sm text-ink-2">
+                <span className="w-5 h-5 rounded-full bg-accent-2/15 border border-accent-2/40 flex items-center justify-center text-xs text-accent-2 font-bold flex-shrink-0">✓</span>
                 {item}
               </li>
             ))}
@@ -138,30 +137,26 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
         </div>
 
         {/* Przykładowa wycena */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-          <div className="text-xs text-[#A8A29E] mb-3 font-semibold uppercase tracking-widest">Przykładowa wycena</div>
+        <div className="relative glow-ring rounded-2xl"><div className="bg-surface rounded-[15px] p-6">
+          <div className="text-xs text-muted mb-3 font-semibold uppercase tracking-widest">Przykładowa wycena</div>
           <div className="text-sm text-white font-semibold mb-1">Łazienka 6m² · Kraków</div>
-          <div className="font-serif text-3xl font-bold text-[#E8A07A] mb-1">18 000 – 30 200 zł</div>
-          <div className="text-xs text-[#A8A29E]">Skucie, hydroizolacja, glazura, hydraulika i materiały</div>
-        </div>
+          <div className="text-3xl font-extrabold tracking-tight tabular-nums text-accent-2 mb-1">18 000 – 30 200 zł</div>
+          <div className="text-xs text-muted">Skucie, hydroizolacja, glazura, hydraulika i materiały</div>
+        </div></div>
       </div>
 
       {/* PRAWA KOLUMNA — formularz */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FAF8F5]">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-bg">
         <div className="w-full max-w-md">
 
           {/* Mobile logo */}
-          <a href="/" className="flex items-center gap-0.5 mb-8 lg:hidden">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
+          <div className="mb-8 lg:hidden"><Brand size={28} /></div>
 
           <div className="mb-8">
-            <h1 className="font-serif text-3xl font-bold text-[#1C1917] mb-2">
+            <h1 className="text-4xl font-extrabold text-ink mb-2">
               {isRecovery ? 'Ustaw nowe hasło' : isForgot ? 'Resetuj hasło' : isRegister ? 'Utwórz konto' : 'Witaj z powrotem'}
             </h1>
-            <p className="text-sm text-[#78716C]">
+            <p className="text-sm text-muted">
               {isRecovery
                 ? 'Wpisz nowe hasło — po zapisaniu przeniesiemy Cię do panelu'
                 : isForgot
@@ -172,7 +167,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
             </p>
           </div>
 
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-sm">
+          <div className="bg-surface border border-line rounded-3xl p-7 shadow-2xl shadow-black/40">
 
             {!isForgot && !isRecovery && (
               <>
@@ -180,7 +175,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                   type="button"
                   onClick={handleGoogleLogin}
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-3 border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold text-[#1C1917] hover:bg-[#FAF8F5] transition disabled:opacity-50 mb-5"
+                  className="w-full flex items-center justify-center gap-3 border border-line rounded-xl py-3 text-sm font-semibold text-ink hover:bg-surface-2 hover:border-line-strong transition disabled:opacity-50 mb-5"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                     <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -191,9 +186,9 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                   Kontynuuj przez Google
                 </button>
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="flex-1 h-px bg-[#E7E0D8]" />
-                  <span className="text-xs text-[#78716C]">lub</span>
-                  <div className="flex-1 h-px bg-[#E7E0D8]" />
+                  <div className="flex-1 h-px bg-line" />
+                  <span className="text-xs text-muted">lub</span>
+                  <div className="flex-1 h-px bg-line" />
                 </div>
               </>
             )}
@@ -202,7 +197,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
             <div className="space-y-4 mb-5">
               {!isRecovery && (
               <div>
-                <label htmlFor="email" className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide mb-2 block">Email</label>
+                <label htmlFor="email" className="text-xs font-semibold text-ink-2 uppercase tracking-wide mb-2 block">Email</label>
                 <input
                   id="email"
                   name="email"
@@ -213,16 +208,16 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                   placeholder="twoj@email.pl"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
+                  className="w-full bg-bg border border-line-strong rounded-xl px-4 py-3 text-sm text-ink placeholder-muted outline-none focus:border-accent-2 focus:ring-2 focus:ring-accent-2/20 transition"
                 />
               </div>
               )}
               {!isForgot && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label htmlFor="password" className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide">{isRecovery ? 'Nowe hasło' : 'Hasło'}</label>
+                    <label htmlFor="password" className="text-xs font-semibold text-ink-2 uppercase tracking-wide">{isRecovery ? 'Nowe hasło' : 'Hasło'}</label>
                     {!isRegister && !isRecovery && (
-                      <button type="button" onClick={() => { setIsForgot(true); setMessage('') }} className="text-xs text-[#C85A2A] hover:underline">
+                      <button type="button" onClick={() => { setIsForgot(true); setMessage('') }} className="text-xs text-accent-2 hover:underline">
                         Zapomniałem hasła
                       </button>
                     )}
@@ -237,7 +232,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                     placeholder="Minimum 6 znaków"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
+                    className="w-full bg-bg border border-line-strong rounded-xl px-4 py-3 text-sm text-ink placeholder-muted outline-none focus:border-accent-2 focus:ring-2 focus:ring-accent-2/20 transition"
                   />
                 </div>
               )}
@@ -246,8 +241,8 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
             {message && (
               <div role={messageType === 'error' ? 'alert' : 'status'} className={`rounded-xl px-4 py-3 text-sm mb-5 ${
                 messageType === 'success'
-                  ? 'bg-green-50 border border-green-200 text-green-700'
-                  : 'bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#B04E24]'
+                  ? 'bg-green-500/10 border border-green-400/30 text-green-400'
+                  : 'bg-surface-2 border border-accent-2/40 text-accent-2'
               }`}>
                 {message}
               </div>
@@ -256,7 +251,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold hover:bg-[#B04E24] transition-all shadow-md shadow-[#C85A2A]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-accent text-white py-3.5 rounded-xl font-semibold hover:bg-accent-hover btn-glow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -272,17 +267,17 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
           </div>
 
           {isRecovery ? null : isForgot ? (
-            <p className="text-sm text-center text-[#78716C] mt-5">
-              <button onClick={() => { setIsForgot(false); setMessage('') }} className="text-[#C85A2A] font-semibold hover:underline">
+            <p className="text-sm text-center text-muted mt-5">
+              <button onClick={() => { setIsForgot(false); setMessage('') }} className="text-accent-2 font-semibold hover:underline">
                 ← Wróć do logowania
               </button>
             </p>
           ) : (
-            <p className="text-sm text-center text-[#78716C] mt-5">
+            <p className="text-sm text-center text-muted mt-5">
               {isRegister ? 'Masz już konto?' : 'Nie masz konta?'}{' '}
               <button
                 onClick={() => { setIsRegister(!isRegister); setMessage('') }}
-                className="text-[#C85A2A] font-semibold hover:underline"
+                className="text-accent-2 font-semibold hover:underline"
               >
                 {isRegister ? 'Zaloguj się' : 'Zarejestruj się za darmo'}
               </button>
@@ -290,7 +285,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
           )}
 
           <p className="text-center mt-5">
-            <a href="/" className="text-xs text-[#78716C] hover:text-[#78716C] transition-colors">
+            <a href="/" className="text-xs text-muted hover:text-ink transition-colors">
               ← Wróć na stronę główną
             </a>
           </p>

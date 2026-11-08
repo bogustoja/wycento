@@ -1,18 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Lora } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const lora = Lora({
-  variable: "--font-lora",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-});
 
 // Tytuł i opis poniżej to domyślne wartości (strona główna).
 // Podstrony, które mają własne `metadata` (np. /ile-kosztuje-remont-lazienki),
@@ -45,8 +34,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${geistSans.variable} ${lora.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="pl" className="h-full antialiased">
+      <head>
+        {/* Czcionka Onest leży w /public/fonts (bez zapytań do Google). Preload = szybszy pierwszy widok. */}
+        <link rel="preload" href="/fonts/onest-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body className="min-h-full flex flex-col bg-bg text-ink">
         {children}
         {/* Vercel Web Analytics — bez cookies, bez danych osobowych, więc nie wymaga banera zgody. */}
         <Analytics />

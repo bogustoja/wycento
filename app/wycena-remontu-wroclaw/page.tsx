@@ -10,7 +10,7 @@ export default function WycenaWroclaw() {
   return (
     <SeoLanding
       path="/wycena-remontu-wroclaw"
-      badge="📍 Wrocław · Ceny 2026"
+      badge="Wrocław · Ceny 2026"
       h1="Wycena remontu we Wrocławiu —"
       h1Accent="ile to kosztuje w 2026?"
       intro="Wrocław należy do droższych rynków remontowych w Polsce — stawki ekip są zwykle o 15–25% wyższe niż w mniejszych miastach. Poniżej aktualne widełki robocizny i przykładowe koszty całych pomieszczeń, żebyś wiedział, czy oferta, którą dostałeś, jest rozsądna."

@@ -1,6 +1,6 @@
 'use client'
 
-import LogoIcon from '../components/LogoIcon'
+import Brand from '../components/Brand'
 import { escapeHtml } from '../lib/escapeHtml'
 
 import { useState, useEffect } from 'react'
@@ -28,17 +28,17 @@ function PasekPostepu({ miasto }) {
 
   return (
     <div className="mt-4" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(procent)}>
-      <div className="flex justify-between text-xs text-[#78716C] mb-2">
+      <div className="flex justify-between text-xs text-muted mb-2">
         <span>{etap}</span>
         <span className="tabular-nums">{Math.round(procent)}%</span>
       </div>
-      <div className="h-2 bg-[#F2EDE6] rounded-full overflow-hidden">
+      <div className="h-2 bg-surface-2 rounded-full overflow-hidden">
         <div
-          className="h-full bg-[#C85A2A] rounded-full transition-[width] duration-300 ease-out"
+          className="h-full bg-accent rounded-full transition-[width] duration-300 ease-out"
           style={{ width: `${procent}%` }}
         />
       </div>
-      <p className="text-xs text-center text-[#78716C] mt-2 tabular-nums">
+      <p className="text-xs text-center text-muted mt-2 tabular-nums">
         {zostalo > 0 ? `Zwykle 20–40 sekund · zostało ok. ${zostalo} s` : 'Zwykle 20–40 sekund · kończę…'}
       </p>
     </div>
@@ -210,32 +210,31 @@ export default function WycenaPage() {
   // PAYWALL
   if (error === 'BRAK_KREDYTOW') {
     return (
-      <main className="min-h-screen bg-[#FAF8F5] flex items-center justify-center px-6">
+      <main className="min-h-screen bg-bg flex items-center justify-center px-6">
         <div className="max-w-md w-full text-center">
-          <div className="text-6xl mb-6">🔒</div>
-          <h1 className="font-serif text-3xl font-bold text-[#1C1917] mb-3">Limit wycen wyczerpany</h1>
-          <p className="text-[#78716C] mb-8">Wykorzystałeś wszystkie 3 darmowe wyceny. Przejdź na plan Pro — nielimitowane wyceny i pobieranie PDF za 39 zł miesięcznie.</p>
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-7 mb-6 text-left">
+                    <h1 className="text-4xl font-extrabold text-ink mb-3">Limit wycen wyczerpany</h1>
+          <p className="text-muted mb-8">Wykorzystałeś wszystkie 3 darmowe wyceny. Przejdź na plan Pro — nielimitowane wyceny i pobieranie PDF za 39 zł miesięcznie.</p>
+          <div className="bg-surface border border-line rounded-3xl p-7 mb-6 text-left">
             <ul className="space-y-3">
               {['Nielimitowane wyceny', 'Pobieranie raportów PDF', 'Historia wszystkich wycen', 'Priorytetowa obsługa'].map(item => (
-                <li key={item} className="flex items-center gap-3 text-sm text-[#44403C]">
-                  <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
+                <li key={item} className="flex items-center gap-3 text-sm text-ink-2">
+                  <span className="w-5 h-5 rounded-full bg-green-500/15 text-green-400 flex items-center justify-center text-xs font-bold flex-shrink-0">✓</span>
                   {item}
                 </li>
               ))}
             </ul>
-            <div className="mt-6 pt-5 border-t border-[#E7E0D8] flex items-end gap-1">
-              <span className="font-serif text-4xl font-bold">39</span>
-              <span className="text-[#78716C] pb-1">zł / miesiąc</span>
+            <div className="mt-6 pt-5 border-t border-line flex items-end gap-1">
+              <span className="text-5xl font-extrabold tracking-tight">39</span>
+              <span className="text-muted pb-1">zł / miesiąc</span>
             </div>
           </div>
           <button
             onClick={() => router.push('/pro')}
-            className="w-full bg-[#C85A2A] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20 mb-3"
+            className="w-full bg-accent text-white py-4 rounded-xl font-semibold text-base hover:bg-accent-hover btn-glow mb-3"
           >
             Przejdź na Pro →
           </button>
-          <button onClick={() => router.push('/dashboard')} className="text-sm text-[#78716C] hover:text-[#1C1917] transition">
+          <button onClick={() => router.push('/dashboard')} className="text-sm text-muted hover:text-ink transition">
             Wróć do panelu
           </button>
         </div>
@@ -246,93 +245,89 @@ export default function WycenaPage() {
   // WYNIK
   if (wynik) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5]">
-        <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
-          <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="/" className="flex items-center gap-0.5">
-              <LogoIcon size={28} className="mr-2" />
-              <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-              <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-            </a>
-            <button onClick={() => router.push('/dashboard')} className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E7E0D8] px-3 py-1.5 rounded-lg hover:bg-[#F2EDE6]">
+      <main className="min-h-screen bg-bg">
+        <nav className="bg-bg/80 backdrop-blur-md border-b border-line sticky top-0 z-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <Brand />
+            <button onClick={() => router.push('/dashboard')} className="text-sm text-muted hover:text-ink transition-colors border border-line-strong px-3.5 py-1.5 rounded-full hover:bg-surface-2">
               ← Panel
             </button>
           </div>
         </nav>
 
         <div className="max-w-3xl mx-auto px-6 py-10">
-          <button onClick={() => setWynik(null)} className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors mb-6 block">
+          <button onClick={() => setWynik(null)} className="text-sm text-muted hover:text-ink transition-colors mb-6 block">
             ← Nowa wycena
           </button>
 
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-[#1C1917]">Wycena gotowa</h1>
-              <p className="text-sm text-[#78716C] mt-1">{pomieszczenie} · {miasto}</p>
+              <h1 className="text-4xl font-extrabold text-ink">Wycena gotowa</h1>
+              <p className="text-sm text-muted mt-1">{pomieszczenie} · {miasto}</p>
             </div>
-            <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-semibold">Gotowa ✓</span>
+            <span className="shrink-0 whitespace-nowrap text-xs bg-green-500/10 text-green-400 border border-green-400/30 px-3 py-1.5 rounded-full font-semibold">Gotowa ✓</span>
           </div>
 
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6 mb-4">
-            <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-3">Analiza zdjęcia</div>
-            <p className="text-[#44403C] leading-relaxed text-sm">{wynik.summary}</p>
+          <div className="bg-surface border border-line rounded-3xl p-6 mb-4">
+            <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-3">Analiza zdjęcia</div>
+            <p className="text-ink-2 leading-relaxed text-sm">{wynik.summary}</p>
           </div>
 
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden mb-4">
-            <div className="px-6 py-4 border-b border-[#E7E0D8] bg-[#FAF8F5]">
-              <h2 className="font-serif text-lg font-bold text-[#1C1917]">Kosztorys — {miasto}</h2>
+          <div className="bg-surface border border-line rounded-3xl overflow-hidden mb-4">
+            <div className="px-6 py-4 border-b border-line">
+              <h2 className="text-lg font-bold text-ink">Kosztorys — {miasto}</h2>
             </div>
-            <div className="divide-y divide-[#E7E0D8]">
+            <div className="divide-y divide-line">
               {wynik.items.map((item, i) => (
                 <div key={i} className="px-6 py-4 flex justify-between items-center">
-                  <span className="text-sm text-[#44403C]">{item.name}</span>
-                  <span className="font-semibold text-[#1C1917] text-sm tabular-nums whitespace-nowrap ml-4">
+                  <span className="text-sm text-ink-2">{item.name}</span>
+                  <span className="font-semibold text-ink text-sm tabular-nums whitespace-nowrap ml-4">
                     {item.min.toLocaleString('pl-PL')} – {item.max.toLocaleString('pl-PL')} {item.jednostka}
                   </span>
                 </div>
               ))}
             </div>
-            <div className="px-6 py-5 bg-[#1C1917] flex justify-between items-center">
-              <span className="font-semibold text-white">Łącznie</span>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-[#E8A07A] whitespace-nowrap ml-4">
+            <div className="px-6 py-5 bg-accent text-white flex justify-between items-center gap-3 flex-wrap">
+              <span className="font-semibold">Łącznie</span>
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-tight tabular-nums whitespace-nowrap">
                 {wynik.total_min.toLocaleString('pl-PL')} – {wynik.total_max.toLocaleString('pl-PL')} zł
               </span>
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 mb-4">
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
-              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Na co uważać</div>
+            <div className="bg-surface border border-line rounded-3xl p-6">
+              <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-4">Na co uważać</div>
               <ul className="space-y-3">
                 {wynik.uwagi.map((u, i) => (
-                  <li key={i} className="text-sm text-[#44403C] flex gap-2 leading-relaxed">
-                    <span className="text-amber-500 flex-shrink-0 mt-0.5">⚠</span>{u}
+                  <li key={i} className="text-sm text-ink-2 flex gap-2 leading-relaxed">
+                    <span className="text-amber-400 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>{u}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
-              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Warto dodać przy okazji</div>
+            <div className="bg-surface border border-line rounded-3xl p-6">
+              <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-4">Warto dodać przy okazji</div>
               <ul className="space-y-3">
                 {wynik.co_warto_dodac.map((c, i) => (
-                  <li key={i} className="text-sm text-[#44403C] flex gap-2 leading-relaxed">
-                    <span className="text-green-500 flex-shrink-0 mt-0.5">✓</span>{c}
+                  <li key={i} className="text-sm text-ink-2 flex gap-2 leading-relaxed">
+                    <span className="text-green-400 flex-shrink-0 mt-0.5">✓</span>{c}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6 flex items-center justify-between">
+          <div className="bg-surface border border-line rounded-3xl p-6 flex flex-wrap gap-4 items-center justify-between">
             <div>
-              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-1">Czas realizacji</div>
-              <div className="font-serif text-xl font-bold text-[#1C1917]">{wynik.czas_realizacji}</div>
+              <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-1">Czas realizacji</div>
+              <div className="text-2xl font-extrabold text-ink">{wynik.czas_realizacji}</div>
             </div>
             <button
               onClick={handlePDF}
-              className="bg-[#C85A2A] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#B04E24] transition shadow-md shadow-[#C85A2A]/20 flex items-center gap-2"
+              className="bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-hover btn-glow flex items-center gap-2"
             >
-              <span>📄</span> Pobierz PDF
+              Pobierz PDF <span aria-hidden="true">↓</span>
             </button>
           </div>
         </div>
@@ -342,15 +337,11 @@ export default function WycenaPage() {
 
   // FORMULARZ
   return (
-    <main className="min-h-screen bg-[#FAF8F5]">
-      <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-0.5">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
-          <button onClick={() => router.push('/dashboard')} className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors border border-[#E7E0D8] px-3 py-1.5 rounded-lg hover:bg-[#F2EDE6]">
+    <main className="min-h-screen bg-bg">
+      <nav className="bg-bg/80 backdrop-blur-md border-b border-line sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <Brand />
+          <button onClick={() => router.push('/dashboard')} className="text-sm text-muted hover:text-ink transition-colors border border-line-strong px-3.5 py-1.5 rounded-full hover:bg-surface-2">
             ← Panel
           </button>
         </div>
@@ -358,15 +349,15 @@ export default function WycenaPage() {
 
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="mb-8">
-          <h1 className="font-serif text-4xl font-bold text-[#1C1917] mb-2">Nowa wycena</h1>
-          <p className="text-[#78716C]">Zrób zdjęcie pomieszczenia i podaj lokalizację</p>
+          <h1 className="text-5xl font-extrabold text-ink mb-2">Nowa wycena</h1>
+          <p className="text-ink-2">Zrób zdjęcie pomieszczenia i podaj lokalizację</p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-2 gap-8">
 
           {/* FORMULARZ */}
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl p-8">
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-6">Twoje pomieszczenie</h2>
+          <div className="min-w-0 bg-surface border border-line rounded-3xl p-5 sm:p-8">
+            <h2 className="text-xl font-bold text-ink mb-6">Twoje pomieszczenie</h2>
 
             <div className="flex gap-3 mb-6">
               <label htmlFor="miasto" className="sr-only">Miasto lub kod pocztowy</label>
@@ -379,14 +370,14 @@ export default function WycenaPage() {
                 placeholder="Miasto lub kod pocztowy"
                 value={miasto}
                 onChange={(e) => setMiasto(e.target.value)}
-                className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
+                className="min-w-0 flex-1 bg-bg border border-line-strong rounded-xl px-4 py-3 text-sm text-ink placeholder-muted outline-none focus:border-accent-2 focus:ring-2 focus:ring-accent-2/20 transition"
               />
               <label htmlFor="pomieszczenie" className="sr-only">Rodzaj pomieszczenia</label>
               <select
                 id="pomieszczenie"
                 value={pomieszczenie}
                 onChange={(e) => setPomieszczenie(e.target.value)}
-                className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] outline-none focus:border-[#C85A2A] transition"
+                className="bg-bg border border-line-strong rounded-xl px-4 py-3 text-sm text-ink outline-none focus:border-accent-2 transition"
               >
                 <option>Łazienka</option>
                 <option>Kuchnia</option>
@@ -400,8 +391,8 @@ export default function WycenaPage() {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="opis" className="block text-sm font-medium text-[#44403C] mb-2">
-                Co chcesz zrobić? <span className="text-[#78716C] font-normal">(opcjonalnie)</span>
+              <label htmlFor="opis" className="block text-sm font-medium text-ink-2 mb-2">
+                Co chcesz zrobić? <span className="text-muted font-normal">(opcjonalnie)</span>
               </label>
               <textarea
                 id="opis"
@@ -410,29 +401,45 @@ export default function WycenaPage() {
                 value={opis}
                 onChange={(e) => setOpis(e.target.value)}
                 rows={3}
-                className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition resize-none"
+                className="w-full bg-bg border border-line-strong rounded-xl px-4 py-3 text-sm text-ink placeholder-muted outline-none focus:border-accent-2 focus:ring-2 focus:ring-accent-2/20 transition resize-none"
               />
             </div>
 
-            <label className="block border-2 border-dashed border-[#E7E0D8] rounded-2xl p-10 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] focus-within:border-[#C85A2A] focus-within:bg-[#FEF8F4] transition-all mb-6 group">
+            <label className={`block border-2 border-dashed rounded-3xl text-center cursor-pointer transition-all mb-6 group ${preview ? 'border-line p-3' : 'border-line-strong p-10 hover:border-accent-2 hover:bg-surface-2 focus-within:border-accent-2 focus-within:bg-surface-2'} ${loading ? 'pointer-events-none' : ''}`}>
               {preview ? (
                 <div>
-                 <img src={preview} alt="Podgląd dodanego zdjęcia pomieszczenia" className="max-h-56 mx-auto rounded-xl object-cover shadow-sm" />
-                  <p className="text-xs text-[#78716C] mt-3">Kliknij żeby zmienić zdjęcie</p>
+                  {/* Podczas analizy: ten sam skan co na stronie głównej, na zdjęciu usera. */}
+                  <div className="relative overflow-hidden rounded-2xl bg-bg">
+                    <img src={preview} alt="Podgląd dodanego zdjęcia pomieszczenia" className={`mx-auto w-full object-cover transition-all duration-500 ${loading ? 'max-h-96 brightness-75' : 'max-h-64'}`} />
+                    {loading && (
+                      <>
+                        <div aria-hidden="true" className="absolute inset-0 dot-grid" />
+                        <div className="scan-glow" />
+                        <div className="scan-line" />
+                        <div className="absolute top-3 left-3 flex items-center gap-2 rounded-full border border-line bg-bg/80 px-3 py-1.5 text-xs font-semibold text-ink">
+                          <span className="pulse-dot h-2 w-2 rounded-full bg-accent-2" />
+                          Analiza zdjęcia…
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {!loading && <p className="text-xs text-muted mt-3">Kliknij, żeby zmienić zdjęcie</p>}
                 </div>
               ) : (
                 <>
-                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform inline-block">📷</div>
-                  <div className="text-base font-semibold text-[#44403C] mb-1">Dodaj zdjęcie pomieszczenia</div>
-                  <div className="text-sm text-[#78716C]">Kliknij, żeby wybrać zdjęcie lub zrobić je telefonem · JPG lub PNG</div>
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-accent-2/40 bg-accent-2/10 text-accent-2 transition-transform group-hover:scale-110">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /></svg>
+                  </div>
+                  <div className="text-base font-semibold text-ink mb-1">Dodaj zdjęcie pomieszczenia</div>
+                  <div className="text-sm text-muted">Kliknij, żeby wybrać zdjęcie lub zrobić je telefonem · JPG lub PNG</div>
                 </>
               )}
               {/* sr-only zamiast hidden: ukryte pole nie dostawało fokusu z klawiatury */}
-              <input type="file" accept="image/*" onChange={handleImage} className="sr-only" aria-label="Dodaj zdjęcie pomieszczenia" />
+              <input type="file" accept="image/*" onChange={handleImage} disabled={loading} className="sr-only" aria-label="Dodaj zdjęcie pomieszczenia" />
             </label>
 
             {error && error !== 'BRAK_KREDYTOW' && (
-              <div role="alert" className="bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#B04E24] text-sm rounded-xl px-4 py-3 mb-4">
+              <div role="alert" className="bg-surface-2 border border-accent-2/40 text-accent-2 text-sm rounded-xl px-4 py-3 mb-4">
                 {error}
               </div>
             )}
@@ -440,7 +447,7 @@ export default function WycenaPage() {
             <button
               onClick={handleSubmit}
               disabled={loading || !miasto || !image}
-              className="w-full bg-[#C85A2A] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-[#C85A2A]/20 flex items-center justify-center gap-2"
+              className="w-full bg-accent text-white py-4 rounded-xl font-semibold text-base hover:bg-accent-hover btn-glow disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -457,16 +464,16 @@ export default function WycenaPage() {
           </div>
 
           {/* SIDEBAR */}
-          <div className="flex flex-col gap-6">
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden">
-              <div className="px-6 py-4 border-b border-[#E7E0D8] bg-[#FAF8F5] flex items-center justify-between">
+          <div className="min-w-0 flex flex-col gap-6">
+            <div className="bg-surface border border-line rounded-3xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-line flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-0.5">Przykładowy wynik</div>
-                  <div className="font-serif text-base font-bold text-[#1C1917]">Łazienka 6m² · Kraków</div>
+                  <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-0.5">Przykładowy wynik</div>
+                  <div className="text-base font-bold text-ink">Łazienka 6m² · Kraków</div>
                 </div>
-                <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full font-medium">Demo</span>
+                <span className="text-xs bg-green-500/10 text-green-400 border border-green-400/30 px-2 py-0.5 rounded-full font-medium">Demo</span>
               </div>
-              <div className="divide-y divide-[#E7E0D8]">
+              <div className="divide-y divide-line">
                 {[
                   { name: 'Skucie płytek i wywóz gruzu', min: 2000, max: 3200 },
                   { name: 'Hydroizolacja i przygotowanie podłoża', min: 1200, max: 2000 },
@@ -475,31 +482,31 @@ export default function WycenaPage() {
                   { name: 'Materiały: płytki, chemia, armatura (średni standard)', min: 8000, max: 14000 },
                 ].map((item, i) => (
                   <div key={i} className="px-6 py-3 flex justify-between items-center">
-                    <span className="text-sm text-[#44403C]">{item.name}</span>
-                    <span className="text-sm font-semibold text-[#1C1917] tabular-nums">{item.min.toLocaleString('pl-PL')} – {item.max.toLocaleString('pl-PL')} zł</span>
+                    <span className="text-sm text-ink-2">{item.name}</span>
+                    <span className="text-sm font-semibold text-ink tabular-nums">{item.min.toLocaleString('pl-PL')} – {item.max.toLocaleString('pl-PL')} zł</span>
                   </div>
                 ))}
               </div>
-              <div className="px-6 py-4 bg-[#1C1917] flex justify-between items-center">
-                <span className="font-semibold text-white">Łącznie</span>
-                <span className="font-serif text-xl font-bold text-[#E8A07A]">18 000 – 30 200 zł</span>
+              <div className="px-6 py-4 bg-accent text-white flex justify-between items-center gap-3 flex-wrap">
+                <span className="font-semibold">Łącznie</span>
+                <span className="text-xl font-extrabold tracking-tight tabular-nums">18 000 – 30 200 zł</span>
               </div>
             </div>
 
-            <div className="bg-[#1C1917] rounded-2xl p-7">
-              <h3 className="font-serif text-lg font-bold text-white mb-5">Co bierzemy pod uwagę</h3>
+            <div className="bg-surface border border-line rounded-3xl p-7">
+              <h3 className="text-lg font-bold text-ink mb-5">Co bierzemy pod uwagę</h3>
               <div className="space-y-4">
                 {[
-                  { icon: '📍', t: 'Lokalizacja', d: 'Stawki w Warszawie są 20–35% wyższe niż w mniejszych miastach.' },
-                  { icon: '🔧', t: 'Ukryte koszty', d: 'Wywóz gruzu, folia, taśmy, kleje — wszystko w wycenie.' },
-                  { icon: '📊', t: 'Widełki, nie liczba', d: 'Przedział min-max bo remont zawsze ma zmienne.' },
-                  { icon: '💡', t: 'Co zrobić przy okazji', d: 'Wiemy kiedy warto coś wymienić teraz zamiast płacić dwa razy.' },
+                  { t: 'Lokalizacja', d: 'Stawki w Warszawie są 20–35% wyższe niż w mniejszych miastach.' },
+                  { t: 'Ukryte koszty', d: 'Wywóz gruzu, folia, taśmy, kleje — wszystko w wycenie.' },
+                  { t: 'Widełki, nie liczba', d: 'Przedział min-max bo remont zawsze ma zmienne.' },
+                  { t: 'Co zrobić przy okazji', d: 'Wiemy kiedy warto coś wymienić teraz zamiast płacić dwa razy.' },
                 ].map((item) => (
                   <div key={item.t} className="flex gap-3">
-                    <span className="text-xl flex-shrink-0">{item.icon}</span>
+                    <span aria-hidden="true" className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-accent-2" />
                     <div>
-                      <div className="font-semibold text-white text-sm mb-0.5">{item.t}</div>
-                      <div className="text-xs text-[#A8A29E] leading-relaxed">{item.d}</div>
+                      <div className="font-semibold text-ink text-sm mb-0.5">{item.t}</div>
+                      <div className="text-xs text-muted leading-relaxed">{item.d}</div>
                     </div>
                   </div>
                 ))}

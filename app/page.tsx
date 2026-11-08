@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { SEO_LINKS } from './components/seoLinks'
 import { FaqJsonLd } from './components/SeoLanding'
-
-import LogoIcon from './components/LogoIcon'
 import { CONTACT_EMAIL } from './lib/site'
+import SiteHeader from './components/SiteHeader'
+import SiteFooter from './components/SiteFooter'
+import Spotlight from './components/Spotlight'
+import ScanDemo from './components/ScanDemo'
 
 // hreflang: polska strona główna <-> angielska /en
 export const metadata: Metadata = {
@@ -40,289 +41,167 @@ const HOME_FAQ = [
   },
 ]
 
+const NAV = [
+  { href: '#jak-dziala', label: 'Jak działa' },
+  { href: '#cennik', label: 'Cennik' },
+  { href: '#pytania', label: 'Pytania' },
+  { href: '/en', label: 'English' },
+]
+
+const d = (s: number) => ({ '--d': `${s}s` }) as React.CSSProperties
+
+// Ikony liniowe zamiast emoji: wyglądają tak samo na każdym telefonie.
+function Icon({ path }: { path: string }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={path} />
+    </svg>
+  )
+}
+const ICONS = {
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
+  pin: 'M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+  list: 'M9 6h11 M9 12h11 M9 18h11 M4.5 6h.01 M4.5 12h.01 M4.5 18h.01',
+  check: 'M5 12.5l4.5 4.5L19 7.5',
+}
+
+const STEPS = [
+  { n: '01', icon: ICONS.camera, title: 'Zrób zdjęcie', desc: 'Sfotografuj pomieszczenie z progu, przy dobrym świetle. Im więcej widać, tym węższe widełki.' },
+  { n: '02', icon: ICONS.pin, title: 'Podaj miasto', desc: 'Robocizna w Warszawie i w Radomiu różni się o 20–35%. Liczymy według stawek z Twojej okolicy.' },
+  { n: '03', icon: ICONS.list, title: 'Dostań kosztorys', desc: 'Pozycja po pozycji: robocizna, materiały i koszty dodatkowe, z widełkami min–max.' },
+]
+
+const HIDDEN = ['Wywóz gruzu', 'Gruntowanie', 'Folia w płynie', 'Kleje i fugi', 'Taśmy narożne', 'Wyrównanie podłoża', 'Zabezpieczenie mieszkania']
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
+    <main className="flex min-h-screen flex-col bg-bg text-ink">
       <FaqJsonLd faq={HOME_FAQ} />
-
-      {/* NAV */}
-      <nav className="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E7E0D8]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-0.5">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#jak-dziala" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">Jak działa</a>
-            <a href="#cennik" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">Cennik</a>
-            <a href="/en" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">🇬🇧 English</a>
-          </div>
-          <div className="flex items-center gap-4">
-            <a
-              href="/login"
-              className="hidden sm:inline text-sm text-[#78716C] hover:text-[#1C1917] transition-colors font-medium"
-            >
-              Zaloguj się
-            </a>
-            <a
-              href="/login"
-              className="bg-[#C85A2A] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#B04E24] transition-all shadow-sm whitespace-nowrap"
-            >
-              Wypróbuj za darmo
-            </a>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader links={NAV} />
 
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#D4C9BE 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FAF8F5]/60 to-[#FAF8F5]" />
-
-        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-16">
-          <div className="inline-flex items-center gap-2 bg-white border border-[#E7E0D8] rounded-full px-4 py-1.5 mb-10 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            <span className="text-xs font-semibold text-[#78716C]">📷 Wycena ze zdjęcia · Polskie ceny i realia</span>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Heading */}
-            <div>
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
-                Ile naprawdę<br />
-                kosztuje Twój<br />
-                <span className="text-[#C85A2A] italic">remont?</span>
+        <div className="dot-grid absolute inset-0" aria-hidden="true" />
+        <Spotlight x={25} y={15} />
+        <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-16 sm:px-6 sm:pt-20">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
+            <div className="flex min-w-0 flex-[1_1_680px] flex-col gap-6">
+              <span className="rise self-start rounded-full border border-line-strong px-3.5 py-1.5 text-[13px] text-ink-2">
+                Wycena ze zdjęcia · stawki z Twojego miasta
+              </span>
+              <h1 className="rise text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] font-extrabold tracking-[-0.045em]" style={d(0.08)}>
+                Pokaż pokój. Zobacz, ile <span className="text-accent-2">naprawdę</span> kosztuje remont.
               </h1>
-              <p className="text-lg text-[#78716C] leading-relaxed mb-10 max-w-lg">
-                Wrzuć zdjęcie pomieszczenia, podaj miasto. Nasz system wyceni remont z prawdziwymi cenami dla Twojej okolicy — zanim zdążysz zadzwonić do ekipy.
+            </div>
+            <div className="rise flex min-w-0 flex-[0_1_360px] flex-col gap-5" style={d(0.18)}>
+              <p className="text-[17px] leading-relaxed text-ink-2">
+                System ogląda zdjęcie jak wykonawca: liczy metry płytek, zauważa stare instalacje i dolicza gruz, chemię i przygotowanie podłoża.
               </p>
-              <div className="flex items-center gap-6">
-                <div>
-                  <div className="font-serif text-2xl font-bold">30s</div>
-                  <div className="text-xs text-[#78716C]">czas wyceny</div>
-                </div>
-                <div className="w-px h-8 bg-[#E7E0D8]" />
-                <div>
-                  <div className="font-serif text-2xl font-bold">min–max</div>
-                  <div className="text-xs text-[#78716C]">widełki cenowe</div>
-                </div>
-                <div className="w-px h-8 bg-[#E7E0D8]" />
-                <div>
-                  <div className="font-serif text-2xl font-bold">0 zł</div>
-                  <div className="text-xs text-[#78716C]">na start</div>
-                </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <a href="/login" className="btn-glow inline-flex min-h-14 items-center gap-2 rounded-2xl bg-accent px-7 text-[17px] font-bold text-white hover:bg-accent-hover hover:text-white">
+                  Wyceń za darmo <span aria-hidden="true">→</span>
+                </a>
+                <span className="text-sm text-muted">3 wyceny gratis, bez karty</span>
               </div>
-            </div>
-
-            {/* Form card — cała karta to jeden link do rejestracji (formularz działa dopiero po zalogowaniu) */}
-            <a
-              href="/login"
-              className="group block bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-xl shadow-[#1C1917]/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C85A2A]"
-            >
-              <div aria-hidden="true">
-              <div className="flex gap-3 mb-5">
-                <div className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#78716C]">
-                  Miasto (np. Warszawa)
-                </div>
-                <div className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-3 py-3 text-sm text-[#44403C]">
-                  Łazienka ▾
-                </div>
-              </div>
-
-              <div className="border-2 border-dashed border-[#E7E0D8] rounded-xl p-8 text-center group-hover:border-[#C85A2A] group-hover:bg-[#FEF8F4] transition-all mb-5">
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform inline-block">📷</div>
-                <div className="text-sm font-semibold text-[#44403C] mb-1">Dodaj zdjęcie pomieszczenia</div>
-                <div className="text-xs text-[#78716C]">JPG lub PNG · zdjęcie z telefonu wystarczy</div>
-              </div>
-
-              </div>
-
-              <div className="w-full text-center bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold group-hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/25 mb-4">
-                Wyceń mój remont →
-              </div>
-
-              <div className="flex justify-center gap-5 text-xs text-[#78716C]">
-                <span>✓ 3 wyceny gratis</span>
-                <span>✓ Bez karty kredytowej</span>
-                <span>✓ Wynik w 30s</span>
-              </div>
-              <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-[#F2EDE6]">
-                <span className="flex items-center gap-1 text-xs text-[#78716C]"><span className="text-sm">🔒</span> SSL</span>
-                <span className="flex items-center gap-1 text-xs text-[#78716C]"><span className="text-sm">🇪🇺</span> GDPR</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* PRZYKŁADOWA WYCENA */}
-      <section className="bg-white border-y border-[#E7E0D8] py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-semibold text-[#78716C] uppercase tracking-widest text-center mb-10">Przykładowy wynik wyceny</p>
-          <div className="max-w-2xl mx-auto bg-[#FAF8F5] border border-[#E7E0D8] rounded-2xl overflow-hidden shadow-sm">
-            <div className="px-6 py-4 bg-white border-b border-[#E7E0D8] flex items-center justify-between">
-              <div>
-                <div className="font-semibold text-[#1C1917]">Łazienka 6m²</div>
-                <div className="text-xs text-[#78716C]">Kraków, Krowodrza</div>
-              </div>
-              <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full font-medium">Gotowa ✓</span>
-            </div>
-            <div className="divide-y divide-[#E7E0D8]">
-              {[
-                { name: 'Skucie płytek i wywóz gruzu', min: 2000, max: 3200 },
-                { name: 'Hydroizolacja i przygotowanie podłoża', min: 1200, max: 2000 },
-                { name: 'Glazura i terakota — robocizna (ok. 25 m²)', min: 3800, max: 6000 },
-                { name: 'Hydraulika i biały montaż', min: 3000, max: 5000 },
-                { name: 'Materiały: płytki, chemia, armatura (średni standard)', min: 8000, max: 14000 },
-              ].map((item, i) => (
-                <div key={i} className="px-6 py-3.5 flex justify-between items-center">
-                  <span className="text-sm text-[#44403C]">{item.name}</span>
-                  <span className="text-sm font-semibold text-[#1C1917]">{item.min.toLocaleString('pl-PL')} – {item.max.toLocaleString('pl-PL')} zł</span>
-                </div>
-              ))}
-            </div>
-            <div className="px-6 py-4 bg-[#1C1917] flex justify-between items-center">
-              <span className="font-semibold text-white">Łącznie</span>
-              <span className="font-serif text-xl font-bold text-[#E8A07A]">18 000 – 30 200 zł</span>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* PORÓWNANIE */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Przewaga WyceńTo</p>
-            <h2 className="font-serif text-4xl font-bold leading-tight">
-              Inne kalkulatory zgadują.<br />
-              <span className="text-[#C85A2A] italic">My patrzymy.</span>
-            </h2>
-            <p className="text-[#78716C] mt-4 max-w-xl mx-auto text-sm leading-relaxed">
-              "Łazienka 6m²" to za mało. Zdjęcie mówi wszystko — stare płytki, pęknięcia ściany, układ rur, stan fugi. System widzi to co widzi doświadczony wykonawca.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden shadow-sm">
-            <div className="grid grid-cols-3 bg-[#FAF8F5] border-b border-[#E7E0D8]">
-              <div className="px-6 py-4 text-sm font-semibold text-[#78716C]">Co bierzemy pod uwagę</div>
-              <div className="px-6 py-4 text-center">
-                <span className="font-serif font-bold text-[#1C1917] text-sm">Wyceń<span className="text-[#C85A2A]">To</span></span>
-              </div>
-              <div className="px-6 py-4 text-center text-xs font-semibold text-[#78716C] uppercase tracking-wide">Inne kalkulatory</div>
-            </div>
-            {[
-              { feature: 'Analiza zdjęcia (widzi stan pomieszczenia)', us: true, them: false },
-              { feature: 'Stawki robocizny dla Twojego miasta', us: true, them: '⚠ Ogólne' },
-              { feature: 'Ukryte koszty (gruz, kleje, folia, grunt)', us: true, them: false },
-              { feature: 'Szacowany czas realizacji', us: true, them: false },
-              { feature: 'Co warto zrobić przy okazji remontu', us: true, them: false },
-              { feature: 'Raport PDF do pobrania', us: true, them: false },
-            ].map((row, i) => (
-              <div key={i} className="grid grid-cols-3 border-b border-[#E7E0D8] last:border-0 hover:bg-[#FAF8F5]/50 transition-colors">
-                <div className="px-6 py-4 text-sm text-[#44403C] flex items-center">{row.feature}</div>
-                <div className="px-6 py-4 flex justify-center items-center">
-                  <span className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">✓</span>
-                </div>
-                <div className="px-6 py-4 flex justify-center items-center">
-                  {row.them === false
-                    ? <span className="w-6 h-6 rounded-full bg-[#FEF0EA] text-[#C85A2A]/60 flex items-center justify-center text-xs font-bold">✕</span>
-                    : <span className="text-xs text-[#78716C]">{row.them}</span>
-                  }
-                </div>
-              </div>
-            ))}
+          <div className="rise" style={d(0.3)}>
+            <ScanDemo />
           </div>
         </div>
       </section>
 
       {/* JAK DZIAŁA */}
-      <section id="jak-dziala" className="py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Jak to działa</p>
-            <h2 className="font-serif text-4xl font-bold">Trzy kroki do wyceny</h2>
+      <section id="jak-dziala" className="scroll-mt-20 border-t border-line py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+            <h2 className="max-w-xl text-4xl font-extrabold sm:text-5xl">Trzy kroki. Około 30 sekund.</h2>
+            <p className="max-w-sm text-ink-2">Nie musisz nic mierzyć ani znać się na remontach. Zdjęcie z telefonu wystarczy.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { n: '01', icon: '📸', title: 'Zrób zdjęcie', desc: 'Sfotografuj pomieszczenie które chcesz remontować. Im więcej widać, tym lepsza wycena.' },
-              { n: '02', icon: '📍', title: 'Podaj lokalizację', desc: 'Wpisz miasto. Ceny w Warszawie różnią się od Radomia o 20–35% — uwzględniamy to.' },
-              { n: '03', icon: '📋', title: 'Dostaj wycenę', desc: 'Szczegółowy kosztorys z podziałem na robociznę, materiały i koszty dodatkowe.' },
-            ].map((s) => (
-              <div key={s.n} className="bg-white border border-[#E7E0D8] rounded-2xl p-8 hover:shadow-lg hover:shadow-[#1C1917]/5 hover:-translate-y-1 transition-all duration-300">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-2xl">{s.icon}</div>
-                  <span aria-hidden="true" className="font-serif text-4xl font-bold text-[#F2EDE6]">{s.n}</span>
+          <ol className="grid gap-4 md:grid-cols-3">
+            {STEPS.map((s) => (
+              <li key={s.n} className="lift relative overflow-hidden rounded-3xl border border-line bg-surface p-7">
+                <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-accent-2/40 bg-accent-2/10 text-accent-2">
+                  <Icon path={s.icon} />
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-3">{s.title}</h3>
-                <p className="text-sm text-[#78716C] leading-relaxed">{s.desc}</p>
-              </div>
+                <h3 className="mb-2 text-xl font-bold">{s.title}</h3>
+                <p className="text-[15px] leading-relaxed text-ink-2">{s.desc}</p>
+              </li>
             ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* CO LICZYMY — bento */}
+      <section className="border-t border-line py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <h2 className="mb-14 max-w-2xl text-4xl font-extrabold sm:text-5xl">
+            Koniec z remontem, który kosztuje <span className="text-accent-2">dwa razy więcej</span>, niż planowałeś.
+          </h2>
+          <div className="grid gap-4 md:grid-cols-6">
+            <div className="lift flex flex-col gap-5 rounded-3xl border border-line bg-surface p-7 md:col-span-4">
+              <div>
+                <h3 className="mb-2 text-2xl font-bold">Ukryte koszty na wierzchu</h3>
+                <p className="max-w-lg text-ink-2">To, o czym ekipa mówi dopiero na końcu. Na zdjęciu tego nie widać, w kosztorysie jest.</p>
+              </div>
+              <ul className="flex flex-wrap gap-2">
+                {HIDDEN.map((h) => (
+                  <li key={h} className="rounded-full border border-line-strong bg-white/[0.03] px-3.5 py-1.5 text-sm text-ink-2">{h}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="lift flex flex-col justify-between gap-6 rounded-3xl bg-accent p-7 text-white md:col-span-2">
+              <span className="text-5xl font-extrabold tracking-tight">min–max</span>
+              <p className="text-white">Uczciwa wycena to przedział. Nie obiecujemy precyzji, której nikt nie ma bez wizyty na miejscu.</p>
+            </div>
+            <div className="lift rounded-3xl border border-line bg-surface p-7 md:col-span-2">
+              <h3 className="mb-2 text-lg font-bold">Ceny lokalne</h3>
+              <p className="text-[15px] leading-relaxed text-ink-2">Stawki robocizny w Warszawie są o 20–35% wyższe niż w mniejszych miastach. Uwzględniamy to.</p>
+            </div>
+            <div className="lift rounded-3xl border border-line bg-surface p-7 md:col-span-2">
+              <h3 className="mb-2 text-lg font-bold">Czas realizacji</h3>
+              <p className="text-[15px] leading-relaxed text-ink-2">Każda wycena podaje orientacyjny czas prac, żebyś wiedział, czego oczekiwać od ekipy.</p>
+            </div>
+            <div className="lift rounded-3xl border border-line bg-surface p-7 md:col-span-2">
+              <h3 className="mb-2 text-lg font-bold">Co zrobić przy okazji</h3>
+              <p className="text-[15px] leading-relaxed text-ink-2">Podpowiadamy, co wymienić teraz, żeby nie płacić za powrót ekipy za rok.</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* KTO ZA TYM STOI */}
-      <section className="py-24 bg-[#FAF8F5]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Kto za tym stoi</p>
-          <h2 className="font-serif text-4xl font-bold mb-6">Robione przez kogoś, kto kładł płytki</h2>
-          <p className="text-[#78716C] leading-relaxed">
-            WyceńTo tworzy osoba, która pracowała na budowach przy wykończeniach wnętrz, tarasach i altanach w Polsce i w Wielkiej Brytanii.
-            Wiedza o tym, co ekipy faktycznie liczą i co klienci pomijają w budżecie — gruz, gruntowanie, poprawki po starych instalacjach — jest wbudowana w sposób, w jaki system liczy wycenę.
-          </p>
-        </div>
-      </section>
-
-      {/* DLACZEGO */}
-      <section className="bg-[#1C1917] py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-3">Dlaczego WyceńTo</p>
-            <h2 className="font-serif text-4xl font-bold text-white leading-tight">
-              Koniec z remontami które kosztują<br />
-              <span className="text-[#E8A07A] italic">dwa razy więcej</span> niż planowałeś
+      <section className="border-t border-line py-24">
+        <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 sm:px-6 md:grid-cols-[1fr_2fr]">
+          <p className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">Kto za tym stoi</p>
+          <div>
+            <h2 className="mb-6 text-3xl leading-tight font-extrabold sm:text-4xl">
+              Robione przez kogoś, kto <span className="text-accent-2">kładł płytki</span>.
             </h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { icon: '📍', title: 'Ceny lokalne', desc: 'Stawki robocizny w Warszawie są 20–35% wyższe niż w mniejszych miastach. Uwzględniamy to.' },
-              { icon: '🔧', title: 'Ukryte koszty na wierzch', desc: 'Wywóz gruzu, folia, taśmy, kleje, gruntowanie — wszystko co pomijają inne kalkulatory.' },
-              { icon: '📊', title: 'Widełki, nie jedna liczba', desc: 'Uczciwa wycena to przedział min-max. Nie obiecujemy precyzji której nikt nie ma.' },
-              { icon: '⏰', title: 'Czas realizacji', desc: 'Każda wycena podaje orientacyjny czas prac, żebyś wiedział, czego się spodziewać od ekipy.' },
-              { icon: '💡', title: 'Co zrobić przy okazji', desc: 'Wiemy kiedy warto coś wymienić teraz zamiast płacić za powrót ekipy za rok.' },
-              { icon: '📁', title: 'Historia wycen', desc: 'Wszystkie wyceny zapisane. Możesz wrócić, porównać i podjąć świadomą decyzję.' },
-            ].map((item) => (
-              <div key={item.title} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/8 transition-colors">
-                <div className="text-2xl mb-3">{item.icon}</div>
-                <div className="font-semibold text-white mb-2 text-sm">{item.title}</div>
-                <div className="text-xs text-[#A8A29E] leading-relaxed">{item.desc}</div>
-              </div>
-            ))}
+            <p className="max-w-2xl text-lg leading-relaxed text-ink-2">
+              WyceńTo tworzy osoba, która pracowała na budowach przy wykończeniach wnętrz, tarasach i altanach w Polsce i w Wielkiej Brytanii.
+              Wiedza o tym, co ekipy faktycznie liczą i co klienci pomijają w budżecie (gruz, gruntowanie, poprawki po starych instalacjach), jest wbudowana w sposób, w jaki system liczy wycenę.
+            </p>
           </div>
         </div>
       </section>
 
       {/* CENNIK */}
-      <section id="cennik" className="py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Cennik</p>
-            <h2 className="font-serif text-4xl font-bold">Proste zasady, bez niespodzianek</h2>
-            <p className="text-[#78716C] mt-3">Zacznij za darmo. Płać kiedy potrzebujesz więcej.</p>
+      <section id="cennik" className="scroll-mt-20 border-t border-line py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-14 text-center">
+            <h2 className="mb-3 text-4xl font-extrabold sm:text-5xl">Proste zasady, bez niespodzianek</h2>
+            <p className="text-ink-2">Zacznij za darmo. Płać, kiedy potrzebujesz więcej.</p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {/* FREE */}
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl p-8">
-              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Bezpłatny</div>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="font-serif text-5xl font-bold">0</span>
-                <span className="text-lg font-semibold text-[#78716C] pb-1">zł</span>
+          <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
+            <div className="flex flex-col rounded-3xl border border-line bg-surface p-8">
+              <h3 className="mb-4 text-xs font-semibold tracking-[0.14em] text-muted uppercase">Bezpłatny</h3>
+              <div className="mb-1 flex items-end gap-1">
+                <span className="text-6xl font-extrabold tracking-tight">0</span>
+                <span className="pb-2 text-lg font-semibold text-muted">zł</span>
               </div>
-              <div className="text-sm text-[#78716C] mb-7">na zawsze</div>
-              <ul className="space-y-3 mb-8">
+              <div className="mb-7 text-sm text-muted">na zawsze</div>
+              <ul className="mb-8 space-y-3">
                 {[
                   { text: '3 darmowe wyceny', ok: true },
                   { text: 'Podgląd na ekranie', ok: true },
@@ -330,70 +209,56 @@ export default function Home() {
                   { text: 'Raport PDF', ok: false },
                   { text: 'Priorytetowa obsługa', ok: false },
                 ].map((item) => (
-                  <li key={item.text} className={`flex items-center gap-3 text-sm ${item.ok ? 'text-[#44403C]' : 'text-[#78716C] line-through'}`}>
-                    <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${item.ok ? 'bg-green-100 text-green-600' : 'bg-[#F2EDE6] text-[#78716C]'}`}>
-                      {item.ok ? '✓' : '—'}
+                  <li key={item.text} className={`flex items-center gap-3 text-sm ${item.ok ? 'text-ink-2' : 'text-muted line-through'}`}>
+                    <span className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs ${item.ok ? 'bg-green-500/15 text-green-400' : 'bg-white/5 text-muted'}`}>
+                      {item.ok ? '✓' : '–'}
                     </span>
                     {item.text}
                   </li>
                 ))}
               </ul>
-              <a
-                href="/login"
-                className="block text-center w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold text-[#44403C] hover:bg-[#FAF8F5] transition"
-              >
+              <a href="/login" className="mt-auto block w-full rounded-2xl border border-line-strong py-3.5 text-center text-sm font-semibold text-ink transition hover:bg-white/5 hover:text-ink">
                 Zacznij za darmo
               </a>
             </div>
 
-            {/* PRO */}
-            <div className="bg-[#1C1917] rounded-2xl p-8 relative">
-              <div className="text-xs font-semibold text-[#C0A882] uppercase tracking-widest mb-4">Pro</div>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="font-serif text-5xl font-bold text-white">39</span>
-                <span className="text-lg font-semibold text-[#A8A29E] pb-1">zł</span>
+            <div className="glow-ring rounded-3xl">
+              <div className="flex h-full flex-col rounded-[23px] bg-surface p-8">
+                <h3 className="mb-4 text-xs font-semibold tracking-[0.14em] text-accent-2 uppercase">Pro</h3>
+                <div className="mb-1 flex items-end gap-1">
+                  <span className="text-6xl font-extrabold tracking-tight">39</span>
+                  <span className="pb-2 text-lg font-semibold text-muted">zł</span>
+                </div>
+                <div className="mb-7 text-sm text-muted">miesięcznie · anuluj, kiedy chcesz</div>
+                <ul className="mb-8 space-y-3">
+                  {['Nielimitowane wyceny', 'Podgląd na ekranie', 'Historia wycen', 'Raport PDF do pobrania', 'Priorytetowa obsługa'].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-ink-2">
+                      <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-accent-2/15 text-xs text-accent-2">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <a href="/login" className="btn-glow mt-auto block w-full rounded-2xl bg-accent py-3.5 text-center text-sm font-semibold text-white hover:bg-accent-hover hover:text-white">
+                  Zacznij od 3 darmowych wycen
+                </a>
               </div>
-              <div className="text-sm text-[#A8A29E] mb-7">miesięcznie · anuluj kiedy chcesz</div>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Nielimitowane wyceny',
-                  'Podgląd na ekranie',
-                  'Historia wycen',
-                  'Raport PDF do pobrania',
-                  'Priorytetowa obsługa',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm text-[#D4C9BE]">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#C85A2A]/20 border border-[#C85A2A]/40 flex items-center justify-center text-xs font-bold text-[#E8A07A]">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="/login"
-                className="block text-center w-full bg-[#C85A2A] text-white rounded-xl py-3 text-sm font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20"
-              >
-                Zacznij — pierwsze 3 wyceny gratis
-              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 bg-white border-t border-[#E7E0D8]">
-        <div className="max-w-3xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="text-xs font-semibold text-[#C85A2A] uppercase tracking-widest mb-3">Pytania i odpowiedzi</p>
-            <h2 className="font-serif text-4xl font-bold">Najczęstsze pytania</h2>
-          </div>
-          <div className="divide-y divide-[#E7E0D8]">
-            {HOME_FAQ.map((item, i) => (
-              <details key={i} className="group py-5 cursor-pointer list-none">
-                <summary className="flex items-center justify-between font-semibold text-[#1C1917] text-sm select-none list-none">
+      <section id="pytania" className="scroll-mt-20 border-t border-line py-24">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[1fr_2fr]">
+          <h2 className="text-4xl font-extrabold">Najczęstsze pytania</h2>
+          <div className="divide-y divide-line border-y border-line">
+            {HOME_FAQ.map((item) => (
+              <details key={item.q} className="group py-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold select-none [&::-webkit-details-marker]:hidden">
                   {item.q}
-                  <span className="ml-4 flex-shrink-0 w-6 h-6 rounded-full bg-[#F2EDE6] flex items-center justify-center text-[#C85A2A] text-xs font-bold group-open:rotate-45 transition-transform duration-200">+</span>
+                  <span aria-hidden="true" className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-line-strong text-accent-2 transition-transform duration-200 group-open:rotate-45">+</span>
                 </summary>
-                <p className="mt-3 text-sm text-[#78716C] leading-relaxed">{item.a}</p>
+                <p className="mt-3 max-w-2xl leading-relaxed text-ink-2">{item.a}</p>
               </details>
             ))}
           </div>
@@ -401,66 +266,24 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-[#1C1917] py-24">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-8">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            <span className="text-xs font-semibold text-[#D4C9BE]">Zacznij za darmo · bez karty kredytowej</span>
-          </div>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">
-            Nie płać ekipie<br />
-            <span className="text-[#E8A07A] italic">za dużo.</span>
+      <section className="relative overflow-hidden border-t border-line py-28">
+        <div className="dot-grid absolute inset-0" aria-hidden="true" />
+        <Spotlight x={50} y={40} />
+        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <h2 className="mb-5 text-5xl leading-[0.95] font-extrabold sm:text-6xl">
+            Nie płać ekipie <span className="text-accent-2">za dużo.</span>
           </h2>
-          <p className="text-[#A8A29E] mb-10 text-base leading-relaxed">
-            Pierwsze 3 wyceny całkowicie za darmo.<br />
-            Wiedz ile powinien kosztować remont zanim zadzwonisz po oferty.
+          <p className="mx-auto mb-10 max-w-md text-lg text-ink-2">
+            Sprawdź, ile powinien kosztować remont, zanim zadzwonisz po oferty. Pierwsze 3 wyceny za darmo.
           </p>
-          <a
-            href="/login"
-            className="inline-flex items-center gap-2 bg-[#C85A2A] text-white px-10 py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/30 mb-5"
-          >
-            Wyceń mój remont teraz →
+          <a href="/login" className="btn-glow inline-flex min-h-14 items-center gap-2 rounded-2xl bg-accent px-9 text-[17px] font-bold text-white hover:bg-accent-hover hover:text-white">
+            Wyceń mój remont <span aria-hidden="true">→</span>
           </a>
-          <div className="flex justify-center gap-6 text-xs text-[#A8A29E]">
-            <span>✓ 3 wyceny gratis</span>
-            <span>✓ Bez karty</span>
-            <span>✓ Wynik w 30s</span>
-            <span>✓ Anuluj kiedy chcesz</span>
-          </div>
+          <p className="mt-5 text-sm text-muted">Bez karty · wynik w ok. 30 s · pytania: {CONTACT_EMAIL}</p>
         </div>
       </section>
 
-      {/* CENNIKI — linki wewnętrzne do stron SEO */}
-      <section className="py-14 bg-[#FAF8F5] border-t border-[#E7E0D8]">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-serif text-2xl font-bold mb-6">Ceny remontów 2026</h2>
-          <div className="flex flex-wrap gap-3">
-            {SEO_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="bg-white border border-[#E7E0D8] rounded-full px-4 py-2 text-sm text-[#44403C] hover:border-[#C85A2A] hover:text-[#C85A2A] transition-colors">
-                {l.label.startsWith('Remont') ? `Ile kosztuje ${l.label.toLowerCase()}` : `Ceny remontu — ${l.label}`}
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-white border-t border-[#E7E0D8]">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-1">
-            <LogoIcon size={24} className="mr-2" />
-            <span className="font-serif text-lg font-bold">Wyceń</span>
-            <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
-            <span className="text-[#78716C] text-sm ml-2">· Made in Poland 🇵🇱</span>
-          </div>
-          <div className="flex gap-6 text-sm text-[#78716C]">
-            <a href="/regulamin" className="hover:text-[#1C1917] transition-colors">Regulamin</a>
-            <a href="/prywatnosc" className="hover:text-[#1C1917] transition-colors">Prywatność</a>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#1C1917] transition-colors">Kontakt</a>
-          </div>
-          <span className="text-sm text-[#78716C]">© 2026 WyceńTo</span>
-        </div>
-      </footer>
+      <SiteFooter current="/" />
     </main>
   )
 }
