@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { LegalPage } from '../components/LegalPage'
-import { CONTACT_EMAIL } from '../lib/site'
+import { CONTACT_EMAIL, SELLER_LINE } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Regulamin — WyceńTo',
@@ -14,7 +14,7 @@ export default function Regulamin() {
     <LegalPage title="Regulamin" effective="8 listopada 2026" current="/regulamin">
       <section>
         <h2>§1. Postanowienia ogólne</h2>
-        <p>Regulamin określa zasady korzystania z serwisu WyceńTo dostępnego pod adresem wycento.app (dalej „Serwis”). Operatorem Serwisu jest osoba fizyczna działająca pod marką WyceńTo (dalej „Operator”). Kontakt z Operatorem: <Mail />.</p>
+        <p>Regulamin określa zasady korzystania z serwisu WyceńTo dostępnego pod adresem wycento.app (dalej „Serwis”). Operatorem Serwisu i sprzedawcą planu Pro jest {SELLER_LINE}, prowadzący działalność nierejestrowaną na podstawie art. 5 ustawy Prawo przedsiębiorców, pod marką WyceńTo (dalej „Operator”). Kontakt z Operatorem: <Mail />.</p>
         <p>Regulamin jest regulaminem, o którym mowa w art. 8 ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną. Przed założeniem konta należy zapoznać się z Regulaminem.</p>
       </section>
 

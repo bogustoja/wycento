@@ -6,6 +6,7 @@ import { escapeHtml } from '../lib/escapeHtml'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { wyceńRemont } from '../actions/wycena'
+import { createClient } from '../lib/supabase'
 
 // Wycena trwa zwykle 23–30 s (pomiar 7.11.2026) (Claude analizuje zdjęcie i składa kosztorys).
 // Pasek rośnie asymptotycznie do 95% i dobija do 100% dopiero po odpowiedzi.
@@ -54,6 +55,17 @@ export default function WycenaPage() {
   const [loading, setLoading] = useState(false)
   const [wynik, setWynik] = useState(null)
   const [error, setError] = useState(null)
+  // Plan usera: PDF jest tylko w Pro (tak mówi cennik). null = jeszcze nie wiemy.
+  const [plan, setPlan] = useState(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return
+      const { data } = await supabase.from('profiles').select('plan').eq('user_id', user.id).single()
+      setPlan(data?.plan ?? 'free')
+    })
+  }, [])
   const router = useRouter()
 
   // Zdjęcia z telefonu mają 3–8 MB. Zmniejszamy do max 1600 px i JPEG ~80%,
@@ -323,12 +335,21 @@ export default function WycenaPage() {
               <div className="text-xs font-semibold text-muted uppercase tracking-widest mb-1">Czas realizacji</div>
               <div className="text-2xl font-extrabold text-ink">{wynik.czas_realizacji}</div>
             </div>
-            <button
-              onClick={handlePDF}
-              className="bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-hover btn-glow flex items-center gap-2"
-            >
-              Pobierz PDF <span aria-hidden="true">↓</span>
-            </button>
+            {plan === 'pro' ? (
+              <button
+                onClick={handlePDF}
+                className="bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-hover btn-glow flex items-center gap-2"
+              >
+                Pobierz PDF <span aria-hidden="true">↓</span>
+              </button>
+            ) : plan === 'free' ? (
+              <a
+                href="/pro"
+                className="border border-line-strong text-ink px-5 py-3 rounded-xl font-semibold hover:bg-surface-2 transition text-sm text-center"
+              >
+                Raport PDF w planie Pro →
+              </a>
+            ) : null}
           </div>
         </div>
       </main>

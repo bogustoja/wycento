@@ -24,6 +24,7 @@ export default function ProPage() {
     setError(null)
     try {
       const res = await fetch('/api/stripe/checkout', { method: 'POST' })
+      if (res.status === 401) { router.push('/login'); return }
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url
@@ -64,14 +65,6 @@ export default function ProPage() {
         <p className="text-muted mb-8 text-sm">
           Anuluj kiedy chcesz. Żadnych długoterminowych zobowiązań.
         </p>
-
-        {/* Guarantee badge */}
-        <div className="flex items-center justify-center gap-3 bg-green-500/10 border border-green-400/30 rounded-xl px-4 py-3 mb-8">
-                    <div className="text-left">
-            <div className="text-sm font-semibold text-green-400">30-dniowa gwarancja zwrotu</div>
-            <div className="text-xs text-green-400">Jeśli wyceny są niedokładne — zwrócimy pieniądze bez pytań</div>
-          </div>
-        </div>
 
         <div className="glow-ring rounded-3xl mb-5"><div className="bg-surface rounded-[23px] p-8 text-left relative overflow-hidden">
           <ul className="space-y-4 mb-8">
@@ -115,7 +108,6 @@ export default function ProPage() {
           <div className="flex justify-center gap-4 mt-3 text-xs text-muted">
             <span>Płatność przez Stripe</span>
             <span>✓ Anuluj kiedy chcesz</span>
-            <span>✓ 30-dniowa gwarancja</span>
           </div>
         </div></div>
 

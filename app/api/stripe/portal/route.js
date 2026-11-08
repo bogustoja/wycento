@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '../../../lib/supabase-server'
 
-export async function POST() {
+export async function POST(request) {
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
     const supabase = await createClient()
@@ -24,12 +24,12 @@ export async function POST() {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      return_url: `${new URL(request.url).origin}/dashboard`,
     })
 
     return NextResponse.json({ url: session.url })
   } catch (err) {
-    console.error('Stripe portal error:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    console.error('[stripe/portal]', err)
+    return NextResponse.json({ error: 'Nie udało się otworzyć zarządzania subskrypcją. Spróbuj ponownie.' }, { status: 500 })
   }
 }

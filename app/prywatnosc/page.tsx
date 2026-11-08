@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { LegalPage } from '../components/LegalPage'
-import { CONTACT_EMAIL } from '../lib/site'
+import { CONTACT_EMAIL, SELLER_LINE } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Polityka prywatności — WyceńTo',
@@ -14,7 +14,7 @@ export default function Prywatnosc() {
     <LegalPage title="Polityka prywatności" effective="8 listopada 2026" current="/prywatnosc">
       <section>
         <h2>1. Administrator danych</h2>
-        <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (wycento.app) jest osoba fizyczna działająca pod marką WyceńTo. Kontakt w sprawach danych osobowych: <Mail />.</p>
+        <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (wycento.app) jest {SELLER_LINE}, prowadzący działalność pod marką WyceńTo. Kontakt w sprawach danych osobowych: <Mail />.</p>
       </section>
 
       <section>
