@@ -1,10 +1,9 @@
-'use client'
-
 import LogoIcon from '../components/LogoIcon'
+import { CONTACT_EMAIL } from '../lib/site'
 
 export default function HomeEN() {
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
+    <main lang="en" className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
 
       {/* NAV */}
       <nav className="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E7E0D8]">
@@ -20,10 +19,10 @@ export default function HomeEN() {
             <a href="/" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">🇵🇱 Polski</a>
           </div>
           <div className="flex items-center gap-4">
-            <button onClick={() => window.location.href = '/login'} className="text-sm text-[#78716C] hover:text-[#1C1917] font-medium">Log in</button>
-            <button onClick={() => window.location.href = '/login'} className="bg-[#C85A2A] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#B04E24] transition-all shadow-sm">
+            <a href="/login" className="hidden sm:inline text-sm text-[#78716C] hover:text-[#1C1917] font-medium">Log in</a>
+            <a href="/login" className="bg-[#C85A2A] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#B04E24] transition-all shadow-sm whitespace-nowrap">
               Try for free
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -41,7 +40,7 @@ export default function HomeEN() {
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h1 className="font-serif text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
                 How much does<br />your renovation<br />
                 <span className="text-[#C85A2A] italic">really cost?</span>
               </h1>
@@ -49,39 +48,39 @@ export default function HomeEN() {
                 Upload a photo of your room, enter your city. We estimate the renovation cost with real local prices — before you even call a contractor.
               </p>
               <div className="flex items-center gap-6">
-                <div><div className="font-serif text-2xl font-bold">30s</div><div className="text-xs text-[#A8A29E]">estimate time</div></div>
+                <div><div className="font-serif text-2xl font-bold">30s</div><div className="text-xs text-[#78716C]">estimate time</div></div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
-                <div><div className="font-serif text-2xl font-bold">min–max</div><div className="text-xs text-[#A8A29E]">price range</div></div>
+                <div><div className="font-serif text-2xl font-bold">min–max</div><div className="text-xs text-[#78716C]">price range</div></div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
-                <div><div className="font-serif text-2xl font-bold">Free</div><div className="text-xs text-[#A8A29E]">to start</div></div>
+                <div><div className="font-serif text-2xl font-bold">Free</div><div className="text-xs text-[#78716C]">to start</div></div>
               </div>
             </div>
 
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-xl shadow-[#1C1917]/5">
+            <a
+              href="/login"
+              className="group block bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-xl shadow-[#1C1917]/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C85A2A]"
+            >
+              <div aria-hidden="true">
               <div className="flex gap-3 mb-5">
-                <input type="text" placeholder="City (e.g. London)" onClick={() => window.location.href = '/login'} readOnly className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm placeholder-[#A8A29E] outline-none cursor-pointer" />
-                <select onClick={() => window.location.href = '/login'} className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-3 py-3 text-sm outline-none cursor-pointer">
-                  <option>Bathroom</option>
-                  <option>Kitchen</option>
-                  <option>Living room</option>
-                  <option>Bedroom</option>
-                  <option>Whole flat</option>
-                </select>
+                <div className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#78716C]">City (e.g. London)</div>
+                <div className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-3 py-3 text-sm text-[#44403C]">Bathroom ▾</div>
               </div>
-              <div onClick={() => window.location.href = '/login'} className="group border-2 border-dashed border-[#E7E0D8] rounded-xl p-8 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] transition-all mb-5">
+              <div className="border-2 border-dashed border-[#E7E0D8] rounded-xl p-8 text-center group-hover:border-[#C85A2A] group-hover:bg-[#FEF8F4] transition-all mb-5">
                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform inline-block">📷</div>
                 <div className="text-sm font-semibold text-[#44403C] mb-1">Add a photo of the room</div>
-                <div className="text-xs text-[#A8A29E]">Click or drag & drop · JPG, PNG, HEIC</div>
+                <div className="text-xs text-[#78716C]">JPG or PNG · a phone photo is enough</div>
               </div>
-              <button onClick={() => window.location.href = '/login'} className="w-full bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/25 mb-4">
+              </div>
+
+              <div className="w-full text-center bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold group-hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/25 mb-4">
                 Estimate my renovation →
-              </button>
-              <div className="flex justify-center gap-5 text-xs text-[#A8A29E]">
+              </div>
+              <div className="flex justify-center gap-5 text-xs text-[#78716C]">
                 <span>✓ 3 free estimates</span>
                 <span>✓ No credit card</span>
                 <span>✓ Result in 30s</span>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </section>
@@ -121,17 +120,17 @@ export default function HomeEN() {
           </div>
           <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <div className="bg-white border border-[#E7E0D8] rounded-2xl p-8">
-              <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-4">Free</div>
+              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Free</div>
               <div className="flex items-end gap-1 mb-7"><span className="font-serif text-5xl font-bold">£0</span></div>
               <ul className="space-y-3 mb-8">
-                {[{ t: '3 estimates per month', ok: true }, { t: 'On-screen view', ok: true }, { t: 'Estimate history', ok: true }, { t: 'PDF report', ok: false }].map(i => (
-                  <li key={i.t} className={`flex items-center gap-3 text-sm ${i.ok ? 'text-[#44403C]' : 'text-[#C4BDB8]'}`}>
-                    <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${i.ok ? 'bg-green-100 text-green-600' : 'bg-[#F2EDE6] text-[#C4BDB8]'}`}>{i.ok ? '✓' : '—'}</span>
+                {[{ t: '3 free estimates', ok: true }, { t: 'On-screen view', ok: true }, { t: 'Estimate history', ok: true }, { t: 'PDF report', ok: false }].map(i => (
+                  <li key={i.t} className={`flex items-center gap-3 text-sm ${i.ok ? 'text-[#44403C]' : 'text-[#78716C] line-through'}`}>
+                    <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${i.ok ? 'bg-green-100 text-green-600' : 'bg-[#F2EDE6] text-[#78716C]'}`}>{i.ok ? '✓' : '—'}</span>
                     {i.t}
                   </li>
                 ))}
               </ul>
-              <button onClick={() => window.location.href = '/login'} className="w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold hover:bg-[#FAF8F5] transition">Start for free</button>
+              <a href="/login" className="block text-center w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold hover:bg-[#FAF8F5] transition">Start for free</a>
             </div>
             <div className="bg-[#1C1917] rounded-2xl p-8 relative">
                             <div className="text-xs font-semibold text-[#C0A882] uppercase tracking-widest mb-4">Pro</div>
@@ -144,9 +143,9 @@ export default function HomeEN() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => window.location.href = '/login'} className="w-full bg-[#C85A2A] text-white rounded-xl py-3 text-sm font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20">
+              <a href="/login" className="block text-center w-full bg-[#C85A2A] text-white rounded-xl py-3 text-sm font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20">
                 Start — first 3 estimates free
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -159,15 +158,15 @@ export default function HomeEN() {
             <LogoIcon size={24} className="mr-2" />
             <span className="font-serif text-lg font-bold">Wyceń</span>
             <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
-            <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
+            <span className="text-[#78716C] text-sm ml-2">· Made in Poland 🇵🇱</span>
           </div>
           <div className="flex gap-6 text-sm text-[#78716C]">
             <a href="/regulamin" className="hover:text-[#1C1917]">Terms</a>
             <a href="/prywatnosc" className="hover:text-[#1C1917]">Privacy</a>
-            <a href="mailto:kontakt@wycento.pl" className="hover:text-[#1C1917]">Contact</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#1C1917]">Contact</a>
             <a href="/" className="hover:text-[#1C1917]">🇵🇱 Polski</a>
           </div>
-          <span className="text-sm text-[#A8A29E]">© 2026 WyceńTo</span>
+          <span className="text-sm text-[#78716C]">© 2026 WyceńTo</span>
         </div>
       </footer>
     </main>

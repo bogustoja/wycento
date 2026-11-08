@@ -17,6 +17,8 @@ const PATHS = [
   "/wycena-remontu-wroclaw",
   "/wycena-remontu-gdansk",
   "/en",
+  "/regulamin",
+  "/prywatnosc",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

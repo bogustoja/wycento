@@ -1,96 +1,81 @@
-import LogoIcon from '../components/LogoIcon'
+import type { Metadata } from 'next'
+import { LegalPage } from '../components/LegalPage'
+import { CONTACT_EMAIL } from '../lib/site'
+
+export const metadata: Metadata = {
+  title: 'Regulamin — WyceńTo',
+  description: 'Zasady korzystania z serwisu WyceńTo: wyceny remontów ze zdjęcia, plan bezpłatny i Pro, płatności, reklamacje i odstąpienie od umowy.',
+}
+
+const Mail = () => <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
 
 export default function Regulamin() {
   return (
-    <main className="min-h-screen bg-[#FAF8F5]">
-      <nav className="bg-white border-b border-[#E7E0D8]">
-        <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-0.5">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
-          <a href="/" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">← Strona główna</a>
-        </div>
-      </nav>
+    <LegalPage title="Regulamin" effective="8 listopada 2026" current="/regulamin">
+      <section>
+        <h2>§1. Postanowienia ogólne</h2>
+        <p>Regulamin określa zasady korzystania z serwisu WyceńTo dostępnego pod adresem wycento.app (dalej „Serwis”). Operatorem Serwisu jest osoba fizyczna działająca pod marką WyceńTo (dalej „Operator”). Kontakt z Operatorem: <Mail />.</p>
+        <p>Regulamin jest regulaminem, o którym mowa w art. 8 ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną. Przed założeniem konta należy zapoznać się z Regulaminem.</p>
+      </section>
 
-      <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="font-serif text-4xl font-bold text-[#1C1917] mb-2">Regulamin</h1>
-        <p className="text-sm text-[#A8A29E] mb-12">Obowiązuje od 1 maja 2026</p>
+      <section>
+        <h2>§2. Usługi</h2>
+        <p>WyceńTo to narzędzie do orientacyjnej wyceny remontów z wykorzystaniem sztucznej inteligencji. Serwis umożliwia:</p>
+        <ul>
+          <li>przesłanie zdjęcia pomieszczenia i uzyskanie szacunkowej wyceny (widełki min–max),</li>
+          <li>przechowywanie historii wycen na koncie,</li>
+          <li>pobranie wyceny w formie raportu do druku / PDF.</li>
+        </ul>
+        <p>Wyceny mają charakter <strong>wyłącznie orientacyjny</strong> — nie są ofertą handlową, kosztorysem inwestorskim ani opinią rzeczoznawcy. Rzeczywiste koszty mogą się różnić, m.in. od stanu instalacji niewidocznych na zdjęciu.</p>
+      </section>
 
-        <div className="prose prose-stone max-w-none space-y-10 text-[#44403C] text-sm leading-relaxed">
+      <section>
+        <h2>§3. Wymagania techniczne</h2>
+        <ul>
+          <li>urządzenie z dostępem do internetu i aktualną przeglądarką (Chrome, Safari, Firefox, Edge, Opera) z włączonym JavaScript i plikami cookies,</li>
+          <li>aktywny adres e-mail lub konto Google,</li>
+          <li>zdjęcie w formacie JPG lub PNG.</li>
+        </ul>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§1. Postanowienia ogólne</h2>
-            <p>Niniejszy regulamin określa zasady korzystania z serwisu WyceńTo dostępnego pod adresem wycento.vercel.app, zwanego dalej „Serwisem". Operatorem Serwisu jest osoba fizyczna prowadząca działalność pod marką WyceńTo.</p>
-            <p className="mt-3">Korzystanie z Serwisu oznacza akceptację niniejszego Regulaminu.</p>
-          </section>
+      <section>
+        <h2>§4. Konto</h2>
+        <p>Korzystanie z wycen wymaga założenia bezpłatnego konta. Umowa o prowadzenie konta zostaje zawarta z chwilą potwierdzenia adresu e-mail (lub zalogowania przez Google) i trwa bezterminowo. Możesz ją rozwiązać w każdej chwili, prosząc o usunięcie konta pod adresem <Mail />.</p>
+        <p>Operator może zablokować lub usunąć konto użytkownika, który narusza Regulamin, po uprzednim wezwaniu do zaprzestania naruszeń.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§2. Opis usługi</h2>
-            <p>WyceńTo to narzędzie do orientacyjnej wyceny remontów i prac budowlanych z wykorzystaniem sztucznej inteligencji. Serwis umożliwia:</p>
-            <ul className="list-disc list-inside mt-3 space-y-1.5 ml-3">
-              <li>przesyłanie zdjęć pomieszczeń i uzyskiwanie szacunkowych wycen</li>
-              <li>przechowywanie historii wycen</li>
-              <li>pobieranie raportów w formacie PDF (plan Pro)</li>
-            </ul>
-            <p className="mt-3">Wyceny generowane przez Serwis mają charakter <strong>wyłącznie orientacyjny</strong> i nie stanowią oferty handlowej, ani wyceny rzeczoznawcy. Rzeczywiste koszty remontu mogą różnić się od podanych wartości.</p>
-          </section>
+      <section>
+        <h2>§5. Plany i płatności</h2>
+        <p><strong>Plan Bezpłatny</strong> — 3 bezpłatne wyceny na konto (jednorazowo, pula nie odnawia się).</p>
+        <p><strong>Plan Pro</strong> — subskrypcja miesięczna za 39 zł brutto, odnawiana automatycznie co miesiąc. Zapewnia nielimitowaną liczbę wycen. Płatności obsługuje Stripe.</p>
+        <p>Subskrypcję możesz anulować w każdej chwili w panelu użytkownika. Dostęp do Pro trwa do końca opłaconego okresu rozliczeniowego.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§3. Konto użytkownika</h2>
-            <p>Korzystanie z Serwisu wymaga rejestracji i założenia konta. Użytkownik zobowiązany jest do podania prawdziwych danych i zachowania poufności hasła.</p>
-            <p className="mt-3">Operator zastrzega sobie prawo do usunięcia konta użytkownika naruszającego postanowienia Regulaminu.</p>
-          </section>
+      <section>
+        <h2>§6. Odstąpienie od umowy (konsumenci)</h2>
+        <p>Konsument może odstąpić od umowy subskrypcji bez podania przyczyny w terminie 14 dni od jej zawarcia, wysyłając oświadczenie na <Mail />. Jeśli przed upływem tego terminu zażądasz rozpoczęcia świadczenia usługi Pro, w razie odstąpienia zapłacisz kwotę proporcjonalną do okresu, w którym usługa była świadczona (art. 35 ustawy o prawach konsumenta). Zwrot nastąpi w ciągu 14 dni tą samą metodą płatności.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§4. Plany i płatności</h2>
-            <p><strong>Plan Bezpłatny</strong> — umożliwia wykonanie 3 wycen miesięcznie bez opłat.</p>
-            <p className="mt-3"><strong>Plan Pro</strong> — subskrypcja miesięczna za 39 zł brutto. Zapewnia nielimitowaną liczbę wycen oraz pobieranie raportów PDF. Płatności realizowane są za pośrednictwem serwisu Stripe.</p>
-            <p className="mt-3">Subskrypcję można anulować w dowolnym momencie poprzez panel użytkownika. Dostęp do funkcji Pro trwa do końca opłaconego okresu rozliczeniowego.</p>
-            <p className="mt-3">Operator nie zwraca opłat za niewykorzystany okres subskrypcji, chyba że wymagają tego bezwzględnie obowiązujące przepisy prawa.</p>
-          </section>
+      <section>
+        <h2>§7. Zasady korzystania</h2>
+        <p>Zabronione jest przesyłanie treści o charakterze bezprawnym, w tym zdjęć naruszających prawa osób trzecich lub przedstawiających osoby bez ich zgody, a także udostępnianie konta innym osobom i próby obchodzenia limitów Serwisu.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§5. Prawa i obowiązki użytkownika</h2>
-            <p>Użytkownik zobowiązuje się do:</p>
-            <ul className="list-disc list-inside mt-3 space-y-1.5 ml-3">
-              <li>korzystania z Serwisu zgodnie z prawem i postanowieniami Regulaminu</li>
-              <li>nieprzesyłania treści nielegalnych, obraźliwych lub naruszających prawa osób trzecich</li>
-              <li>nieudostępniania konta osobom trzecim</li>
-            </ul>
-          </section>
+      <section>
+        <h2>§8. Reklamacje</h2>
+        <p>Reklamacje dotyczące działania Serwisu lub płatności zgłoś na <Mail />, podając adres e-mail konta i opis problemu. Odpowiemy w ciągu 14 dni. Konsument może też skorzystać z pozasądowych sposobów rozwiązywania sporów, np. pomocy miejskiego lub powiatowego rzecznika konsumentów.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§6. Ograniczenie odpowiedzialności</h2>
-            <p>Serwis dostarcza wyceny na podstawie zdjęć i danych dostarczonych przez użytkownika przy użyciu modeli sztucznej inteligencji. Operator nie ponosi odpowiedzialności za:</p>
-            <ul className="list-disc list-inside mt-3 space-y-1.5 ml-3">
-              <li>rozbieżności między wyceną a rzeczywistymi kosztami remontu</li>
-              <li>decyzje podejmowane przez użytkownika na podstawie wyceny</li>
-              <li>przerwy w działaniu Serwisu</li>
-            </ul>
-          </section>
+      <section>
+        <h2>§9. Odpowiedzialność</h2>
+        <p>Ponieważ wyceny są orientacyjne (§2), Operator nie odpowiada za różnice między wyceną a rzeczywistym kosztem remontu ani za decyzje podjęte wyłącznie na jej podstawie. Operator dokłada starań, by Serwis działał bez przerw, ale mogą wystąpić przerwy techniczne. Postanowienia tego paragrafu nie ograniczają uprawnień konsumentów wynikających z bezwzględnie obowiązujących przepisów.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§7. Zmiany Regulaminu</h2>
-            <p>Operator zastrzega sobie prawo do zmiany Regulaminu. O zmianach użytkownicy będą informowani drogą mailową z 14-dniowym wyprzedzeniem. Dalsze korzystanie z Serwisu po tym terminie oznacza akceptację nowych warunków.</p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">§8. Kontakt</h2>
-            <p>W sprawach dotyczących Regulaminu prosimy o kontakt pod adresem: <a href="mailto:kontakt@wycento.pl" className="text-[#C85A2A] hover:underline">kontakt@wycento.pl</a></p>
-          </section>
-
-        </div>
-      </div>
-
-      <footer className="border-t border-[#E7E0D8] mt-8">
-        <div className="max-w-4xl mx-auto px-6 py-6 flex gap-6 text-sm text-[#78716C]">
-          <a href="/regulamin" className="hover:text-[#1C1917] transition-colors font-medium">Regulamin</a>
-          <a href="/prywatnosc" className="hover:text-[#1C1917] transition-colors">Prywatność</a>
-          <a href="/" className="hover:text-[#1C1917] transition-colors">Strona główna</a>
-        </div>
-      </footer>
-    </main>
+      <section>
+        <h2>§10. Zmiany Regulaminu</h2>
+        <p>O zmianach Regulaminu poinformujemy e-mailem z co najmniej 14-dniowym wyprzedzeniem. Jeśli nie akceptujesz zmian, możesz przed ich wejściem w życie usunąć konto i anulować subskrypcję.</p>
+        <p>Dane osobowe przetwarzamy zgodnie z <a href="/prywatnosc">Polityką prywatności</a>.</p>
+      </section>
+    </LegalPage>
   )
 }

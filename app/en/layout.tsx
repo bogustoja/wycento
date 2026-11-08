@@ -7,7 +7,8 @@ export const metadata: Metadata = {
   description:
     "Upload a photo of the room and enter your city. Get a min–max estimate for labour, materials and hidden costs like debris removal and surface prep.",
   alternates: {
-    canonical: "./",
+    canonical: "/en",
+    languages: { "pl-PL": "/", en: "/en", "x-default": "/" },
   },
   openGraph: {
     url: "./",

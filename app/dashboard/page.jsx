@@ -1,6 +1,7 @@
 'use client'
 
 import LogoIcon from '../components/LogoIcon'
+import { escapeHtml } from '../lib/escapeHtml'
 
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '../lib/supabase'
@@ -75,10 +76,11 @@ function Dashboard() {
 
   function handlePDF(q) {
     const win = window.open('', '_blank')
+    if (!win) { alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna dla wycento.app i kliknij jeszcze raz.'); return }
     win.document.write(`
       <!DOCTYPE html><html lang="pl"><head>
       <meta charset="UTF-8">
-      <title>Wycena — ${q.pomieszczenie} — ${q.miasto}</title>
+      <title>Wycena — ${escapeHtml(q.pomieszczenie)} — ${escapeHtml(q.miasto)}</title>
       <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1C1917; font-size: 14px; line-height: 1.5; }
@@ -98,18 +100,18 @@ function Dashboard() {
       </style></head><body>
       <div class="header">
         <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
-        <div class="meta"><h1>${q.pomieszczenie} · ${q.miasto}</h1><p>${new Date(q.created_at).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
+        <div class="meta"><h1>${escapeHtml(q.pomieszczenie)} · ${escapeHtml(q.miasto)}</h1><p>${new Date(q.created_at).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
       </div>
       <div class="label">Analiza zdjęcia</div>
-      <div class="summary">${q.wynik.summary}</div>
+      <div class="summary">${escapeHtml(q.wynik.summary)}</div>
       <div class="label">Kosztorys</div>
       <table>
-        ${q.wynik.items.map(item => `<tr><td>${item.name}</td><td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${item.jednostka}</td></tr>`).join('')}
+        ${q.wynik.items.map(item => `<tr><td>${escapeHtml(item.name)}</td><td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${escapeHtml(item.jednostka)}</td></tr>`).join('')}
         <tr class="total-row"><td>Łącznie</td><td>${q.wynik.total_min.toLocaleString('pl-PL')} – ${q.wynik.total_max.toLocaleString('pl-PL')} zł</td></tr>
       </table>
       <div class="two-col">
-        <div><div class="label">Na co uważać</div>${(q.wynik.uwagi || []).map(u => `<div class="item"><span class="warn">⚠</span><span>${u}</span></div>`).join('')}</div>
-        <div><div class="label">Warto dodać przy okazji</div>${(q.wynik.co_warto_dodac || []).map(c => `<div class="item"><span class="ok">✓</span><span>${c}</span></div>`).join('')}</div>
+        <div><div class="label">Na co uważać</div>${(q.wynik.uwagi || []).map(u => `<div class="item"><span class="warn">⚠</span><span>${escapeHtml(u)}</span></div>`).join('')}</div>
+        <div><div class="label">Warto dodać przy okazji</div>${(q.wynik.co_warto_dodac || []).map(c => `<div class="item"><span class="ok">✓</span><span>${escapeHtml(c)}</span></div>`).join('')}</div>
       </div>
       ${plan !== 'pro' ? `<div style="margin-top:24px;background:#FEF8F4;border:1px solid #F2D9C8;border-radius:8px;padding:12px 16px;text-align:center;font-size:11px;color:#C85A2A;font-weight:600;">Wygenerowano bezpłatnie na wycento.app · Sprawdź ile kosztuje Twój remont</div>` : ''}
       <div class="footer">Wycena wygenerowana przez WyceńTo · wycento.app · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej</div>
@@ -136,7 +138,7 @@ function Dashboard() {
             <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
           </a>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-[#A8A29E] hidden sm:block">{user?.email}</span>
+            <span className="text-sm text-[#78716C] hidden sm:block">{user?.email}</span>
             <div className="w-8 h-8 bg-[#C85A2A] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
               {initials}
             </div>
@@ -175,7 +177,7 @@ function Dashboard() {
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">
+              <span className="text-xs font-semibold text-[#78716C] uppercase tracking-widest">
                 {plan === 'pro' ? 'Plan Pro' : 'Pozostałe wyceny'}
               </span>
               <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">📊</div>
@@ -188,7 +190,7 @@ function Dashboard() {
               <>
                 <div className="font-serif text-4xl font-bold text-[#1C1917]">
                   {credits}
-                  <span className="text-xl text-[#A8A29E] font-sans font-normal">/3</span>
+                  <span className="text-xl text-[#78716C] font-sans font-normal">/3</span>
                 </div>
                 <div className="mt-3 h-1.5 bg-[#F2EDE6] rounded-full overflow-hidden">
                   <div
@@ -196,14 +198,14 @@ function Dashboard() {
                     style={{ width: `${((3 - credits) / 3) * 100}%` }}
                   />
                 </div>
-                <div className="text-xs text-[#A8A29E] mt-2">{3 - credits} z 3 wykorzystanych</div>
+                <div className="text-xs text-[#78716C] mt-2">{3 - credits} z 3 wykorzystanych</div>
               </>
             )}
           </div>
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Twój plan</span>
+              <span className="text-xs font-semibold text-[#78716C] uppercase tracking-widest">Twój plan</span>
               <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">⭐</div>
             </div>
             {loading ? (
@@ -226,7 +228,7 @@ function Dashboard() {
                     const data = await res.json()
                     if (data.url) window.location.href = data.url
                   }}
-                  className="text-xs text-[#A8A29E] hover:text-[#78716C] hover:underline transition-colors"
+                  className="text-xs text-[#78716C] hover:text-[#44403C] hover:underline transition-colors"
                 >
                   Zarządzaj / anuluj →
                 </button>
@@ -237,11 +239,11 @@ function Dashboard() {
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest">Wszystkich wycen</span>
+              <span className="text-xs font-semibold text-[#78716C] uppercase tracking-widest">Wszystkich wycen</span>
               <div className="w-9 h-9 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-lg">📋</div>
             </div>
             {loading ? <div className="h-10 bg-[#F2EDE6] rounded-lg animate-pulse" /> : <div className="font-serif text-4xl font-bold text-[#1C1917]">{totalQuotes}</div>}
-            <div className="text-xs text-[#A8A29E] mt-2">od początku</div>
+            <div className="text-xs text-[#78716C] mt-2">od początku</div>
           </div>
         </div>
 
@@ -253,7 +255,7 @@ function Dashboard() {
               <div>
                 <div className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-2">Limit wycen</div>
                 <h2 className="font-serif text-2xl font-bold text-white mb-2">Wykorzystałeś 3/3 wyceny</h2>
-                <p className="text-[#78716C] text-sm max-w-xs">Przejdź na Pro — nielimitowane wyceny i pobieranie PDF za 39 zł/mies.</p>
+                <p className="text-[#A8A29E] text-sm max-w-xs">Przejdź na Pro — nielimitowane wyceny i pobieranie PDF za 39 zł/mies.</p>
               </div>
               <button
                 onClick={() => router.push('/pro')}
@@ -270,7 +272,7 @@ function Dashboard() {
               <div>
                 <div className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-2">Nowa wycena</div>
                 <h2 className="font-serif text-2xl font-bold text-white mb-2">Wyceń swój remont</h2>
-                <p className="text-[#78716C] text-sm max-w-xs">Zrób zdjęcie pomieszczenia, podaj miasto. Wynik w 30 sekund.</p>
+                <p className="text-[#A8A29E] text-sm max-w-xs">Zrób zdjęcie pomieszczenia, podaj miasto. Wynik w 30 sekund.</p>
               </div>
               <button
                 onClick={() => router.push('/wycena')}
@@ -304,7 +306,7 @@ function Dashboard() {
             <div className="py-16 text-center">
               <div className="text-5xl mb-4">🏗️</div>
               <div className="font-semibold text-[#1C1917] mb-2">Brak wycen</div>
-              <div className="text-sm text-[#A8A29E] mb-6">Twoje wyceny pojawią się tutaj po pierwszej analizie</div>
+              <div className="text-sm text-[#78716C] mb-6">Twoje wyceny pojawią się tutaj po pierwszej analizie</div>
               <button
                 onClick={() => router.push('/wycena')}
                 className="bg-[#C85A2A] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#B04E24] transition"
@@ -322,7 +324,7 @@ function Dashboard() {
                     </div>
                     <div>
                       <div className="font-medium text-[#1C1917] text-sm">{q.pomieszczenie}</div>
-                      <div className="text-xs text-[#A8A29E]">{q.miasto} · {formatDate(q.created_at)}</div>
+                      <div className="text-xs text-[#78716C]">{q.miasto} · {formatDate(q.created_at)}</div>
                     </div>
                   </div>
                   <div className="text-right">

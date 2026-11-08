@@ -1,6 +1,7 @@
 'use client'
 
 import LogoIcon from '../components/LogoIcon'
+import { escapeHtml } from '../lib/escapeHtml'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -37,7 +38,7 @@ function PasekPostepu({ miasto }) {
           style={{ width: `${procent}%` }}
         />
       </div>
-      <p className="text-xs text-center text-[#A8A29E] mt-2 tabular-nums">
+      <p className="text-xs text-center text-[#78716C] mt-2 tabular-nums">
         {zostalo > 0 ? `Zwykle 20–40 sekund · zostało ok. ${zostalo} s` : 'Zwykle 20–40 sekund · kończę…'}
       </p>
     </div>
@@ -116,12 +117,13 @@ export default function WycenaPage() {
 
   function handlePDF() {
     const win = window.open('', '_blank')
+    if (!win) { alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna dla wycento.app i kliknij jeszcze raz.'); return }
     win.document.write(`
       <!DOCTYPE html>
       <html lang="pl">
       <head>
         <meta charset="UTF-8">
-        <title>Wycena — ${pomieszczenie} — ${miasto}</title>
+        <title>Wycena — ${escapeHtml(pomieszczenie)} — ${escapeHtml(miasto)}</title>
         <style>
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body { font-family: Arial, Helvetica, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1C1917; font-size: 14px; line-height: 1.5; }
@@ -154,20 +156,20 @@ export default function WycenaPage() {
         <div class="header">
           <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
           <div class="meta">
-            <h1>${pomieszczenie} · ${miasto}</h1>
+            <h1>${escapeHtml(pomieszczenie)} · ${escapeHtml(miasto)}</h1>
             <p>${new Date().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
           </div>
         </div>
 
         <div class="section-label">Analiza zdjęcia</div>
-        <div class="summary">${wynik.summary}</div>
+        <div class="summary">${escapeHtml(wynik.summary)}</div>
 
         <div class="section-label">Kosztorys</div>
         <table>
           ${wynik.items.map(item => `
             <tr>
-              <td>${item.name}</td>
-              <td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${item.jednostka}</td>
+              <td>${escapeHtml(item.name)}</td>
+              <td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${escapeHtml(item.jednostka)}</td>
             </tr>
           `).join('')}
           <tr class="total-row">
@@ -179,18 +181,18 @@ export default function WycenaPage() {
         <div class="two-col">
           <div>
             <div class="section-label">Na co uważać</div>
-            ${wynik.uwagi.map(u => `<div class="item"><span class="warn">⚠</span><span>${u}</span></div>`).join('')}
+            ${wynik.uwagi.map(u => `<div class="item"><span class="warn">⚠</span><span>${escapeHtml(u)}</span></div>`).join('')}
           </div>
           <div>
             <div class="section-label">Warto dodać przy okazji</div>
-            ${wynik.co_warto_dodac.map(c => `<div class="item"><span class="ok">✓</span><span>${c}</span></div>`).join('')}
+            ${wynik.co_warto_dodac.map(c => `<div class="item"><span class="ok">✓</span><span>${escapeHtml(c)}</span></div>`).join('')}
           </div>
         </div>
 
         <div class="time-box">
           <div>
             <div class="label">Szacowany czas realizacji</div>
-            <div class="value">${wynik.czas_realizacji}</div>
+            <div class="value">${escapeHtml(wynik.czas_realizacji)}</div>
           </div>
         </div>
 
@@ -272,7 +274,7 @@ export default function WycenaPage() {
           </div>
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6 mb-4">
-            <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-3">Analiza zdjęcia</div>
+            <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-3">Analiza zdjęcia</div>
             <p className="text-[#44403C] leading-relaxed text-sm">{wynik.summary}</p>
           </div>
 
@@ -300,7 +302,7 @@ export default function WycenaPage() {
 
           <div className="grid sm:grid-cols-2 gap-4 mb-4">
             <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
-              <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-4">Na co uważać</div>
+              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Na co uważać</div>
               <ul className="space-y-3">
                 {wynik.uwagi.map((u, i) => (
                   <li key={i} className="text-sm text-[#44403C] flex gap-2 leading-relaxed">
@@ -310,7 +312,7 @@ export default function WycenaPage() {
               </ul>
             </div>
             <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6">
-              <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-4">Warto dodać przy okazji</div>
+              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Warto dodać przy okazji</div>
               <ul className="space-y-3">
                 {wynik.co_warto_dodac.map((c, i) => (
                   <li key={i} className="text-sm text-[#44403C] flex gap-2 leading-relaxed">
@@ -323,7 +325,7 @@ export default function WycenaPage() {
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-6 flex items-center justify-between">
             <div>
-              <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-1">Czas realizacji</div>
+              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-1">Czas realizacji</div>
               <div className="font-serif text-xl font-bold text-[#1C1917]">{wynik.czas_realizacji}</div>
             </div>
             <button
@@ -367,14 +369,21 @@ export default function WycenaPage() {
             <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-6">Twoje pomieszczenie</h2>
 
             <div className="flex gap-3 mb-6">
+              <label htmlFor="miasto" className="sr-only">Miasto lub kod pocztowy</label>
               <input
+                id="miasto"
+                name="miasto"
+                autoComplete="address-level2"
+                maxLength={80}
                 type="text"
                 placeholder="Miasto lub kod pocztowy"
                 value={miasto}
                 onChange={(e) => setMiasto(e.target.value)}
                 className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
               />
+              <label htmlFor="pomieszczenie" className="sr-only">Rodzaj pomieszczenia</label>
               <select
+                id="pomieszczenie"
                 value={pomieszczenie}
                 onChange={(e) => setPomieszczenie(e.target.value)}
                 className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] outline-none focus:border-[#C85A2A] transition"
@@ -391,10 +400,12 @@ export default function WycenaPage() {
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-[#44403C] mb-2">
-                Co chcesz zrobić? <span className="text-[#A8A29E] font-normal">(opcjonalnie)</span>
+              <label htmlFor="opis" className="block text-sm font-medium text-[#44403C] mb-2">
+                Co chcesz zrobić? <span className="text-[#78716C] font-normal">(opcjonalnie)</span>
               </label>
               <textarea
+                id="opis"
+                maxLength={500}
                 placeholder="np. położyć płytki na podłodze, wymienić wannę na prysznic, pomalować ściany i wymienić okno..."
                 value={opis}
                 onChange={(e) => setOpis(e.target.value)}
@@ -403,24 +414,25 @@ export default function WycenaPage() {
               />
             </div>
 
-            <label className="block border-2 border-dashed border-[#E7E0D8] rounded-2xl p-10 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] transition-all mb-6 group">
+            <label className="block border-2 border-dashed border-[#E7E0D8] rounded-2xl p-10 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] focus-within:border-[#C85A2A] focus-within:bg-[#FEF8F4] transition-all mb-6 group">
               {preview ? (
                 <div>
-                  <img src={preview} alt="preview" className="max-h-56 mx-auto rounded-xl object-cover shadow-sm" />
-                  <p className="text-xs text-[#A8A29E] mt-3">Kliknij żeby zmienić zdjęcie</p>
+                 <img src={preview} alt="Podgląd dodanego zdjęcia pomieszczenia" className="max-h-56 mx-auto rounded-xl object-cover shadow-sm" />
+                  <p className="text-xs text-[#78716C] mt-3">Kliknij żeby zmienić zdjęcie</p>
                 </div>
               ) : (
                 <>
                   <div className="text-5xl mb-3 group-hover:scale-110 transition-transform inline-block">📷</div>
                   <div className="text-base font-semibold text-[#44403C] mb-1">Dodaj zdjęcie pomieszczenia</div>
-                  <div className="text-sm text-[#A8A29E]">Kliknij lub przeciągnij plik · JPG, PNG, HEIC</div>
+                  <div className="text-sm text-[#78716C]">Kliknij, żeby wybrać zdjęcie lub zrobić je telefonem · JPG lub PNG</div>
                 </>
               )}
-              <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
+              {/* sr-only zamiast hidden: ukryte pole nie dostawało fokusu z klawiatury */}
+              <input type="file" accept="image/*" onChange={handleImage} className="sr-only" aria-label="Dodaj zdjęcie pomieszczenia" />
             </label>
 
             {error && error !== 'BRAK_KREDYTOW' && (
-              <div className="bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#C85A2A] text-sm rounded-xl px-4 py-3 mb-4">
+              <div role="alert" className="bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#B04E24] text-sm rounded-xl px-4 py-3 mb-4">
                 {error}
               </div>
             )}
@@ -449,7 +461,7 @@ export default function WycenaPage() {
             <div className="bg-white border border-[#E7E0D8] rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-[#E7E0D8] bg-[#FAF8F5] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-0.5">Przykładowy wynik</div>
+                  <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-0.5">Przykładowy wynik</div>
                   <div className="font-serif text-base font-bold text-[#1C1917]">Łazienka 6m² · Kraków</div>
                 </div>
                 <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full font-medium">Demo</span>
@@ -487,7 +499,7 @@ export default function WycenaPage() {
                     <span className="text-xl flex-shrink-0">{item.icon}</span>
                     <div>
                       <div className="font-semibold text-white text-sm mb-0.5">{item.t}</div>
-                      <div className="text-xs text-[#78716C] leading-relaxed">{item.d}</div>
+                      <div className="text-xs text-[#A8A29E] leading-relaxed">{item.d}</div>
                     </div>
                   </div>
                 ))}

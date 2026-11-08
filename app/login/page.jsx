@@ -2,20 +2,53 @@
 
 import LogoIcon from '../components/LogoIcon'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
+
+// Supabase zwraca błędy po angielsku — tłumaczymy te, które user realnie zobaczy.
+function tlumaczBlad(msg = '') {
+  const m = msg.toLowerCase()
+  if (m.includes('already registered') || m.includes('already been registered')) return 'Konto z tym adresem już istnieje. Zaloguj się albo zresetuj hasło.'
+  if (m.includes('password should be at least') || m.includes('at least 6')) return 'Hasło musi mieć co najmniej 6 znaków.'
+  if (m.includes('invalid email') || m.includes('unable to validate email') || (m.includes('email address') && m.includes('invalid'))) return 'Nieprawidłowy adres email.'
+  if (m.includes('email not confirmed')) return 'Najpierw potwierdź adres email — kliknij link z wiadomości, którą wysłaliśmy.'
+  if (m.includes('rate limit') || m.includes('security purposes') || m.includes('too many')) return 'Za dużo prób. Odczekaj chwilę i spróbuj ponownie.'
+  if (m.includes('same password') || m.includes('different from the old')) return 'Nowe hasło musi być inne niż poprzednie.'
+  if (m.includes('weak')) return 'Hasło jest za słabe — dodaj więcej znaków.'
+  return 'Coś poszło nie tak. Spróbuj ponownie za chwilę.'
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [isForgot, setIsForgot] = useState(false)
+  // Tryb ustawiania nowego hasła — po kliknięciu linku z maila „resetuj hasło”.
+  const [isRecovery, setIsRecovery] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('error')
   const router = useRouter()
   const supabase = createClient()
+
+  // Link z maila resetującego otwiera /login?code=…; klient Supabase sam wymienia kod na sesję
+  // i emituje PASSWORD_RECOVERY. Wcześniej nic tego nie łapało — user zostawał na formularzu logowania
+  // i nie miał jak ustawić nowego hasła.
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecovery(true)
+        setIsForgot(false)
+        setIsRegister(false)
+        setMessage('')
+        window.history.replaceState(null, '', '/login')
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [supabase])
 
   async function handleGoogleLogin() {
     setLoading(true)
@@ -27,37 +60,49 @@ export default function LoginPage() {
   }
 
   async function handleSubmit() {
-    if (isForgot) {
-      if (!email) { setMessage('Podaj adres email'); setMessageType('error'); return }
+    if (isRecovery) {
+      if (password.length < 6) { setMessage('Hasło musi mieć co najmniej 6 znaków.'); setMessageType('error'); return }
       setLoading(true)
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const { error } = await supabase.auth.updateUser({ password })
+      setLoading(false)
+      if (error) { setMessage(tlumaczBlad(error.message)); setMessageType('error'); return }
+      router.push('/dashboard')
+      return
+    }
+
+    if (!EMAIL_RE.test(email.trim())) { setMessage('Podaj poprawny adres email'); setMessageType('error'); return }
+
+    if (isForgot) {
+      setLoading(true)
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/login`,
       })
-      if (error) { setMessage(error.message); setMessageType('error') }
-      else { setMessage('Wysłaliśmy link do resetowania hasła. Sprawdź skrzynkę.'); setMessageType('success') }
+      if (error) { setMessage(tlumaczBlad(error.message)); setMessageType('error') }
+      else { setMessage('Jeśli konto z tym adresem istnieje, wysłaliśmy link do ustawienia nowego hasła. Sprawdź skrzynkę (i spam).'); setMessageType('success') }
       setLoading(false)
       return
     }
 
-    if (!email || !password) { setMessage('Uzupełnij email i hasło'); setMessageType('error'); return }
+    if (!password) { setMessage('Podaj hasło'); setMessageType('error'); return }
+    if (isRegister && password.length < 6) { setMessage('Hasło musi mieć co najmniej 6 znaków.'); setMessageType('error'); return }
     setLoading(true)
     setMessage('')
 
     if (isRegister) {
-      const { error } = await supabase.auth.signUp({ email, password })
-      if (error) { setMessage(error.message); setMessageType('error') }
+      const { error } = await supabase.auth.signUp({ email: email.trim(), password })
+      if (error) { setMessage(tlumaczBlad(error.message)); setMessageType('error') }
       else { setMessage('Sprawdź email — wysłaliśmy link weryfikacyjny!'); setMessageType('success') }
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) { setMessage('Nieprawidłowy email lub hasło'); setMessageType('error') }
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+      if (error) {
+        setMessage(error.message.toLowerCase().includes('email not confirmed') ? tlumaczBlad(error.message) : 'Nieprawidłowy email lub hasło')
+        setMessageType('error')
+      }
       else router.push('/dashboard')
     }
     setLoading(false)
   }
 
-  function handleKeyDown(e) {
-    if (e.key === 'Enter') handleSubmit()
-  }
 
   return (
     <div className="min-h-screen flex">
@@ -74,7 +119,7 @@ export default function LoginPage() {
             Wycena remontu<br />
             <span className="text-[#E8A07A] italic">ze zdjęcia</span>
           </h2>
-          <p className="text-[#78716C] leading-relaxed mb-10">
+          <p className="text-[#A8A29E] leading-relaxed mb-10">
 Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na robociznę, materiały i koszty dodatkowe.
           </p>
           <ul className="space-y-4">
@@ -94,10 +139,10 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
 
         {/* Przykładowa wycena */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-          <div className="text-xs text-[#78716C] mb-3 font-semibold uppercase tracking-widest">Przykładowa wycena</div>
+          <div className="text-xs text-[#A8A29E] mb-3 font-semibold uppercase tracking-widest">Przykładowa wycena</div>
           <div className="text-sm text-white font-semibold mb-1">Łazienka 6m² · Kraków</div>
           <div className="font-serif text-3xl font-bold text-[#E8A07A] mb-1">18 000 – 30 200 zł</div>
-          <div className="text-xs text-[#78716C]">Skucie, hydroizolacja, glazura, hydraulika i materiały</div>
+          <div className="text-xs text-[#A8A29E]">Skucie, hydroizolacja, glazura, hydraulika i materiały</div>
         </div>
       </div>
 
@@ -114,10 +159,12 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
 
           <div className="mb-8">
             <h1 className="font-serif text-3xl font-bold text-[#1C1917] mb-2">
-              {isForgot ? 'Resetuj hasło' : isRegister ? 'Utwórz konto' : 'Witaj z powrotem'}
+              {isRecovery ? 'Ustaw nowe hasło' : isForgot ? 'Resetuj hasło' : isRegister ? 'Utwórz konto' : 'Witaj z powrotem'}
             </h1>
             <p className="text-sm text-[#78716C]">
-              {isForgot
+              {isRecovery
+                ? 'Wpisz nowe hasło — po zapisaniu przeniesiemy Cię do panelu'
+                : isForgot
                 ? 'Wyślemy Ci link do ustawienia nowego hasła'
                 : isRegister
                 ? 'Pierwsze 3 wyceny za darmo, bez karty kredytowej'
@@ -127,14 +174,15 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
 
           <div className="bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-sm">
 
-            {!isForgot && (
+            {!isForgot && !isRecovery && (
               <>
                 <button
+                  type="button"
                   onClick={handleGoogleLogin}
                   disabled={loading}
                   className="w-full flex items-center justify-center gap-3 border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold text-[#1C1917] hover:bg-[#FAF8F5] transition disabled:opacity-50 mb-5"
                 >
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                     <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
                     <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
                     <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
@@ -144,40 +192,51 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                 </button>
                 <div className="flex items-center gap-3 mb-5">
                   <div className="flex-1 h-px bg-[#E7E0D8]" />
-                  <span className="text-xs text-[#A8A29E]">lub</span>
+                  <span className="text-xs text-[#78716C]">lub</span>
                   <div className="flex-1 h-px bg-[#E7E0D8]" />
                 </div>
               </>
             )}
 
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit() }} noValidate>
             <div className="space-y-4 mb-5">
+              {!isRecovery && (
               <div>
-                <label className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide mb-2 block">Email</label>
+                <label htmlFor="email" className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide mb-2 block">Email</label>
                 <input
+                  id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
                   placeholder="twoj@email.pl"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyDown}
                   className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
                 />
               </div>
+              )}
               {!isForgot && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide">Hasło</label>
-                    {!isRegister && (
+                    <label htmlFor="password" className="text-xs font-semibold text-[#1C1917] uppercase tracking-wide">{isRecovery ? 'Nowe hasło' : 'Hasło'}</label>
+                    {!isRegister && !isRecovery && (
                       <button type="button" onClick={() => { setIsForgot(true); setMessage('') }} className="text-xs text-[#C85A2A] hover:underline">
                         Zapomniałem hasła
                       </button>
                     )}
                   </div>
                   <input
+                    id="password"
+                    name="password"
                     type="password"
+                    autoComplete={isRegister || isRecovery ? 'new-password' : 'current-password'}
+                    minLength={6}
+                    required
                     placeholder="Minimum 6 znaków"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={handleKeyDown}
                     className="w-full bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#1C1917] placeholder-[#A8A29E] outline-none focus:border-[#C85A2A] focus:ring-2 focus:ring-[#C85A2A]/10 transition"
                   />
                 </div>
@@ -185,17 +244,17 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
             </div>
 
             {message && (
-              <div className={`rounded-xl px-4 py-3 text-sm mb-5 ${
+              <div role={messageType === 'error' ? 'alert' : 'status'} className={`rounded-xl px-4 py-3 text-sm mb-5 ${
                 messageType === 'success'
                   ? 'bg-green-50 border border-green-200 text-green-700'
-                  : 'bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#C85A2A]'
+                  : 'bg-[#FEF0EA] border border-[#C85A2A]/30 text-[#B04E24]'
               }`}>
                 {message}
               </div>
             )}
 
             <button
-              onClick={handleSubmit}
+              type="submit"
               disabled={loading}
               className="w-full bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold hover:bg-[#B04E24] transition-all shadow-md shadow-[#C85A2A]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -207,11 +266,12 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
                   </svg>
                   Ładowanie...
                 </>
-              ) : isForgot ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
+              ) : isRecovery ? 'Zapisz nowe hasło' : isForgot ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
             </button>
+            </form>
           </div>
 
-          {isForgot ? (
+          {isRecovery ? null : isForgot ? (
             <p className="text-sm text-center text-[#78716C] mt-5">
               <button onClick={() => { setIsForgot(false); setMessage('') }} className="text-[#C85A2A] font-semibold hover:underline">
                 ← Wróć do logowania
@@ -230,7 +290,7 @@ Nasz system analizuje zdjęcie i podaje realistyczny kosztorys z podziałem na r
           )}
 
           <p className="text-center mt-5">
-            <a href="/" className="text-xs text-[#A8A29E] hover:text-[#78716C] transition-colors">
+            <a href="/" className="text-xs text-[#78716C] hover:text-[#78716C] transition-colors">
               ← Wróć na stronę główną
             </a>
           </p>

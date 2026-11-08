@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // "$" = dokładnie ta ścieżka. Bez niego "/wycena" zablokowałoby też /wycena-remontu-warszawa itd.
-        disallow: ["/api/", "/auth/", "/dashboard", "/wycena$", "/pro$", "/login$"],
+        // /login i /pro NIE są tu blokowane: mają meta noindex, a Google musi móc wejść, żeby go zobaczyć.
+        disallow: ["/api/", "/auth/", "/dashboard", "/wycena$"],
       },
     ],
     sitemap: "https://wycento.app/sitemap.xml",

@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "./",
   },
+  applicationName: "WyceńTo",
   openGraph: {
     url: "./",
     siteName: "WyceńTo",
@@ -47,6 +48,7 @@ export default function RootLayout({
     <html lang="pl" className={`${geistSans.variable} ${lora.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         {children}
+        {/* Vercel Web Analytics — bez cookies, bez danych osobowych, więc nie wymaga banera zgody. */}
         <Analytics />
       </body>
     </html>

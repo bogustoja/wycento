@@ -1,12 +1,49 @@
-'use client'
-
+import type { Metadata } from 'next'
 import { SEO_LINKS } from './components/seoLinks'
+import { FaqJsonLd } from './components/SeoLanding'
 
 import LogoIcon from './components/LogoIcon'
+import { CONTACT_EMAIL } from './lib/site'
+
+// hreflang: polska strona główna <-> angielska /en
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+    languages: { 'pl-PL': '/', en: '/en', 'x-default': '/' },
+  },
+}
+
+const HOME_FAQ = [
+  {
+    q: 'Jak dokładna jest wycena?',
+    a: 'To wycena orientacyjna — taka, jaką doświadczony wykonawca da „z głowy” po obejrzeniu zdjęcia. Dlatego podajemy widełki min–max, a nie jedną liczbę. Nie zastępuje kosztorysu po wizycie ekipy na miejscu, ale pozwala sprawdzić, czy oferta, którą dostajesz, jest z tej planety.',
+  },
+  {
+    q: 'Skąd bierzecie ceny?',
+    a: 'Zdjęcie analizuje model AI (Anthropic Claude) według wytycznych przygotowanych przez osobę z praktyką w wykończeniach: aktualne stawki robocizny, typowe koszty materiałów i różnice między miastami. Wycena uwzględnia też koszty, których na zdjęciu nie widać — wywóz gruzu, chemię budowlaną, przygotowanie podłoża.',
+  },
+  {
+    q: 'Co się dzieje z moim zdjęciem?',
+    a: 'Zdjęcie trafia wyłącznie do analizy przez model AI (Anthropic) w celu wyceny — nie zapisujemy go na naszych serwerach. Na Twoim koncie zostaje tylko wynik wyceny (bez zdjęcia).',
+  },
+  {
+    q: 'Czy mogę anulować subskrypcję?',
+    a: 'Tak, w każdej chwili z panelu użytkownika — jedno kliknięcie. Dostęp do Pro trwa do końca opłaconego miesiąca. Żadnych ukrytych opłat ani zobowiązań.',
+  },
+  {
+    q: 'Jakie pomieszczenia można wycenić?',
+    a: 'Łazienkę, kuchnię, pokój, sypialnię, przedpokój, taras i całe mieszkanie. Najlepsza wycena wychodzi przy dobrym oświetleniu i zdjęciu pokazującym cały pokój.',
+  },
+  {
+    q: 'Co jeśli wycena jest daleko od rzeczywistości?',
+    a: `Napisz do nas na ${CONTACT_EMAIL} i podaj, ile ostatecznie zapłaciłeś. Każde takie porównanie poprawia wytyczne, według których liczymy wyceny.`,
+  },
+]
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
+      <FaqJsonLd faq={HOME_FAQ} />
 
       {/* NAV */}
       <nav className="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E7E0D8]">
@@ -22,18 +59,18 @@ export default function Home() {
             <a href="/en" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">🇬🇧 English</a>
           </div>
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors font-medium"
+            <a
+              href="/login"
+              className="hidden sm:inline text-sm text-[#78716C] hover:text-[#1C1917] transition-colors font-medium"
             >
               Zaloguj się
-            </button>
-            <button
-              onClick={() => window.location.href = '/login'}
-              className="bg-[#C85A2A] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#B04E24] transition-all shadow-sm"
+            </a>
+            <a
+              href="/login"
+              className="bg-[#C85A2A] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#B04E24] transition-all shadow-sm whitespace-nowrap"
             >
               Wypróbuj za darmo
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -52,7 +89,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Heading */}
             <div>
-              <h1 className="font-serif text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
                 Ile naprawdę<br />
                 kosztuje Twój<br />
                 <span className="text-[#C85A2A] italic">remont?</span>
@@ -63,69 +100,58 @@ export default function Home() {
               <div className="flex items-center gap-6">
                 <div>
                   <div className="font-serif text-2xl font-bold">30s</div>
-                  <div className="text-xs text-[#A8A29E]">czas wyceny</div>
+                  <div className="text-xs text-[#78716C]">czas wyceny</div>
                 </div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
                 <div>
                   <div className="font-serif text-2xl font-bold">min–max</div>
-                  <div className="text-xs text-[#A8A29E]">widełki cenowe</div>
+                  <div className="text-xs text-[#78716C]">widełki cenowe</div>
                 </div>
                 <div className="w-px h-8 bg-[#E7E0D8]" />
                 <div>
                   <div className="font-serif text-2xl font-bold">0 zł</div>
-                  <div className="text-xs text-[#A8A29E]">na start</div>
+                  <div className="text-xs text-[#78716C]">na start</div>
                 </div>
               </div>
             </div>
 
-            {/* Form card */}
-            <div className="bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-xl shadow-[#1C1917]/5">
+            {/* Form card — cała karta to jeden link do rejestracji (formularz działa dopiero po zalogowaniu) */}
+            <a
+              href="/login"
+              className="group block bg-white border border-[#E7E0D8] rounded-2xl p-7 shadow-xl shadow-[#1C1917]/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C85A2A]"
+            >
+              <div aria-hidden="true">
               <div className="flex gap-3 mb-5">
-                <input
-                  type="text"
-                  placeholder="Miasto (np. Warszawa)"
-                  onClick={() => window.location.href = '/login'}
-                  readOnly
-                  className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm placeholder-[#A8A29E] outline-none cursor-pointer"
-                />
-                <select
-                  onClick={() => window.location.href = '/login'}
-                  className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-3 py-3 text-sm outline-none cursor-pointer"
-                >
-                  <option>Łazienka</option>
-                  <option>Kuchnia</option>
-                  <option>Przedpokój</option>
-                  <option>Sypialnia</option>
-                  <option>Całe mieszkanie</option>
-                </select>
+                <div className="flex-1 bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-4 py-3 text-sm text-[#78716C]">
+                  Miasto (np. Warszawa)
+                </div>
+                <div className="bg-[#FAF8F5] border border-[#E7E0D8] rounded-xl px-3 py-3 text-sm text-[#44403C]">
+                  Łazienka ▾
+                </div>
               </div>
 
-              <div
-                onClick={() => window.location.href = '/login'}
-                className="group border-2 border-dashed border-[#E7E0D8] rounded-xl p-8 text-center cursor-pointer hover:border-[#C85A2A] hover:bg-[#FEF8F4] transition-all mb-5"
-              >
+              <div className="border-2 border-dashed border-[#E7E0D8] rounded-xl p-8 text-center group-hover:border-[#C85A2A] group-hover:bg-[#FEF8F4] transition-all mb-5">
                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform inline-block">📷</div>
                 <div className="text-sm font-semibold text-[#44403C] mb-1">Dodaj zdjęcie pomieszczenia</div>
-                <div className="text-xs text-[#A8A29E]">Kliknij lub przeciągnij · JPG, PNG, HEIC</div>
+                <div className="text-xs text-[#78716C]">JPG lub PNG · zdjęcie z telefonu wystarczy</div>
               </div>
 
-              <button
-                onClick={() => window.location.href = '/login'}
-                className="w-full bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/25 mb-4"
-              >
-                Wyceń mój remont →
-              </button>
+              </div>
 
-              <div className="flex justify-center gap-5 text-xs text-[#A8A29E]">
+              <div className="w-full text-center bg-[#C85A2A] text-white py-3.5 rounded-xl font-semibold group-hover:bg-[#B04E24] transition-all shadow-lg shadow-[#C85A2A]/25 mb-4">
+                Wyceń mój remont →
+              </div>
+
+              <div className="flex justify-center gap-5 text-xs text-[#78716C]">
                 <span>✓ 3 wyceny gratis</span>
                 <span>✓ Bez karty kredytowej</span>
                 <span>✓ Wynik w 30s</span>
               </div>
               <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-[#F2EDE6]">
-                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🔒</span> SSL</span>
-                <span className="flex items-center gap-1 text-xs text-[#C4BDB8]"><span className="text-sm">🇪🇺</span> GDPR</span>
+                <span className="flex items-center gap-1 text-xs text-[#78716C]"><span className="text-sm">🔒</span> SSL</span>
+                <span className="flex items-center gap-1 text-xs text-[#78716C]"><span className="text-sm">🇪🇺</span> GDPR</span>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </section>
@@ -133,12 +159,12 @@ export default function Home() {
       {/* PRZYKŁADOWA WYCENA */}
       <section className="bg-white border-y border-[#E7E0D8] py-16">
         <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest text-center mb-10">Przykładowy wynik wyceny</p>
+          <p className="text-xs font-semibold text-[#78716C] uppercase tracking-widest text-center mb-10">Przykładowy wynik wyceny</p>
           <div className="max-w-2xl mx-auto bg-[#FAF8F5] border border-[#E7E0D8] rounded-2xl overflow-hidden shadow-sm">
             <div className="px-6 py-4 bg-white border-b border-[#E7E0D8] flex items-center justify-between">
               <div>
                 <div className="font-semibold text-[#1C1917]">Łazienka 6m²</div>
-                <div className="text-xs text-[#A8A29E]">Kraków, Krowodrza</div>
+                <div className="text-xs text-[#78716C]">Kraków, Krowodrza</div>
               </div>
               <span className="text-xs bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full font-medium">Gotowa ✓</span>
             </div>
@@ -184,7 +210,7 @@ export default function Home() {
               <div className="px-6 py-4 text-center">
                 <span className="font-serif font-bold text-[#1C1917] text-sm">Wyceń<span className="text-[#C85A2A]">To</span></span>
               </div>
-              <div className="px-6 py-4 text-center text-xs font-semibold text-[#A8A29E] uppercase tracking-wide">Inne kalkulatory</div>
+              <div className="px-6 py-4 text-center text-xs font-semibold text-[#78716C] uppercase tracking-wide">Inne kalkulatory</div>
             </div>
             {[
               { feature: 'Analiza zdjęcia (widzi stan pomieszczenia)', us: true, them: false },
@@ -202,7 +228,7 @@ export default function Home() {
                 <div className="px-6 py-4 flex justify-center items-center">
                   {row.them === false
                     ? <span className="w-6 h-6 rounded-full bg-[#FEF0EA] text-[#C85A2A]/60 flex items-center justify-center text-xs font-bold">✕</span>
-                    : <span className="text-xs text-[#A8A29E]">{row.them}</span>
+                    : <span className="text-xs text-[#78716C]">{row.them}</span>
                   }
                 </div>
               </div>
@@ -227,7 +253,7 @@ export default function Home() {
               <div key={s.n} className="bg-white border border-[#E7E0D8] rounded-2xl p-8 hover:shadow-lg hover:shadow-[#1C1917]/5 hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-12 h-12 bg-[#F5EBE4] rounded-xl flex items-center justify-center text-2xl">{s.icon}</div>
-                  <span className="font-serif text-4xl font-bold text-[#F2EDE6]">{s.n}</span>
+                  <span aria-hidden="true" className="font-serif text-4xl font-bold text-[#F2EDE6]">{s.n}</span>
                 </div>
                 <h3 className="font-serif text-xl font-bold mb-3">{s.title}</h3>
                 <p className="text-sm text-[#78716C] leading-relaxed">{s.desc}</p>
@@ -271,7 +297,7 @@ export default function Home() {
               <div key={item.title} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/8 transition-colors">
                 <div className="text-2xl mb-3">{item.icon}</div>
                 <div className="font-semibold text-white mb-2 text-sm">{item.title}</div>
-                <div className="text-xs text-[#78716C] leading-relaxed">{item.desc}</div>
+                <div className="text-xs text-[#A8A29E] leading-relaxed">{item.desc}</div>
               </div>
             ))}
           </div>
@@ -290,12 +316,12 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* FREE */}
             <div className="bg-white border border-[#E7E0D8] rounded-2xl p-8">
-              <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-widest mb-4">Bezpłatny</div>
+              <div className="text-xs font-semibold text-[#78716C] uppercase tracking-widest mb-4">Bezpłatny</div>
               <div className="flex items-end gap-1 mb-1">
                 <span className="font-serif text-5xl font-bold">0</span>
                 <span className="text-lg font-semibold text-[#78716C] pb-1">zł</span>
               </div>
-              <div className="text-sm text-[#A8A29E] mb-7">na zawsze</div>
+              <div className="text-sm text-[#78716C] mb-7">na zawsze</div>
               <ul className="space-y-3 mb-8">
                 {[
                   { text: '3 darmowe wyceny', ok: true },
@@ -304,20 +330,20 @@ export default function Home() {
                   { text: 'Raport PDF', ok: false },
                   { text: 'Priorytetowa obsługa', ok: false },
                 ].map((item) => (
-                  <li key={item.text} className={`flex items-center gap-3 text-sm ${item.ok ? 'text-[#44403C]' : 'text-[#C4BDB8]'}`}>
-                    <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${item.ok ? 'bg-green-100 text-green-600' : 'bg-[#F2EDE6] text-[#C4BDB8]'}`}>
+                  <li key={item.text} className={`flex items-center gap-3 text-sm ${item.ok ? 'text-[#44403C]' : 'text-[#78716C] line-through'}`}>
+                    <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${item.ok ? 'bg-green-100 text-green-600' : 'bg-[#F2EDE6] text-[#78716C]'}`}>
                       {item.ok ? '✓' : '—'}
                     </span>
                     {item.text}
                   </li>
                 ))}
               </ul>
-              <button
-                onClick={() => window.location.href = '/login'}
-                className="w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold text-[#44403C] hover:bg-[#FAF8F5] transition"
+              <a
+                href="/login"
+                className="block text-center w-full border border-[#E7E0D8] rounded-xl py-3 text-sm font-semibold text-[#44403C] hover:bg-[#FAF8F5] transition"
               >
                 Zacznij za darmo
-              </button>
+              </a>
             </div>
 
             {/* PRO */}
@@ -342,12 +368,12 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <button
-                onClick={() => window.location.href = '/login'}
-                className="w-full bg-[#C85A2A] text-white rounded-xl py-3 text-sm font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20"
+              <a
+                href="/login"
+                className="block text-center w-full bg-[#C85A2A] text-white rounded-xl py-3 text-sm font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20"
               >
                 Zacznij — pierwsze 3 wyceny gratis
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -361,32 +387,7 @@ export default function Home() {
             <h2 className="font-serif text-4xl font-bold">Najczęstsze pytania</h2>
           </div>
           <div className="divide-y divide-[#E7E0D8]">
-            {[
-              {
-                q: 'Jak dokładna jest wycena?',
-                a: 'To wycena orientacyjna — taka, jaką doświadczony wykonawca da „z głowy” po obejrzeniu zdjęcia. Dlatego podajemy widełki min–max, a nie jedną liczbę. Nie zastępuje kosztorysu po wizycie ekipy na miejscu, ale pozwala sprawdzić, czy oferta, którą dostajesz, jest z tej planety.',
-              },
-              {
-                q: 'Skąd bierzecie ceny?',
-                a: 'Zdjęcie analizuje model AI (Anthropic Claude) według wytycznych przygotowanych przez osobę z praktyką w wykończeniach: aktualne stawki robocizny, typowe koszty materiałów i różnice między miastami. Wycena uwzględnia też koszty, których na zdjęciu nie widać — wywóz gruzu, chemię budowlaną, przygotowanie podłoża.',
-              },
-              {
-                q: 'Co się dzieje z moim zdjęciem?',
-                a: 'Zdjęcie trafia wyłącznie do analizy przez model AI (Anthropic) w celu wyceny — nie zapisujemy go na naszych serwerach. Na Twoim koncie zostaje tylko wynik wyceny (bez zdjęcia).',
-              },
-              {
-                q: 'Czy mogę anulować subskrypcję?',
-                a: 'Tak, w każdej chwili z panelu użytkownika — jedno kliknięcie. Dostęp do Pro trwa do końca opłaconego miesiąca. Żadnych ukrytych opłat ani zobowiązań.',
-              },
-              {
-                q: 'Jakie pomieszczenia można wycenić?',
-                a: 'Łazienkę, kuchnię, pokój, sypialnię, przedpokój, taras i całe mieszkanie. Najlepsza wycena wychodzi przy dobrym oświetleniu i zdjęciu pokazującym cały pokój.',
-              },
-              {
-                q: 'Co jeśli wycena jest daleko od rzeczywistości?',
-                a: 'Napisz do nas na kontakt@wycento.pl i podaj, ile ostatecznie zapłaciłeś. Każde takie porównanie poprawia wytyczne, według których liczymy wyceny.',
-              },
-            ].map((item, i) => (
+            {HOME_FAQ.map((item, i) => (
               <details key={i} className="group py-5 cursor-pointer list-none">
                 <summary className="flex items-center justify-between font-semibold text-[#1C1917] text-sm select-none list-none">
                   {item.q}
@@ -410,17 +411,17 @@ export default function Home() {
             Nie płać ekipie<br />
             <span className="text-[#E8A07A] italic">za dużo.</span>
           </h2>
-          <p className="text-[#78716C] mb-10 text-base leading-relaxed">
+          <p className="text-[#A8A29E] mb-10 text-base leading-relaxed">
             Pierwsze 3 wyceny całkowicie za darmo.<br />
             Wiedz ile powinien kosztować remont zanim zadzwonisz po oferty.
           </p>
-          <button
-            onClick={() => window.location.href = '/login'}
+          <a
+            href="/login"
             className="inline-flex items-center gap-2 bg-[#C85A2A] text-white px-10 py-4 rounded-xl font-semibold text-base hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/30 mb-5"
           >
             Wyceń mój remont teraz →
-          </button>
-          <div className="flex justify-center gap-6 text-xs text-[#78716C]">
+          </a>
+          <div className="flex justify-center gap-6 text-xs text-[#A8A29E]">
             <span>✓ 3 wyceny gratis</span>
             <span>✓ Bez karty</span>
             <span>✓ Wynik w 30s</span>
@@ -450,14 +451,14 @@ export default function Home() {
             <LogoIcon size={24} className="mr-2" />
             <span className="font-serif text-lg font-bold">Wyceń</span>
             <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
-            <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
+            <span className="text-[#78716C] text-sm ml-2">· Made in Poland 🇵🇱</span>
           </div>
           <div className="flex gap-6 text-sm text-[#78716C]">
             <a href="/regulamin" className="hover:text-[#1C1917] transition-colors">Regulamin</a>
             <a href="/prywatnosc" className="hover:text-[#1C1917] transition-colors">Prywatność</a>
-            <a href="mailto:kontakt@wycento.pl" className="hover:text-[#1C1917] transition-colors">Kontakt</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#1C1917] transition-colors">Kontakt</a>
           </div>
-          <span className="text-sm text-[#A8A29E]">© 2026 WyceńTo</span>
+          <span className="text-sm text-[#78716C]">© 2026 WyceńTo</span>
         </div>
       </footer>
     </main>

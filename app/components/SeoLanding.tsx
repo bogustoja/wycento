@@ -123,7 +123,7 @@ export default function SeoLanding(p: Props) {
           <div className="grid md:grid-cols-3 gap-4">
             {p.przyklady.map((x) => (
               <div key={x.room} className="bg-white border border-[#E7E0D8] rounded-xl p-5">
-                <div className="text-xs font-semibold text-[#A8A29E] uppercase tracking-wide mb-2">{x.room}</div>
+                <div className="text-xs font-semibold text-[#78716C] uppercase tracking-wide mb-2">{x.room}</div>
                 <div className="font-serif text-xl font-bold mb-1">{x.range}</div>
                 <div className="text-xs text-[#78716C]">{x.note}</div>
               </div>
@@ -163,7 +163,7 @@ export default function SeoLanding(p: Props) {
           <a href="/login" className="inline-flex items-center gap-2 bg-[#C85A2A] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20">
             {p.ctaButton}
           </a>
-          <div className="flex justify-center gap-5 mt-4 text-xs text-[#A8A29E]">
+          <div className="flex justify-center gap-5 mt-4 text-xs text-[#78716C]">
             <span>✓ Bez karty</span><span>✓ Wynik w ok. 30 s</span><span>✓ 3 wyceny gratis</span>
           </div>
         </section>

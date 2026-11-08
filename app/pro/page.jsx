@@ -89,7 +89,7 @@ export default function ProPage() {
             <span className="font-serif text-5xl font-bold text-white">39</span>
             <div className="pb-1.5">
               <div className="text-[#A8A29E] text-base">zł / miesiąc</div>
-              <div className="text-xs text-[#78716C]">ok. 1,30 zł za wycenę przy 30 wycenach</div>
+              <div className="text-xs text-[#A8A29E]">ok. 1,30 zł za wycenę przy 30 wycenach</div>
             </div>
           </div>
 
@@ -114,7 +114,7 @@ export default function ProPage() {
               </>
             ) : 'Przejdź na Pro — 39 zł/mies →'}
           </button>
-          <div className="flex justify-center gap-4 mt-3 text-xs text-[#78716C]">
+          <div className="flex justify-center gap-4 mt-3 text-xs text-[#A8A29E]">
             <span>🔒 Stripe SSL</span>
             <span>✓ Anuluj kiedy chcesz</span>
             <span>🛡️ 30-dniowa gwarancja</span>
@@ -123,7 +123,7 @@ export default function ProPage() {
 
         <button
           onClick={() => router.push('/dashboard')}
-          className="text-sm text-[#A8A29E] hover:text-[#78716C] transition-colors"
+          className="text-sm text-[#78716C] hover:text-[#78716C] transition-colors"
         >
           Zostań przy planie darmowym
         </button>

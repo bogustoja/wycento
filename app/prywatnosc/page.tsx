@@ -1,111 +1,85 @@
-import LogoIcon from '../components/LogoIcon'
+import type { Metadata } from 'next'
+import { LegalPage } from '../components/LegalPage'
+import { CONTACT_EMAIL } from '../lib/site'
+
+export const metadata: Metadata = {
+  title: 'Polityka prywatności — WyceńTo',
+  description: 'Jakie dane zbiera WyceńTo, w jakim celu, komu je powierzamy i jakie masz prawa (RODO). Zdjęć pomieszczeń nie zapisujemy.',
+}
+
+const Mail = () => <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
 
 export default function Prywatnosc() {
   return (
-    <main className="min-h-screen bg-[#FAF8F5]">
-      <nav className="bg-white border-b border-[#E7E0D8]">
-        <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-0.5">
-            <LogoIcon size={28} className="mr-2" />
-            <span className="font-serif text-xl font-bold text-[#1C1917]">Wyceń</span>
-            <span className="font-serif text-xl font-bold text-[#C85A2A]">To</span>
-          </a>
-          <a href="/" className="text-sm text-[#78716C] hover:text-[#1C1917] transition-colors">← Strona główna</a>
-        </div>
-      </nav>
+    <LegalPage title="Polityka prywatności" effective="8 listopada 2026" current="/prywatnosc">
+      <section>
+        <h2>1. Administrator danych</h2>
+        <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (wycento.app) jest osoba fizyczna działająca pod marką WyceńTo. Kontakt w sprawach danych osobowych: <Mail />.</p>
+      </section>
 
-      <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="font-serif text-4xl font-bold text-[#1C1917] mb-2">Polityka prywatności</h1>
-        <p className="text-sm text-[#A8A29E] mb-12">Obowiązuje od 1 maja 2026</p>
+      <section>
+        <h2>2. Jakie dane zbieramy</h2>
+        <ul>
+          <li><strong>Adres e-mail</strong> — przy zakładaniu konta (lub z konta Google, jeśli logujesz się przez Google).</li>
+          <li><strong>Zdjęcia pomieszczeń</strong> — wysyłane do analizy przez Anthropic (model Claude). Nie zapisujemy ich na naszych serwerach.</li>
+          <li><strong>Wyniki wycen</strong> — miasto, rodzaj pomieszczenia, opis i wynik wyceny, zapisane na Twoim koncie.</li>
+          <li><strong>Dane płatności</strong> — obsługuje je wyłącznie Stripe; nie widzimy numerów kart.</li>
+          <li><strong>Dane techniczne</strong> — adres IP i informacje o przeglądarce w logach serwera.</li>
+        </ul>
+      </section>
 
-        <div className="space-y-10 text-[#44403C] text-sm leading-relaxed">
+      <section>
+        <h2>3. Cele i podstawy prawne</h2>
+        <ul>
+          <li>Świadczenie usług Serwisu, prowadzenie konta, wyceny i historia — art. 6 ust. 1 lit. b RODO (wykonanie umowy).</li>
+          <li>Płatności i rozliczenia podatkowe — art. 6 ust. 1 lit. b i c RODO.</li>
+          <li>Bezpieczeństwo, zapobieganie nadużyciom, statystyki odwiedzin — art. 6 ust. 1 lit. f RODO (prawnie uzasadniony interes).</li>
+          <li>Odpowiedzi na wiadomości — art. 6 ust. 1 lit. f RODO.</li>
+        </ul>
+        <p>Podanie adresu e-mail jest dobrowolne, ale bez niego nie da się założyć konta.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">1. Administrator danych</h2>
-            <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (wycento.vercel.app) jest osoba fizyczna prowadząca działalność pod marką WyceńTo. Kontakt: <a href="mailto:kontakt@wycento.pl" className="text-[#C85A2A] hover:underline">kontakt@wycento.pl</a></p>
-          </section>
+      <section>
+        <h2>4. Komu powierzamy dane</h2>
+        <ul>
+          <li><strong>Supabase</strong> — baza danych i logowanie (serwery w Irlandii, UE).</li>
+          <li><strong>Vercel</strong> — hosting aplikacji (funkcje uruchamiane we Frankfurcie, UE) i anonimowe statystyki odwiedzin.</li>
+          <li><strong>Anthropic</strong> — analiza zdjęć i generowanie wycen (USA).</li>
+          <li><strong>Stripe</strong> — obsługa płatności.</li>
+          <li><strong>Google</strong> — tylko jeśli logujesz się przez konto Google.</li>
+        </ul>
+        <p>Część tych firm ma siedzibę w USA lub korzysta z infrastruktury poza Europejskim Obszarem Gospodarczym. Przekazanie danych odbywa się na podstawie decyzji Komisji Europejskiej w sprawie EU-US Data Privacy Framework lub standardowych klauzul umownych zatwierdzonych przez Komisję.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">2. Jakie dane zbieramy</h2>
-            <ul className="list-disc list-inside space-y-2 ml-3">
-              <li><strong>Adres e-mail</strong> — przy rejestracji konta</li>
-              <li><strong>Zdjęcia pomieszczeń</strong> — przesyłane do analizy przez Anthropic (Claude); nie zapisujemy ich na naszych serwerach</li>
-              <li><strong>Wyniki wycen</strong> — przechowywane na Twoim koncie w formie zaszyfrowanej</li>
-              <li><strong>Dane płatności</strong> — obsługiwane wyłącznie przez Stripe; nie mamy dostępu do numerów kart</li>
-              <li><strong>Dane techniczne</strong> — adres IP, przeglądarka (logi systemowe)</li>
-            </ul>
-          </section>
+      <section>
+        <h2>5. Jak długo przechowujemy dane</h2>
+        <p>Dane konta i wycen — do usunięcia konta. Dokumenty rozliczeniowe — przez 5 lat od końca roku podatkowego, zgodnie z przepisami podatkowymi. Logi serwera — przez krótki okres ustalony przez dostawcę hostingu.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">3. W jakim celu przetwarzamy dane</h2>
-            <ul className="list-disc list-inside space-y-2 ml-3">
-              <li>Świadczenie usług Serwisu (wyceny, historia, PDF)</li>
-              <li>Obsługa konta i uwierzytelnianie</li>
-              <li>Realizacja płatności i zarządzanie subskrypcją</li>
-              <li>Kontakt w sprawach technicznych i obsługi klienta</li>
-            </ul>
-          </section>
+      <section>
+        <h2>6. Twoje prawa</h2>
+        <p>Masz prawo do:</p>
+        <ul>
+          <li>dostępu do swoich danych i otrzymania ich kopii,</li>
+          <li>sprostowania danych,</li>
+          <li>usunięcia danych („prawo do bycia zapomnianym”),</li>
+          <li>ograniczenia przetwarzania i przenoszenia danych,</li>
+          <li>sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie,</li>
+          <li>skargi do Prezesa Urzędu Ochrony Danych Osobowych (UODO).</li>
+        </ul>
+        <p>Aby skorzystać z praw, napisz na <Mail />.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">4. Podstawa prawna (RODO)</h2>
-            <p>Przetwarzamy dane na podstawie:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-3">
-              <li>Art. 6 ust. 1 lit. b RODO — wykonanie umowy (świadczenie usług)</li>
-              <li>Art. 6 ust. 1 lit. c RODO — obowiązki prawne (np. przepisy podatkowe)</li>
-              <li>Art. 6 ust. 1 lit. f RODO — prawnie uzasadniony interes (bezpieczeństwo)</li>
-            </ul>
-          </section>
+      <section>
+        <h2>7. Pliki cookies i statystyki</h2>
+        <p>Używamy wyłącznie plików cookies niezbędnych do działania Serwisu — utrzymują zalogowanie (Supabase Auth). Nie używamy cookies reklamowych ani śledzących, dlatego nie wyświetlamy banera zgody.</p>
+        <p>Do liczenia odwiedzin używamy Vercel Web Analytics, które nie zapisuje cookies i nie identyfikuje użytkowników — zlicza zanonimizowane odsłony stron.</p>
+      </section>
 
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">5. Podmioty zewnętrzne</h2>
-            <ul className="list-disc list-inside space-y-2 ml-3">
-              <li><strong>Supabase</strong> — przechowywanie kont i wycen (serwery w UE)</li>
-              <li><strong>Anthropic (Claude)</strong> — analiza zdjęć i generowanie wycen</li>
-              <li><strong>Stripe</strong> — obsługa płatności</li>
-              <li><strong>Vercel</strong> — hosting aplikacji</li>
-            </ul>
-            <p className="mt-3">Wszystkie podmioty zapewniają odpowiedni poziom ochrony danych zgodnie z RODO.</p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">6. Czas przechowywania</h2>
-            <p>Dane konta i wycen przechowujemy do momentu usunięcia konta. Dane płatnicze (faktury) przechowujemy przez 5 lat zgodnie z przepisami podatkowymi.</p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">7. Twoje prawa</h2>
-            <p>Masz prawo do:</p>
-            <ul className="list-disc list-inside mt-3 space-y-1.5 ml-3">
-              <li>dostępu do swoich danych</li>
-              <li>sprostowania danych</li>
-              <li>usunięcia danych („prawo do bycia zapomnianym")</li>
-              <li>przenoszenia danych</li>
-              <li>ograniczenia przetwarzania</li>
-              <li>wniesienia skargi do UODO (Urząd Ochrony Danych Osobowych)</li>
-            </ul>
-            <p className="mt-3">Aby skorzystać z praw, napisz na: <a href="mailto:kontakt@wycento.pl" className="text-[#C85A2A] hover:underline">kontakt@wycento.pl</a></p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">8. Pliki cookies</h2>
-            <p>Serwis używa plików cookies sesyjnych niezbędnych do działania uwierzytelniania (Supabase Auth). Nie używamy cookies reklamowych ani śledzących.</p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-bold text-[#1C1917] mb-3">9. Zmiany polityki</h2>
-            <p>O istotnych zmianach Polityki prywatności poinformujemy drogą e-mail z 14-dniowym wyprzedzeniem.</p>
-          </section>
-
-        </div>
-      </div>
-
-      <footer className="border-t border-[#E7E0D8] mt-8">
-        <div className="max-w-4xl mx-auto px-6 py-6 flex gap-6 text-sm text-[#78716C]">
-          <a href="/regulamin" className="hover:text-[#1C1917] transition-colors">Regulamin</a>
-          <a href="/prywatnosc" className="hover:text-[#1C1917] transition-colors font-medium">Prywatność</a>
-          <a href="/" className="hover:text-[#1C1917] transition-colors">Strona główna</a>
-        </div>
-      </footer>
-    </main>
+      <section>
+        <h2>8. Zmiany polityki</h2>
+        <p>O istotnych zmianach poinformujemy e-mailem z 14-dniowym wyprzedzeniem.</p>
+      </section>
+    </LegalPage>
   )
 }
