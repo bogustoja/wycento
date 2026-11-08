@@ -1,5 +1,7 @@
 'use client'
 
+import { SEO_LINKS } from './components/seoLinks'
+
 import LogoIcon from './components/LogoIcon'
 
 export default function Home() {
@@ -423,6 +425,20 @@ export default function Home() {
             <span>✓ Bez karty</span>
             <span>✓ Wynik w 30s</span>
             <span>✓ Anuluj kiedy chcesz</span>
+          </div>
+        </div>
+      </section>
+
+      {/* CENNIKI — linki wewnętrzne do stron SEO */}
+      <section className="py-14 bg-[#FAF8F5] border-t border-[#E7E0D8]">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="font-serif text-2xl font-bold mb-6">Ceny remontów 2026</h2>
+          <div className="flex flex-wrap gap-3">
+            {SEO_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="bg-white border border-[#E7E0D8] rounded-full px-4 py-2 text-sm text-[#44403C] hover:border-[#C85A2A] hover:text-[#C85A2A] transition-colors">
+                {l.label.startsWith('Remont') ? `Ile kosztuje ${l.label.toLowerCase()}` : `Ceny remontu — ${l.label}`}
+              </a>
+            ))}
           </div>
         </div>
       </section>

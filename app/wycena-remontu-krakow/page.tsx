@@ -1,3 +1,4 @@
+import { SeoFooter } from '../components/SeoLanding'
 import LogoIcon from '../components/LogoIcon'
 
 import type { Metadata } from 'next'
@@ -50,15 +51,15 @@ export default function WycenaKrakow() {
             <span className="text-[#C85A2A]">ile to naprawdę kosztuje?</span>
           </h1>
           <p className="text-lg text-[#78716C] leading-relaxed max-w-2xl">
-            Kraków jest drugim najdroższym miastem remontowym w Polsce. Stawki w centrum są zbliżone do Warszawy, ale poza Starym Miastem różnica jest już znacząca. Zebraliśmy aktualne dane dla każdej dzielnicy.
+            Kraków należy do najdroższych rynków remontowych w Polsce. Stawki w centrum są zbliżone do Warszawy, ale poza Starym Miastem różnica jest już znacząca. Poniżej aktualne widełki i orientacyjne różnice między dzielnicami.
           </p>
         </div>
 
         <div className="bg-[#1C1917] rounded-2xl p-7 mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
           <div>
             <div className="text-xs font-semibold text-[#E8A07A] uppercase tracking-widest mb-2">Wycena ze zdjęcia · Kraków</div>
-            <div className="font-serif text-xl font-bold text-white mb-1">Podaj adres, wrzuć zdjęcie</div>
-            <div className="text-sm text-[#78716C]">Wycena z cenami dla Twojej dzielnicy — 30 sekund, za darmo.</div>
+            <div className="font-serif text-xl font-bold text-white mb-1">Wrzuć zdjęcie, wpisz miasto</div>
+            <div className="text-sm text-[#78716C]">Widełki z podziałem na robociznę i materiały w ok. 30 sekund, za darmo.</div>
           </div>
           <a href="/login" className="flex-shrink-0 bg-[#C85A2A] text-white px-6 py-3.5 rounded-xl font-semibold text-sm hover:bg-[#B04E24] transition shadow-lg shadow-[#C85A2A]/20 whitespace-nowrap">
             Wyceń za darmo →
@@ -132,21 +133,7 @@ export default function WycenaKrakow() {
         </section>
       </div>
 
-      <footer className="bg-white border-t border-[#E7E0D8] mt-12">
-        <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-1">
-            <LogoIcon size={24} className="mr-2" />
-            <span className="font-serif text-lg font-bold">Wyceń</span>
-            <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
-            <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
-          </div>
-          <div className="flex gap-5 text-sm text-[#78716C]">
-            <a href="/ile-kosztuje-remont-lazienki" className="hover:text-[#1C1917]">Remont łazienki</a>
-            <a href="/ile-kosztuje-remont-kuchni" className="hover:text-[#1C1917]">Remont kuchni</a>
-            <a href="/wycena-remontu-warszawa" className="hover:text-[#1C1917]">Warszawa</a>
-          </div>
-        </div>
-      </footer>
+      <SeoFooter current="/wycena-remontu-krakow" />
     </main>
   )
 }

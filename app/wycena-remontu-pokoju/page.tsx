@@ -1,3 +1,4 @@
+import { SeoFooter, FaqJsonLd } from '../components/SeoLanding'
 import LogoIcon from '../components/LogoIcon'
 
 import type { Metadata } from 'next'
@@ -39,6 +40,7 @@ const FAQ = [
 export default function RemontPokoju() {
   return (
     <main className="min-h-screen bg-[#FAF8F5] text-[#1C1917]">
+      <FaqJsonLd faq={FAQ} />
       <nav className="bg-white border-b border-[#E7E0D8] sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-0.5">
@@ -122,22 +124,7 @@ export default function RemontPokoju() {
         </section>
       </div>
 
-      <footer className="bg-white border-t border-[#E7E0D8] mt-12">
-        <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-1">
-            <LogoIcon size={24} className="mr-2" />
-            <span className="font-serif text-lg font-bold">Wyceń</span>
-            <span className="font-serif text-lg font-bold text-[#C85A2A]">To</span>
-            <span className="text-[#A8A29E] text-sm ml-2">· Made in Poland 🇵🇱</span>
-          </div>
-          <div className="flex gap-5 text-sm text-[#78716C]">
-            <a href="/ile-kosztuje-remont-lazienki" className="hover:text-[#1C1917]">Remont łazienki</a>
-            <a href="/ile-kosztuje-remont-kuchni" className="hover:text-[#1C1917]">Remont kuchni</a>
-            <a href="/wycena-remontu-warszawa" className="hover:text-[#1C1917]">Warszawa</a>
-            <a href="/wycena-remontu-krakow" className="hover:text-[#1C1917]">Kraków</a>
-          </div>
-        </div>
-      </footer>
+      <SeoFooter current="/wycena-remontu-pokoju" />
     </main>
   )
 }
