@@ -170,22 +170,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* KTO ZA TYM STOI */}
-      <section className="border-t border-line py-24">
-        <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 sm:px-6 md:grid-cols-[1fr_2fr]">
-          <p className="text-xs font-semibold tracking-[0.14em] text-muted uppercase">Kto za tym stoi</p>
-          <div>
-            <h2 className="mb-6 text-3xl leading-tight font-extrabold sm:text-4xl">
-              Robione przez kogoś, kto <span className="text-accent-2">kładł płytki</span>.
-            </h2>
-            <p className="max-w-2xl text-lg leading-relaxed text-ink-2">
-              WyceńTo tworzy osoba, która pracowała na budowach przy wykończeniach wnętrz, tarasach i altanach w Polsce i w Wielkiej Brytanii.
-              Wiedza o tym, co ekipy faktycznie liczą i co klienci pomijają w budżecie (gruz, gruntowanie, poprawki po starych instalacjach), jest wbudowana w sposób, w jaki system liczy wycenę.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* CENNIK */}
       <section id="cennik" className="scroll-mt-20 border-t border-line py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
