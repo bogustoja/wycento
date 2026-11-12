@@ -5,6 +5,7 @@ import Spotlight from '../components/Spotlight'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { PAYMENTS_ENABLED } from '../lib/site'
 
 const FEATURES = [
   { text: 'Nielimitowane wyceny — bez limitów', highlight: true },
@@ -92,7 +93,7 @@ export default function ProPage() {
 
           <button
             onClick={handleCheckout}
-            disabled={loading}
+            disabled={loading || !PAYMENTS_ENABLED}
             className="w-full bg-accent text-white py-4 rounded-xl font-semibold text-base hover:bg-accent-hover btn-glow disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? (
@@ -103,7 +104,7 @@ export default function ProPage() {
                 </svg>
                 Przekierowuję do płatności...
               </>
-            ) : 'Przejdź na Pro — 39 zł/mies →'}
+            ) : PAYMENTS_ENABLED ? 'Przejdź na Pro — 39 zł/mies →' : 'Płatności ruszą wkrótce'}
           </button>
           <div className="flex justify-center gap-4 mt-3 text-xs text-muted">
             <span>Płatność przez Stripe</span>

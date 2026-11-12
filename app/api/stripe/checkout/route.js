@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '../../../lib/supabase-server'
+import { PAYMENTS_ENABLED } from '../../../lib/site'
 
 // Tworzy sesję płatności Stripe (subskrypcja Pro 39 zł/mies.) i zwraca link do kasy.
 export async function POST(request) {
   try {
+    if (!PAYMENTS_ENABLED) {
+      return NextResponse.json({ error: 'Płatności ruszą wkrótce. Na razie korzystasz z planu darmowego.' }, { status: 503 })
+    }
     if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_PRICE_ID) {
       console.error('[stripe/checkout] brak STRIPE_SECRET_KEY lub STRIPE_PRICE_ID')
       return NextResponse.json({ error: 'Płatności są chwilowo niedostępne. Spróbuj za kilka minut.' }, { status: 503 })
