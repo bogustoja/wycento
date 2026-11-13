@@ -210,7 +210,7 @@ export async function wyceńRemont(formData) {
   }
 
   // --- Zapis do historii (wycena już jest, więc błąd zapisu nie blokuje wyniku) ---
-  const { error: insertError } = await supabase
+  const { data: saved, error: insertError } = await supabase
     .from('quotes')
     .insert({
       user_id: user.id,
@@ -220,12 +220,14 @@ export async function wyceńRemont(formData) {
       total_max: wynik.total_max,
       wynik,
     })
+    .select('id')
+    .single()
 
   if (insertError) {
     console.error('[wycena] quotes insert failed:', insertError)
   }
 
-  return { success: true, wynik }
+  return { success: true, wynik, quoteId: saved?.id ?? null }
 }
 
 async function refund(userId) {

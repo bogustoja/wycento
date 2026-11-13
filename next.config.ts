@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // pdfkit czyta własne pliki z node_modules w runtime — nie bundlować.
+  serverExternalPackages: ["pdfkit"],
+  outputFileTracingIncludes: {
+    "/api/pdf": ["./assets/fonts/DejaVuSans*.ttf"],
+  },
   experimental: {
     serverActions: {
       // Zdjęcie po kompresji (1600 px, JPEG 80%) w base64 to ~0,5–0,9 MB, domyślny limit to 1 MB.

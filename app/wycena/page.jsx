@@ -1,8 +1,6 @@
 'use client'
 
 import Brand from '../components/Brand'
-import { escapeHtml } from '../lib/escapeHtml'
-import { openPrintHtml } from '../lib/openPrint'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -55,6 +53,7 @@ export default function WycenaPage() {
   const [preview, setPreview] = useState(null)
   const [loading, setLoading] = useState(false)
   const [wynik, setWynik] = useState(null)
+  const [quoteId, setQuoteId] = useState(null)
   const [error, setError] = useState(null)
   // Plan usera: PDF jest tylko w Pro (tak mówi cennik). null = jeszcze nie wiemy.
   const [plan, setPlan] = useState(null)
@@ -119,102 +118,13 @@ export default function WycenaPage() {
       formData.append('image', image)
       const result = await wyceńRemont(formData)
       if (!result || result.error) setError(result?.error || 'Błąd podczas wyceny. Spróbuj ponownie.')
-      else setWynik(result.wynik)
+      else { setWynik(result.wynik); setQuoteId(result.quoteId ?? null) }
     } catch (err) {
       console.error(err)
       setError('Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.')
     } finally {
       setLoading(false)
     }
-  }
-
-  function handlePDF() {
-    openPrintHtml(`
-      <!DOCTYPE html>
-      <html lang="pl">
-      <head>
-        <meta charset="UTF-8">
-        <title>Wycena — ${escapeHtml(pomieszczenie)} — ${escapeHtml(miasto)}</title>
-        <style>
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: Arial, Helvetica, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1C1917; font-size: 14px; line-height: 1.5; }
-          .header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 2px solid #C85A2A; padding-bottom: 20px; margin-bottom: 28px; }
-          .logo { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
-          .logo span { color: #C85A2A; }
-          .meta h1 { font-size: 18px; font-weight: 700; }
-          .meta p { color: #78716C; font-size: 12px; margin-top: 4px; }
-          .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #A8A29E; font-weight: 700; margin: 24px 0 10px; }
-          .summary { background: #FAF8F5; border: 1px solid #E7E0D8; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #44403C; }
-          table { width: 100%; border-collapse: collapse; }
-          tr { border-bottom: 1px solid #E7E0D8; }
-          td { padding: 10px 0; }
-          td:last-child { text-align: right; font-weight: 600; }
-          .total-row td { background: #1C1917; color: white; padding: 12px 10px; font-weight: 700; font-size: 15px; }
-          .total-row td:first-child { border-radius: 6px 0 0 6px; }
-          .total-row td:last-child { border-radius: 0 6px 6px 0; color: #E8A07A; }
-          .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px; }
-          .item { display: flex; gap: 8px; font-size: 13px; margin: 6px 0; align-items: flex-start; }
-          .warn { color: #D97706; font-size: 15px; flex-shrink: 0; }
-          .ok { color: #16A34A; font-size: 15px; flex-shrink: 0; }
-          .time-box { margin-top: 20px; background: #F5EBE4; border: 1px solid #E7E0D8; border-radius: 8px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
-          .time-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #A8A29E; font-weight: 700; }
-          .time-box .value { font-size: 17px; font-weight: 700; color: #1C1917; }
-          .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #E7E0D8; font-size: 11px; color: #A8A29E; text-align: center; }
-          @page { size: A4 portrait; margin: 15mm; } html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } tr, .item { break-inside: avoid; } @media print { body { margin: 0; } }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
-          <div class="meta">
-            <h1>${escapeHtml(pomieszczenie)} · ${escapeHtml(miasto)}</h1>
-            <p>${new Date().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-          </div>
-        </div>
-
-        <div class="section-label">Analiza zdjęcia</div>
-        <div class="summary">${escapeHtml(wynik.summary)}</div>
-
-        <div class="section-label">Kosztorys</div>
-        <table>
-          ${wynik.items.map(item => `
-            <tr>
-              <td>${escapeHtml(item.name)}</td>
-              <td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${escapeHtml(item.jednostka)}</td>
-            </tr>
-          `).join('')}
-          <tr class="total-row">
-            <td>Łącznie</td>
-            <td>${wynik.total_min.toLocaleString('pl-PL')} – ${wynik.total_max.toLocaleString('pl-PL')} zł</td>
-          </tr>
-        </table>
-
-        <div class="two-col">
-          <div>
-            <div class="section-label">Na co uważać</div>
-            ${wynik.uwagi.map(u => `<div class="item"><span class="warn">⚠</span><span>${escapeHtml(u)}</span></div>`).join('')}
-          </div>
-          <div>
-            <div class="section-label">Warto dodać przy okazji</div>
-            ${wynik.co_warto_dodac.map(c => `<div class="item"><span class="ok">✓</span><span>${escapeHtml(c)}</span></div>`).join('')}
-          </div>
-        </div>
-
-        <div class="time-box">
-          <div>
-            <div class="label">Szacowany czas realizacji</div>
-            <div class="value">${escapeHtml(wynik.czas_realizacji)}</div>
-          </div>
-        </div>
-
-        <div style="margin-top:24px;background:#FEF8F4;border:1px solid #F2D9C8;border-radius:8px;padding:12px 16px;text-align:center;font-size:11px;color:#C85A2A;font-weight:600;">Wygenerowano bezpłatnie na wycento.app · Sprawdź ile kosztuje Twój remont</div>
-        <div class="footer">
-          Wycena wygenerowana przez WyceńTo · wycento.app · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej
-        </div>
-        <script>window.onload = function() { window.print(); }</script>
-      </body>
-      </html>
-    `)
   }
 
   // PAYWALL
@@ -334,12 +244,16 @@ export default function WycenaPage() {
               <div className="text-2xl font-extrabold text-ink">{wynik.czas_realizacji}</div>
             </div>
             {plan === 'pro' ? (
-              <button
-                onClick={handlePDF}
-                className="bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-hover btn-glow flex items-center gap-2"
-              >
-                Pobierz PDF <span aria-hidden="true">↓</span>
-              </button>
+              quoteId && (
+                <a
+                  href={`/api/pdf?id=${quoteId}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-accent-hover btn-glow flex items-center gap-2"
+                >
+                  Pobierz PDF <span aria-hidden="true">↓</span>
+                </a>
+              )
             ) : plan === 'free' ? (
               <a
                 href="/pro"

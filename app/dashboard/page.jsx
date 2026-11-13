@@ -2,8 +2,6 @@
 
 import Brand from '../components/Brand'
 import Spotlight from '../components/Spotlight'
-import { escapeHtml } from '../lib/escapeHtml'
-import { openPrintHtml } from '../lib/openPrint'
 
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '../lib/supabase'
@@ -64,50 +62,6 @@ function Dashboard() {
   async function handleLogout() {
     await supabase.auth.signOut()
     router.push('/login')
-  }
-
-  function handlePDF(q) {
-    openPrintHtml(`
-      <!DOCTYPE html><html lang="pl"><head>
-      <meta charset="UTF-8">
-      <title>Wycena — ${escapeHtml(q.pomieszczenie)} — ${escapeHtml(q.miasto)}</title>
-      <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 24px; color: #1C1917; font-size: 14px; line-height: 1.5; }
-        .header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 2px solid #C85A2A; padding-bottom: 20px; margin-bottom: 28px; }
-        .logo { font-size: 22px; font-weight: 900; } .logo span { color: #C85A2A; }
-        .meta h1 { font-size: 18px; font-weight: 700; } .meta p { color: #78716C; font-size: 12px; margin-top: 4px; }
-        .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #A8A29E; font-weight: 700; margin: 24px 0 10px; }
-        .summary { background: #FAF8F5; border: 1px solid #E7E0D8; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #44403C; }
-        table { width: 100%; border-collapse: collapse; } tr { border-bottom: 1px solid #E7E0D8; } td { padding: 10px 0; } td:last-child { text-align: right; font-weight: 600; }
-        .total-row td { background: #1C1917; color: white; padding: 12px 10px; font-weight: 700; font-size: 15px; }
-        .total-row td:first-child { border-radius: 6px 0 0 6px; } .total-row td:last-child { border-radius: 0 6px 6px 0; color: #E8A07A; }
-        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px; }
-        .item { display: flex; gap: 8px; font-size: 13px; margin: 6px 0; align-items: flex-start; }
-        .warn { color: #D97706; font-size: 15px; flex-shrink: 0; } .ok { color: #16A34A; font-size: 15px; flex-shrink: 0; }
-        .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #E7E0D8; font-size: 11px; color: #A8A29E; text-align: center; }
-        @page { size: A4 portrait; margin: 15mm; } html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } tr, .item { break-inside: avoid; } @media print { body { margin: 0; } }
-      </style></head><body>
-      <div class="header">
-        <div class="logo"><svg width="26" height="26" viewBox="0 0 64 64" style="vertical-align:-6px;margin-right:8px"><rect width="64" height="64" rx="14" fill="#C85A2A"/><path d="M12 31 L32 14 L52 31" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 28 V48 H45 V28" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M25 38 L30.5 43 L40 33" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Wyceń<span>To</span></div>
-        <div class="meta"><h1>${escapeHtml(q.pomieszczenie)} · ${escapeHtml(q.miasto)}</h1><p>${new Date(q.created_at).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
-      </div>
-      <div class="label">Analiza zdjęcia</div>
-      <div class="summary">${escapeHtml(q.wynik.summary)}</div>
-      <div class="label">Kosztorys</div>
-      <table>
-        ${q.wynik.items.map(item => `<tr><td>${escapeHtml(item.name)}</td><td>${item.min.toLocaleString('pl-PL')} – ${item.max.toLocaleString('pl-PL')} ${escapeHtml(item.jednostka)}</td></tr>`).join('')}
-        <tr class="total-row"><td>Łącznie</td><td>${q.wynik.total_min.toLocaleString('pl-PL')} – ${q.wynik.total_max.toLocaleString('pl-PL')} zł</td></tr>
-      </table>
-      <div class="two-col">
-        <div><div class="label">Na co uważać</div>${(q.wynik.uwagi || []).map(u => `<div class="item"><span class="warn">⚠</span><span>${escapeHtml(u)}</span></div>`).join('')}</div>
-        <div><div class="label">Warto dodać przy okazji</div>${(q.wynik.co_warto_dodac || []).map(c => `<div class="item"><span class="ok">✓</span><span>${escapeHtml(c)}</span></div>`).join('')}</div>
-      </div>
-      ${plan !== 'pro' ? `<div style="margin-top:24px;background:#FEF8F4;border:1px solid #F2D9C8;border-radius:8px;padding:12px 16px;text-align:center;font-size:11px;color:#C85A2A;font-weight:600;">Wygenerowano bezpłatnie na wycento.app · Sprawdź ile kosztuje Twój remont</div>` : ''}
-      <div class="footer">Wycena wygenerowana przez WyceńTo · wycento.app · Wycena ma charakter orientacyjny i nie stanowi oferty handlowej</div>
-      <script>window.onload = function() { window.print(); }</script>
-      </body></html>
-    `)
   }
 
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? '?'
@@ -315,7 +269,7 @@ function Dashboard() {
                       {q.wynik.total_min?.toLocaleString('pl-PL')} – {q.wynik.total_max?.toLocaleString('pl-PL')} zł
                     </div>
                     {plan === 'pro' && (
-                      <button onClick={() => handlePDF(q)} className="text-xs text-accent-2 font-medium mt-0.5 hover:underline">PDF ↓</button>
+                      <a href={`/api/pdf?id=${q.id}`} target="_blank" rel="noopener" className="inline-block text-xs text-accent-2 font-medium mt-0.5 py-2 hover:underline">PDF ↓</a>
                     )}
                   </div>
                 </div>
