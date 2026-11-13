@@ -3,6 +3,7 @@
 import Brand from '../components/Brand'
 import Spotlight from '../components/Spotlight'
 import { escapeHtml } from '../lib/escapeHtml'
+import { openPrintHtml } from '../lib/openPrint'
 
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '../lib/supabase'
@@ -66,9 +67,7 @@ function Dashboard() {
   }
 
   function handlePDF(q) {
-    const win = window.open('', '_blank')
-    if (!win) { alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna dla wycento.app i kliknij jeszcze raz.'); return }
-    win.document.write(`
+    openPrintHtml(`
       <!DOCTYPE html><html lang="pl"><head>
       <meta charset="UTF-8">
       <title>Wycena — ${escapeHtml(q.pomieszczenie)} — ${escapeHtml(q.miasto)}</title>
@@ -109,7 +108,6 @@ function Dashboard() {
       <script>window.onload = function() { window.print(); }</script>
       </body></html>
     `)
-    win.document.close()
   }
 
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? '?'

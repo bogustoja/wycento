@@ -2,6 +2,7 @@
 
 import Brand from '../components/Brand'
 import { escapeHtml } from '../lib/escapeHtml'
+import { openPrintHtml } from '../lib/openPrint'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -128,9 +129,7 @@ export default function WycenaPage() {
   }
 
   function handlePDF() {
-    const win = window.open('', '_blank')
-    if (!win) { alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna dla wycento.app i kliknij jeszcze raz.'); return }
-    win.document.write(`
+    openPrintHtml(`
       <!DOCTYPE html>
       <html lang="pl">
       <head>
@@ -216,7 +215,6 @@ export default function WycenaPage() {
       </body>
       </html>
     `)
-    win.document.close()
   }
 
   // PAYWALL
