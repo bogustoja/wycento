@@ -1,3 +1,4 @@
+import RenovationCalculator from '../components/RenovationCalculator'
 import { SeoFooter, FaqJsonLd } from '../components/SeoLanding'
 import SiteHeader from '../components/SiteHeader'
 
@@ -67,6 +68,8 @@ export default function RemontPokoju() {
             Wyceń za darmo →
           </a>
         </div>
+
+        <RenovationCalculator initialRoom="pokoj" initialCity="wojewodzkie" title="Kalkulator remontu pokoju" />
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Orientacyjne koszty remontu pokoju</h2>

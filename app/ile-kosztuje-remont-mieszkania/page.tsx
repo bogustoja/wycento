@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 export default function RemontMieszkania() {
   return (
     <SeoLanding
+      calculator={{ room: 'mieszkanie', city: 'wojewodzkie', title: 'Kalkulator remontu mieszkania' }}
       path="/ile-kosztuje-remont-mieszkania"
       badge="Ceny 2026"
       h1="Ile kosztuje remont mieszkania?"

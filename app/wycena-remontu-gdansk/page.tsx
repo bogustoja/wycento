@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 export default function WycenaGdansk() {
   return (
     <SeoLanding
+      calculator={{ room: 'lazienka', city: 'duze', title: 'Kalkulator remontu — stawki dla Trójmiasta' }}
       path="/wycena-remontu-gdansk"
       badge="Gdańsk · Trójmiasto · Ceny 2026"
       h1="Wycena remontu w Gdańsku —"

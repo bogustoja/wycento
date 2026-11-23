@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 export default function WycenaWroclaw() {
   return (
     <SeoLanding
+      calculator={{ room: 'lazienka', city: 'duze', title: 'Kalkulator remontu — stawki dla Wrocławia' }}
       path="/wycena-remontu-wroclaw"
       badge="Wrocław · Ceny 2026"
       h1="Wycena remontu we Wrocławiu —"

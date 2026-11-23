@@ -1,3 +1,4 @@
+import RenovationCalculator from '../components/RenovationCalculator'
 import { SeoFooter } from '../components/SeoLanding'
 import SiteHeader from '../components/SiteHeader'
 
@@ -54,6 +55,8 @@ export default function WycenaWarszawa() {
             Wyceń za darmo →
           </a>
         </div>
+
+        <RenovationCalculator initialRoom="lazienka" initialCity="warszawa" title="Kalkulator remontu — stawki dla Warszawy" />
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Stawki robocizny w Warszawie 2026</h2>

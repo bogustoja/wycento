@@ -1,5 +1,6 @@
 // Lista stron SEO — używana w stopkach i na stronie głównej (linkowanie wewnętrzne).
 export const SEO_LINKS = [
+  { href: '/kalkulator-remontu', label: 'Kalkulator remontu' },
   { href: '/ile-kosztuje-remont-mieszkania', label: 'Remont mieszkania' },
   { href: '/ile-kosztuje-remont-lazienki', label: 'Remont łazienki' },
   { href: '/ile-kosztuje-remont-kuchni', label: 'Remont kuchni' },
