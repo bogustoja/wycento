@@ -40,7 +40,7 @@ export default function Regulamin() {
 
       <section>
         <h2>§4. Konto</h2>
-        <p>Korzystanie z wycen wymaga założenia bezpłatnego konta. Umowa o prowadzenie konta zostaje zawarta z chwilą potwierdzenia adresu e-mail (lub zalogowania przez Google) i trwa bezterminowo. Możesz ją rozwiązać w każdej chwili, prosząc o usunięcie konta pod adresem <Mail />.</p>
+        <p>Korzystanie z wycen wymaga założenia bezpłatnego konta. Umowa o prowadzenie konta zostaje zawarta z chwilą potwierdzenia adresu e-mail (lub zalogowania przez Google) i trwa bezterminowo. Możesz ją rozwiązać w każdej chwili, usuwając konto w aplikacji iOS (zakładka Konto → Usuń konto) albo prosząc o usunięcie konta pod adresem <Mail />.</p>
         <p>Operator może zablokować lub usunąć konto użytkownika, który narusza Regulamin, po uprzednim wezwaniu do zaprzestania naruszeń.</p>
       </section>
 
