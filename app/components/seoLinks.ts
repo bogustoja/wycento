@@ -9,4 +9,7 @@ export const SEO_LINKS = [
   { href: '/wycena-remontu-krakow', label: 'Kraków' },
   { href: '/wycena-remontu-wroclaw', label: 'Wrocław' },
   { href: '/wycena-remontu-gdansk', label: 'Gdańsk' },
+  { href: '/wycena-remontu-poznan', label: 'Poznań' },
+  { href: '/wycena-remontu-lodz', label: 'Łódź' },
+  { href: '/wycena-remontu-katowice', label: 'Katowice' },
 ]
