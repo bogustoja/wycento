@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '../../lib/supabase-server'
+import { getRequestClient } from '../../lib/supabase-request'
 import { buildQuotePdf } from '../../lib/quotePdf'
 
 export const runtime = 'nodejs'
@@ -11,8 +11,7 @@ export async function GET(request) {
   const id = new URL(request.url).searchParams.get('id') ?? ''
   if (!UUID.test(id)) return NextResponse.json({ error: 'Nieprawidłowy identyfikator' }, { status: 400 })
 
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { supabase, user } = await getRequestClient(request)
   if (!user) return NextResponse.json({ error: 'Zaloguj się' }, { status: 401 })
 
   // PDF tylko w planie Pro — sprawdzamy po stronie serwera, nie tylko ukrywamy przycisk.

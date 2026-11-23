@@ -27,7 +27,7 @@ async function setPlan(supabase, { userId, customerId, subscriptionId, plan }) {
 
   const { data, error } = await query.select('user_id')
   if (error) return { error }
-  if (!data || data.length === 0) return { error: new Error(`Nie znaleziono profilu (user ${userId}, customer ${customerId})`) }
+  if (!data || data.length === 0) return { error: new Error(`Nie znaleziono profilu (user ${userId}, customer ${customerId})`), notFound: true }
   return { error: null }
 }
 
@@ -88,6 +88,9 @@ export async function POST(request) {
         subscriptionId: null,
         plan: 'free',
       })
+      // Konto usunięte przez użytkownika (api/account/delete anuluje subskrypcję i kasuje profil).
+      // Nie ma już czego aktualizować — potwierdzamy, żeby Stripe nie ponawiał zdarzenia przez kilka dni.
+      if (result.notFound) result = { error: null }
       break
     }
 

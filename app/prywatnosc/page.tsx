@@ -14,14 +14,14 @@ export default function Prywatnosc() {
     <LegalPage title="Polityka prywatności" effective="8 listopada 2026" current="/prywatnosc">
       <section>
         <h2>1. Administrator danych</h2>
-        <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (wycento.app) jest {SELLER_LINE}, prowadzący działalność pod marką WyceńTo. Kontakt w sprawach danych osobowych: <Mail />.</p>
+        <p>Administratorem danych osobowych użytkowników serwisu WyceńTo (strona wycento.app i aplikacja WyceńTo na iOS) jest {SELLER_LINE}, prowadzący działalność pod marką WyceńTo. Kontakt w sprawach danych osobowych: <Mail />.</p>
       </section>
 
       <section>
         <h2>2. Jakie dane zbieramy</h2>
         <ul>
           <li><strong>Adres e-mail</strong> — przy zakładaniu konta (lub z konta Google, jeśli logujesz się przez Google).</li>
-          <li><strong>Zdjęcia pomieszczeń</strong> — wysyłane do analizy przez Anthropic (model Claude). Nie zapisujemy ich na naszych serwerach.</li>
+          <li><strong>Zdjęcia pomieszczeń</strong> — wysyłane do analizy przez Anthropic (model Claude). Nie zapisujemy ich na naszych serwerach. W aplikacji iOS zdjęcie robisz aparatem albo wybierasz z galerii — aplikacja dostaje tylko to jedno zdjęcie, które wskażesz.</li>
           <li><strong>Wyniki wycen</strong> — miasto, rodzaj pomieszczenia, opis i wynik wyceny, zapisane na Twoim koncie.</li>
           <li><strong>Dane płatności</strong> — obsługuje je wyłącznie Stripe; nie widzimy numerów kart.</li>
           <li><strong>Dane techniczne</strong> — adres IP i informacje o przeglądarce w logach serwera.</li>
@@ -67,12 +67,13 @@ export default function Prywatnosc() {
           <li>sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie,</li>
           <li>skargi do Prezesa Urzędu Ochrony Danych Osobowych (UODO).</li>
         </ul>
-        <p>Aby skorzystać z praw, napisz na <Mail />.</p>
+        <p>Konto wraz z historią wycen możesz usunąć samodzielnie w aplikacji iOS (zakładka Konto → Usuń konto). Aby skorzystać z pozostałych praw albo usunąć konto bez aplikacji, napisz na <Mail />.</p>
       </section>
 
       <section>
         <h2>7. Pliki cookies i statystyki</h2>
         <p>Używamy wyłącznie plików cookies niezbędnych do działania Serwisu — utrzymują zalogowanie (Supabase Auth). Nie używamy cookies reklamowych ani śledzących, dlatego nie wyświetlamy banera zgody.</p>
+        <p>Aplikacja iOS nie zawiera reklam, analityki ani narzędzi śledzących. Sesję logowania przechowuje tylko na Twoim urządzeniu.</p>
         <p>Do liczenia odwiedzin używamy Vercel Web Analytics, które nie zapisuje cookies i nie identyfikuje użytkowników — zlicza zanonimizowane odsłony stron.</p>
       </section>
 
