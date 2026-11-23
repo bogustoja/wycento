@@ -33,6 +33,7 @@ export default function Regulamin() {
         <h2>§3. Wymagania techniczne</h2>
         <ul>
           <li>urządzenie z dostępem do internetu i aktualną przeglądarką (Chrome, Safari, Firefox, Edge, Opera) z włączonym JavaScript i plikami cookies,</li>
+          <li>albo iPhone z aplikacją WyceńTo (wymaga aktualnej wersji iOS),</li>
           <li>aktywny adres e-mail lub konto Google,</li>
           <li>zdjęcie w formacie JPG lub PNG.</li>
         </ul>
