@@ -1,3 +1,4 @@
+import RenovationCalculator from '../components/RenovationCalculator'
 import { SeoFooter, FaqJsonLd } from '../components/SeoLanding'
 import SiteHeader from '../components/SiteHeader'
 
@@ -80,6 +81,8 @@ export default function RemontLazienki() {
         </div>
 
         {/* WIDEŁKI CENOWE */}
+        <RenovationCalculator initialRoom="lazienka" initialCity="wojewodzkie" title="Kalkulator remontu łazienki" />
+
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Orientacyjne koszty remontu łazienki</h2>
           <p className="text-muted text-sm mb-6">Ceny dla łazienki o powierzchni 5–7m². Przy wyższym standardzie lub dużych miastach spodziewaj się wyższego przedziału.</p>

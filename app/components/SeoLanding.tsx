@@ -1,4 +1,6 @@
 import SiteHeader from './SiteHeader'
+import RenovationCalculator from './RenovationCalculator'
+import type { CityTier, Room } from '../lib/calc'
 import SiteFooter from './SiteFooter'
 import { SEO_LINKS } from './seoLinks'
 
@@ -46,6 +48,7 @@ type Props = {
   ctaTitle: string
   ctaText: string
   ctaButton: string
+  calculator?: { room: Room; city: CityTier; title: string }
 }
 
 export default function SeoLanding(p: Props) {
@@ -76,6 +79,8 @@ export default function SeoLanding(p: Props) {
             Wyceń za darmo →
           </a>
         </div>
+
+        {p.calculator && <RenovationCalculator initialRoom={p.calculator.room} initialCity={p.calculator.city} title={p.calculator.title} />}
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">{p.stawkiTitle}</h2>

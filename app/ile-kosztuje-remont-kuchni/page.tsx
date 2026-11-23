@@ -1,3 +1,4 @@
+import RenovationCalculator from '../components/RenovationCalculator'
 import { SeoFooter, FaqJsonLd } from '../components/SeoLanding'
 import SiteHeader from '../components/SiteHeader'
 
@@ -72,6 +73,8 @@ export default function RemontKuchni() {
             Wyceń za darmo →
           </a>
         </div>
+
+        <RenovationCalculator initialRoom="kuchnia" initialCity="wojewodzkie" title="Kalkulator remontu kuchni" />
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Orientacyjne koszty remontu kuchni</h2>

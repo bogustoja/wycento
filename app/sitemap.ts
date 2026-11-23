@@ -4,10 +4,11 @@ const BASE = "https://wycento.app";
 
 // Data ręczna: zmieniaj ją TYLKO gdy faktycznie zmieniasz treść stron.
 // `new Date()` ustawiało datę builda przy każdym deployu — Google przestaje wtedy ufać lastmod.
-const UPDATED = new Date("2026-11-08");
+const UPDATED = new Date("2026-11-24");
 
 const PATHS = [
   "",
+  "/kalkulator-remontu",
   "/ile-kosztuje-remont-lazienki",
   "/ile-kosztuje-remont-kuchni",
   "/wycena-remontu-pokoju",

@@ -103,6 +103,9 @@ export default function Home() {
                 </a>
                 <span className="text-sm text-muted">3 wyceny gratis, bez karty</span>
               </div>
+              <a href="/kalkulator-remontu" className="text-sm font-semibold text-accent-2 underline-offset-4 hover:underline">
+                Nie masz zdjęcia pod ręką? Policz w kalkulatorze bez logowania →
+              </a>
             </div>
           </div>
           <div className="rise" style={d(0.3)}>

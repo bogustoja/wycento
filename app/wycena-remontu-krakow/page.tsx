@@ -1,3 +1,4 @@
+import RenovationCalculator from '../components/RenovationCalculator'
 import { SeoFooter } from '../components/SeoLanding'
 import SiteHeader from '../components/SiteHeader'
 
@@ -54,6 +55,8 @@ export default function WycenaKrakow() {
             Wyceń za darmo →
           </a>
         </div>
+
+        <RenovationCalculator initialRoom="lazienka" initialCity="duze" title="Kalkulator remontu — stawki dla Krakowa" />
 
         <section className="mb-12">
           <h2 className="font-serif text-2xl font-bold mb-2">Stawki robocizny w Krakowie 2026</h2>
